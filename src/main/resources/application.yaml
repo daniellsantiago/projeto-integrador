@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/projeto_integrador?createDatabaseIfNotExist=true&serverTimeZone=UTC
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWOOR:root}
+  jpa:
+    show-sql: true
