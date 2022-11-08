@@ -5,3 +5,5 @@ spring:
     password: ${MYSQL_PASSWOOR:root}
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: update
