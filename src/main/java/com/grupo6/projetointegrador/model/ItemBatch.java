@@ -1,5 +1,6 @@
 package com.grupo6.projetointegrador.model;
 
+import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import lombok.*;
 
 import javax.persistence.*;

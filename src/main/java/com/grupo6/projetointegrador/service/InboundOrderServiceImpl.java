@@ -8,6 +8,7 @@ import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.*;
 import com.grupo6.projetointegrador.repository.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,6 +33,7 @@ public class InboundOrderServiceImpl implements InboundOrderService{
     }
 
     @Override
+    @Transactional
     public List<ItemBatchDto> createInboundOrder(CreateInboundOrderDto createInboundOrderDto) {
 
         verifyEverythingIsOk(createInboundOrderDto.getSectionId(),
@@ -54,15 +56,14 @@ public class InboundOrderServiceImpl implements InboundOrderService{
         inboundOrderToPersist.setWarehouseOperator(warehouseOperator);
         inboundOrderToPersist.setItemBatches(itemBatches);
 
-        inboundOrderRepo.save(inboundOrderToPersist);
+        InboundOrder savedInboundOrder = inboundOrderRepo.save(inboundOrderToPersist);
 
-        return null;
+        return savedInboundOrder.getItemBatches().stream().map(ItemBatchDto::fromItemBatch).collect(Collectors.toList());
     }
 
-    private boolean verifyEverythingIsOk(Long sectionId, Long warehouseId, Long warehouseOperatorId, List<CreateItemBatchDto> itemBatchDto){
+    private void verifyEverythingIsOk(Long sectionId, Long warehouseId, Long warehouseOperatorId, List<CreateItemBatchDto> itemBatchDto){
         verifyWarehouseMatchWithOperator(warehouseOperatorId, warehouseId);
         verifySectionIsOk(sectionId, warehouseId, itemBatchDto);
-        return true;
     }
 
     private Warehouse findOrThrowWarehouse(Long warehouseId){
