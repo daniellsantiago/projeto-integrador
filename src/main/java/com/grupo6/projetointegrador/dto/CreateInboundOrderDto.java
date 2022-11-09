@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class CreateInboundOrderDto {
+    private Long warehouseOperatorId;
     private Long warehouseId;
     private Long sectionId;
     private List<CreateItemBatchDto> createItemBatchDtos;
