@@ -32,6 +32,14 @@ public class GlobalExceptionHandler {
         return ErrorMessageResponseDto.of(exception.getMessage(), "NOT_FOUND_ERROR");
     }
 
+    @ExceptionHandler(BusinessRuleException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorMessageResponseDto handleBusinessRuleException(BusinessRuleException exception) {
+        logger.error("BusinessRuleException: ", exception);
+        return ErrorMessageResponseDto.of(exception.getMessage(), "BUSINESS_RULE_ERROR");
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
