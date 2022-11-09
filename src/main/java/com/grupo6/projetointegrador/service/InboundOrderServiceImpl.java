@@ -33,7 +33,17 @@ public class InboundOrderServiceImpl implements InboundOrderService{
 
     @Override
     public List<ItemBatchDto> createInboundOrder(CreateInboundOrderDto createInboundOrderDto) {
+        verifyEverithingIsOk(createInboundOrderDto.getSectionId(),
+                createInboundOrderDto.getWarehouseId(),
+                createInboundOrderDto.getWarehouseOperatorId(),
+                createInboundOrderDto.getCreateItemBatchDtos());
         return null;
+    }
+
+    private void verifyEverithingIsOk(Long sectionId, Long warehouseId, Long warehouseOperatorId, List<CreateItemBatchDto> itemBatchDto){
+        findOrThrowWarehouse(warehouseId);
+        findOrThrowWarehouseOperator(warehouseOperatorId, warehouseId);
+        verifySectionIsOk(sectionId, warehouseId, itemBatchDto);
     }
 
     private Warehouse findOrThrowWarehouse(Long warehouseId){
@@ -49,6 +59,19 @@ public class InboundOrderServiceImpl implements InboundOrderService{
             throw new BusinessRuleException("Este operador não faz parte do armazém.");
         }
     }
+
+    // Funções de verificação Section
+    private void verifySectionIsOk(Long sectionId, Long warehouseId, List<CreateItemBatchDto> itemBatchDto){
+        findOrThrowSection(sectionId);
+        verifyWarehouseMatchSection(sectionId, warehouseId);
+        verifyForEachItemBatchDtoIsOk(itemBatchDto, sectionId);
+    }
+
+    private void verifyForEachItemBatchDtoIsOk(List<CreateItemBatchDto> itemBatchDto, Long sectionId) {
+        Long volumeTotal = itemBatchDto.stream().map(CreateItemBatchDto::getVolume).reduce(0L, Long::sum);
+        verifyAvailableVolume(volumeTotal, sectionId);
+    }
+
 
     private Section findOrThrowSection(Long sectionId){
         return sectionRepo.findById(sectionId).orElseThrow(() -> new NotFoundException("Seção não encontrada."));
