@@ -5,19 +5,13 @@ import com.grupo6.projetointegrador.dto.CreateItemBatchDto;
 import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
-import com.grupo6.projetointegrador.model.InboundOrder;
-import com.grupo6.projetointegrador.model.Section;
-import com.grupo6.projetointegrador.model.Warehouse;
-import com.grupo6.projetointegrador.model.WarehouseOperator;
-import com.grupo6.projetointegrador.repository.InboundOrderRepo;
-import com.grupo6.projetointegrador.repository.SectionRepo;
-import com.grupo6.projetointegrador.repository.WarehouseOperatorRepo;
-import com.grupo6.projetointegrador.repository.WarehouseRepo;
+import com.grupo6.projetointegrador.model.*;
+import com.grupo6.projetointegrador.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InboundOrderServiceImpl implements InboundOrderService{
@@ -27,39 +21,45 @@ public class InboundOrderServiceImpl implements InboundOrderService{
     private WarehouseOperatorRepo warehouseOperatorRepo;
     private SectionRepo sectionRepo;
 
-    public InboundOrderServiceImpl(InboundOrderRepo inboundOrderRepo, WarehouseRepo warehouseRepo, WarehouseOperatorRepo warehouseOperatorRepo, SectionRepo sectionRepo) {
+    private ProductRepo productRepo;
+
+    public InboundOrderServiceImpl(InboundOrderRepo inboundOrderRepo, WarehouseRepo warehouseRepo, WarehouseOperatorRepo warehouseOperatorRepo, SectionRepo sectionRepo, ProductRepo productRepo) {
         this.inboundOrderRepo = inboundOrderRepo;
         this.warehouseRepo = warehouseRepo;
         this.warehouseOperatorRepo = warehouseOperatorRepo;
         this.sectionRepo = sectionRepo;
+        this.productRepo = productRepo;
     }
 
     @Override
     public List<ItemBatchDto> createInboundOrder(CreateInboundOrderDto createInboundOrderDto) {
 
-        if (verifyEverithingIsOk(createInboundOrderDto.getSectionId(),
+        verifyEverythingIsOk(createInboundOrderDto.getSectionId(),
                 createInboundOrderDto.getWarehouseId(),
                 createInboundOrderDto.getWarehouseOperatorId(),
-                createInboundOrderDto.getCreateItemBatchDtos())){
+                createInboundOrderDto.getItemBatches());
 
-            InboundOrder inboundOrderToPersist = new InboundOrder();
-            WarehouseOperator warehouseOperator = findOrThrowWarehouseOperator(createInboundOrderDto.getWarehouseOperatorId());
-            Warehouse warehouse = findOrThrowWarehouse(createInboundOrderDto.getWarehouseId());
-            Section section = findOrThrowSection(createInboundOrderDto.getSectionId());
+        InboundOrder inboundOrderToPersist = new InboundOrder();
+        WarehouseOperator warehouseOperator = findOrThrowWarehouseOperator(createInboundOrderDto.getWarehouseOperatorId());
+        Warehouse warehouse = findOrThrowWarehouse(createInboundOrderDto.getWarehouseId());
+        Section section = findOrThrowSection(createInboundOrderDto.getSectionId());
+        List<ItemBatch> itemBatches = createInboundOrderDto.getItemBatches().stream().map((batchDto) -> {
+            Product product = productRepo.findById(batchDto.getProductId()).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
+            return batchDto.toItemBatch(inboundOrderToPersist, product);
+        }).collect(Collectors.toList());
 
+        inboundOrderToPersist.setOrderDate(LocalDate.now());
+        inboundOrderToPersist.setSection(section);
+        inboundOrderToPersist.setWarehouse(warehouse);
+        inboundOrderToPersist.setWarehouseOperator(warehouseOperator);
+        inboundOrderToPersist.setItemBatches(itemBatches);
 
-            inboundOrderToPersist.setOrderDate(LocalDate.now());
-            inboundOrderToPersist.setSection(section);
-            inboundOrderToPersist.setWarehouse(warehouse);
-            inboundOrderToPersist.setWarehouseOperator(warehouseOperator);
-
-        }
-
+        inboundOrderRepo.save(inboundOrderToPersist);
 
         return null;
     }
 
-    private boolean verifyEverithingIsOk(Long sectionId, Long warehouseId, Long warehouseOperatorId, List<CreateItemBatchDto> itemBatchDto){
+    private boolean verifyEverythingIsOk(Long sectionId, Long warehouseId, Long warehouseOperatorId, List<CreateItemBatchDto> itemBatchDto){
         verifyWarehouseMatchWithOperator(warehouseOperatorId, warehouseId);
         verifySectionIsOk(sectionId, warehouseId, itemBatchDto);
         return true;
@@ -74,7 +74,8 @@ public class InboundOrderServiceImpl implements InboundOrderService{
     }
 
     private boolean verifyWarehouseMatchWithOperator(Long warehouseOperatorId, Long warehouseId){
-        if(findOrThrowWarehouse(warehouseId).getWarehouseOperator().getId().equals(warehouseOperatorId)){
+        Warehouse warehouse = findOrThrowWarehouse(warehouseId);
+        if(warehouse.getWarehouseOperator().getId().equals(warehouseOperatorId)){
             return true;
         } else {
             throw new BusinessRuleException("Este operador não faz parte do armazém.");
@@ -92,12 +93,12 @@ public class InboundOrderServiceImpl implements InboundOrderService{
         return sectionRepo.findById(sectionId).orElseThrow(() -> new NotFoundException("Seção não encontrada."));
     }
 
-    private boolean verifyAvailableVolume(List<CreateItemBatchDto> itemBatchDto, Long sectionId) {
+    private void verifyAvailableVolume(List<CreateItemBatchDto> itemBatchDto, Long sectionId) {
         Long volumeTotal = itemBatchDto.stream().map(CreateItemBatchDto::getVolume).reduce(0L, Long::sum);
         Section section = findOrThrowSection(sectionId);
         if (section.getVolume().compareTo(volumeTotal) < 0){
             throw new BusinessRuleException("Volume do lote é maior que a capacidade disponível.");
-        } else return true;
+        }
     }
 
     private Section verifyWarehouseMatchSection(Long sectionId, Long warehouseId){
