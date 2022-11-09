@@ -30,4 +30,6 @@ public class InboundOrder {
     private Warehouse warehouse;
 
     private LocalDate orderDate;
+
+
 }

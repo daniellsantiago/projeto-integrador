@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost/projeto_integrador?createDatabaseIfNotExist=true&serverTimeZone=UTC
     username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWOOR:root}
+    password: ${MYSQL_PASSWOOR:1357902468}
   jpa:
     show-sql: true
     hibernate:

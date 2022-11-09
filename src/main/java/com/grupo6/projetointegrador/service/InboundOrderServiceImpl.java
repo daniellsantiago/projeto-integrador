@@ -5,6 +5,7 @@ import com.grupo6.projetointegrador.dto.CreateItemBatchDto;
 import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
+import com.grupo6.projetointegrador.model.InboundOrder;
 import com.grupo6.projetointegrador.model.Section;
 import com.grupo6.projetointegrador.model.Warehouse;
 import com.grupo6.projetointegrador.model.WarehouseOperator;
@@ -14,6 +15,8 @@ import com.grupo6.projetointegrador.repository.WarehouseOperatorRepo;
 import com.grupo6.projetointegrador.repository.WarehouseRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,28 +36,46 @@ public class InboundOrderServiceImpl implements InboundOrderService{
 
     @Override
     public List<ItemBatchDto> createInboundOrder(CreateInboundOrderDto createInboundOrderDto) {
-        verifyEverithingIsOk(createInboundOrderDto.getSectionId(),
+
+        if (verifyEverithingIsOk(createInboundOrderDto.getSectionId(),
                 createInboundOrderDto.getWarehouseId(),
                 createInboundOrderDto.getWarehouseOperatorId(),
-                createInboundOrderDto.getCreateItemBatchDtos());
+                createInboundOrderDto.getCreateItemBatchDtos())){
+
+            InboundOrder inboundOrderToPersist = new InboundOrder();
+            WarehouseOperator warehouseOperator = findOrThrowWarehouseOperator(createInboundOrderDto.getWarehouseOperatorId());
+            Warehouse warehouse = findOrThrowWarehouse(createInboundOrderDto.getWarehouseId());
+            Section section = findOrThrowSection(createInboundOrderDto.getSectionId());
+
+
+            inboundOrderToPersist.setOrderDate(LocalDate.now());
+            inboundOrderToPersist.setSection(section);
+            inboundOrderToPersist.setWarehouse(warehouse);
+            inboundOrderToPersist.setWarehouseOperator(warehouseOperator);
+
+        }
+
+
         return null;
     }
 
-    private void verifyEverithingIsOk(Long sectionId, Long warehouseId, Long warehouseOperatorId, List<CreateItemBatchDto> itemBatchDto){
-        findOrThrowWarehouse(warehouseId);
-        findOrThrowWarehouseOperator(warehouseOperatorId, warehouseId);
+    private boolean verifyEverithingIsOk(Long sectionId, Long warehouseId, Long warehouseOperatorId, List<CreateItemBatchDto> itemBatchDto){
+        verifyWarehouseMatchWithOperator(warehouseOperatorId, warehouseId);
         verifySectionIsOk(sectionId, warehouseId, itemBatchDto);
+        return true;
     }
 
     private Warehouse findOrThrowWarehouse(Long warehouseId){
         return warehouseRepo.findById(warehouseId).orElseThrow(() -> new NotFoundException("Armazém não encontrado."));
     }
 
-    private WarehouseOperator findOrThrowWarehouseOperator(Long warehouseOperatorId, Long warehouseId){
-        WarehouseOperator operator = warehouseOperatorRepo.findById(warehouseOperatorId).orElseThrow(() -> new NotFoundException("Operador não encontrado."));
+    private WarehouseOperator findOrThrowWarehouseOperator(Long warehouseOperatorId){
+        return warehouseOperatorRepo.findById(warehouseOperatorId).orElseThrow(() -> new NotFoundException("Operador não encontrado."));
+    }
 
+    private boolean verifyWarehouseMatchWithOperator(Long warehouseOperatorId, Long warehouseId){
         if(findOrThrowWarehouse(warehouseId).getWarehouseOperator().getId().equals(warehouseOperatorId)){
-            return operator;
+            return true;
         } else {
             throw new BusinessRuleException("Este operador não faz parte do armazém.");
         }
@@ -62,19 +83,21 @@ public class InboundOrderServiceImpl implements InboundOrderService{
 
     // Funções de verificação Section
     private void verifySectionIsOk(Long sectionId, Long warehouseId, List<CreateItemBatchDto> itemBatchDto){
-        findOrThrowSection(sectionId);
         verifyWarehouseMatchSection(sectionId, warehouseId);
-        verifyForEachItemBatchDtoIsOk(itemBatchDto, sectionId);
+        verifyAvailableVolume(itemBatchDto, sectionId);
+        matchStorageType(itemBatchDto, sectionId);
     }
-
-    private void verifyForEachItemBatchDtoIsOk(List<CreateItemBatchDto> itemBatchDto, Long sectionId) {
-        Long volumeTotal = itemBatchDto.stream().map(CreateItemBatchDto::getVolume).reduce(0L, Long::sum);
-        verifyAvailableVolume(volumeTotal, sectionId);
-    }
-
 
     private Section findOrThrowSection(Long sectionId){
         return sectionRepo.findById(sectionId).orElseThrow(() -> new NotFoundException("Seção não encontrada."));
+    }
+
+    private boolean verifyAvailableVolume(List<CreateItemBatchDto> itemBatchDto, Long sectionId) {
+        Long volumeTotal = itemBatchDto.stream().map(CreateItemBatchDto::getVolume).reduce(0L, Long::sum);
+        Section section = findOrThrowSection(sectionId);
+        if (section.getVolume().compareTo(volumeTotal) < 0){
+            throw new BusinessRuleException("Volume do lote é maior que a capacidade disponível.");
+        } else return true;
     }
 
     private Section verifyWarehouseMatchSection(Long sectionId, Long warehouseId){
@@ -86,15 +109,12 @@ public class InboundOrderServiceImpl implements InboundOrderService{
         }
     }
 
-    private boolean matchStorageType(CreateItemBatchDto itemBatchDto, Long sectionId){
+    private void matchStorageType(List<CreateItemBatchDto> itemBatchDto, Long sectionId){
         Section section = findOrThrowSection(sectionId);
-
-        return section.getStorageType().equals(itemBatchDto.getStorageType());
-    }
-
-    private boolean verifyAvailableVolume(Long volume, Long sectionId){
-        Section section = findOrThrowSection(sectionId);
-
-        return section.getVolume().compareTo(volume) >= 0;
+        itemBatchDto.forEach((batch) -> {
+            if(!section.getStorageType().equals(batch.getStorageType())){
+                throw new BusinessRuleException("O tipo de armazenamento do produto não é compatível com a seção");
+            }
+        });
     }
 }

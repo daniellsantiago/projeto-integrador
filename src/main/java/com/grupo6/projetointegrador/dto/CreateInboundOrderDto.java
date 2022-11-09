@@ -1,5 +1,6 @@
 package com.grupo6.projetointegrador.dto;
 
+import com.grupo6.projetointegrador.model.InboundOrder;
 import lombok.Data;
 
 import java.util.List;

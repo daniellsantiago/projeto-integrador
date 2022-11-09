@@ -1,5 +1,8 @@
 package com.grupo6.projetointegrador.dto;
 
+import com.grupo6.projetointegrador.model.InboundOrder;
+import com.grupo6.projetointegrador.model.ItemBatch;
+import com.grupo6.projetointegrador.model.Product;
 import com.grupo6.projetointegrador.model.StorageType;
 import lombok.Data;
 
@@ -9,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ItemBatchDto {
-    private Long id;
+    private Long itemBatchId;
 
     private Long productId;
 
@@ -26,4 +29,19 @@ public class ItemBatchDto {
     private BigDecimal price;
 
     private StorageType storageType;
+
+    public ItemBatch toItemBatch(InboundOrder inboundOrder, Product product) {
+        return new ItemBatch(
+                itemBatchId,
+                product,
+                productQuantity,
+                manufacturingDate,
+                manufacturingTime,
+                volume,
+                dueDate,
+                price,
+                inboundOrder,
+                storageType
+        );
+    }
 }
