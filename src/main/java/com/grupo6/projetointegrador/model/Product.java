@@ -1,15 +1,14 @@
 package com.grupo6.projetointegrador.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
@@ -17,14 +16,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long buyerId;
-
     private BigDecimal price;
-
-    @Enumerated(EnumType.STRING)
-    private StorageType category;
 
     @ManyToOne
     @JsonBackReference
     private Seller seller;
+
+    @Enumerated(EnumType.STRING)
+    private StorageType category;
 }

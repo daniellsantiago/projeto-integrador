@@ -1,8 +1,6 @@
 package com.grupo6.projetointegrador.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,7 +8,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderPurchase {
@@ -19,6 +18,7 @@ public class OrderPurchase {
     private Long id;
 
     private LocalDate dateOrder;
+
     @OneToMany(mappedBy = "orderPurchase")
     private List<ProductOrder> productOrders;
 

@@ -1,12 +1,8 @@
 package com.grupo6.projetointegrador.service;
 
-import com.grupo6.projetointegrador.model.OrderPurchase;
-
-import com.grupo6.projetointegrador.repository.OrderPurchaseRepo;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import com.grupo6.projetointegrador.dto.OrderPurchaseDto;
 
 public interface OrderPurchaseService {
-  OrderPurchase findById(Long id);
+  OrderPurchaseDto findById(Long id);
+  String endOrder(Long id);
 }
