@@ -7,11 +7,7 @@ import com.grupo6.projetointegrador.dto.UpdateItemBatchDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.*;
-import com.grupo6.projetointegrador.repository.InboundOrderRepo;
-import com.grupo6.projetointegrador.repository.ProductRepo;
-import com.grupo6.projetointegrador.repository.WarehouseOperatorRepo;
-import com.grupo6.projetointegrador.repository.WarehouseRepo;
-import com.grupo6.projetointegrador.repository.SectionRepo;
+import com.grupo6.projetointegrador.repository.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -140,7 +136,7 @@ public class InboundOrderServiceImpl implements InboundOrderService{
     }
 
     private void verifyWarehouseMatchSection(Long sectionId, Long warehouseId){
-        if(findSectionOrThrowNotFound(sectionId).getWarehouse().getId().equals(warehouseId)){
+        if(!findSectionOrThrowNotFound(sectionId).getWarehouse().getId().equals(warehouseId)){
             throw new BusinessRuleException("Esta seção não faz parte do armazém.");
         }
     }

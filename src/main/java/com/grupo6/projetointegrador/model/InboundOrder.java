@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class InboundOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -21,7 +21,10 @@ public class InboundOrder {
     @OneToOne
     private Section section;
 
-    @OneToMany(mappedBy = "inboundOrder", cascade = CascadeType.PERSIST)
+    @OneToMany(
+            mappedBy = "inboundOrder",
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
     private List<ItemBatch> itemBatches;
 
     @OneToOne

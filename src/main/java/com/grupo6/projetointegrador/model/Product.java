@@ -1,20 +1,19 @@
 package com.grupo6.projetointegrador.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private BigDecimal price;

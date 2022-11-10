@@ -4,6 +4,7 @@ import com.grupo6.projetointegrador.dto.CreateInboundOrderDto;
 import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import com.grupo6.projetointegrador.dto.UpdateItemBatchDto;
 import com.grupo6.projetointegrador.service.InboundOrderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +24,13 @@ public class InboundOrderController {
     }
 
     @PostMapping
-    public List<ItemBatchDto> createInboundOrder(@RequestBody CreateInboundOrderDto createInboundOrderDto){
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<ItemBatchDto> createInboundOrder(@RequestBody @Valid CreateInboundOrderDto createInboundOrderDto){
         return service.createInboundOrder(createInboundOrderDto);
     }
 
     @PutMapping("/{inboundOrderId}/item-batch")
+    @ResponseStatus(HttpStatus.CREATED)
     public List<ItemBatchDto> updateItemBatches(
             @PathVariable Long inboundOrderId,
             @RequestBody @Valid @NotEmpty List<UpdateItemBatchDto> updateItemBatchDtos
