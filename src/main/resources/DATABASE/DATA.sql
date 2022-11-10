@@ -1,88 +1,116 @@
--- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
+-- phpMyAdmin SQL Dump
+-- version 5.1.1
+-- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1    Database: projeto_integrador
--- ------------------------------------------------------
--- Server version	8.0.31
+-- Host: 127.0.0.1
+-- Tempo de geração: 10-Nov-2022 às 15:46
+-- Versão do servidor: 10.4.20-MariaDB
+-- versão do PHP: 7.3.29
+
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Dumping data for table `product`
+-- Banco de dados: `projeto_integrador`
 --
 
-LOCK TABLES `product` WRITE;
-/*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,41.50,'CONGELADO',1),(2,32.50,'REFRIGERADO',1),(3,43.50,'REFRIGERADO',1),(4,11.50,'FRESCO',1),(5,22.50,'REFRIGERADO',1),(6,555.50,'CONGELADO',2),(7,33.50,'FRESCO',3),(8,41.50,'FRESCO',1),(9,32.50,'CONGELADO',1),(10,43.50,'REFRIGERADO',3),(11,11.50,'FRESCO',1),(12,22.50,'REFRIGERADO',1),(13,55.50,'CONGELADO',2),(14,33.50,'FRESCO',3);
-/*!40000 ALTER TABLE `product` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
--- Dumping data for table `section`
+-- Extraindo dados da tabela `buyer`
 --
 
-LOCK TABLES `section` WRITE;
-/*!40000 ALTER TABLE `section` DISABLE KEYS */;
-INSERT INTO `section` VALUES (1,'FRESCO',6100,1),(2,'CONGELADO',4100,1),(3,'REFRIGERADO',7100,1),(4,'FRESCO',6200,2),(5,'CONGELADO',4200,2),(6,'REFRIGERADO',7300,3),(7,'FRESCO',6300,3);
-/*!40000 ALTER TABLE `section` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `buyer` (`id`) VALUES(1);
+INSERT INTO `buyer` (`id`) VALUES(2);
+INSERT INTO `buyer` (`id`) VALUES(3);
 
 --
--- Dumping data for table `seller`
+-- Extraindo dados da tabela `inbound_order`
 --
 
-LOCK TABLES `seller` WRITE;
-/*!40000 ALTER TABLE `seller` DISABLE KEYS */;
-INSERT INTO `seller` VALUES (1),(2),(3);
-/*!40000 ALTER TABLE `seller` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `inbound_order` (`id`, `order_date`, `section_id`, `warehouse_id`, `warehouse_operator_id`) VALUES(1, '2022-11-08', 1, 1, 3);
 
 --
--- Dumping data for table `buyer`
+-- Extraindo dados da tabela `item_batch`
 --
 
-LOCK TABLES `buyer` WRITE;
-/*!40000 ALTER TABLE `buyer` DISABLE KEYS */;
-INSERT INTO `buyer` VALUES (1),(2),(3);
-/*!40000 ALTER TABLE `buyer` ENABLE KEYS */;
-UNLOCK TABLES;
-
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(1, '2022-11-11', '2022-11-08', '2022-11-08 22:27:42', '30.20', 5, 'FRESCO', 3, 1, 1);
 
 --
--- Dumping data for table `warehouse`
+-- Extraindo dados da tabela `order_purchase`
 --
 
-LOCK TABLES `warehouse` WRITE;
-/*!40000 ALTER TABLE `warehouse` DISABLE KEYS */;
-INSERT INTO `warehouse` VALUES (3,1),(2,2),(1,3);
-/*!40000 ALTER TABLE `warehouse` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `order_purchase` (`id`, `date_order`, `status`) VALUES(1, '2022-11-10', 0);
 
 --
--- Dumping data for table `warehouse_operator`
+-- Extraindo dados da tabela `product`
 --
 
-LOCK TABLES `warehouse_operator` WRITE;
-/*!40000 ALTER TABLE `warehouse_operator` DISABLE KEYS */;
-INSERT INTO `warehouse_operator` VALUES (1),(2),(3);
-/*!40000 ALTER TABLE `warehouse_operator` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(1, '41.50', 'CONGELADO', 1);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(2, '32.50', 'REFRIGERADO', 1);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(3, '43.50', 'REFRIGERADO', 1);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(4, '11.50', 'FRESCO', 1);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(5, '22.50', 'REFRIGERADO', 1);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(6, '555.50', 'CONGELADO', 2);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(7, '33.50', 'FRESCO', 3);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(8, '41.50', 'FRESCO', 1);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(9, '32.50', 'CONGELADO', 1);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(10, '43.50', 'REFRIGERADO', 3);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(11, '11.50', 'FRESCO', 1);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(12, '22.50', 'REFRIGERADO', 1);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(13, '55.50', 'CONGELADO', 2);
+INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(14, '33.50', 'FRESCO', 3);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- Extraindo dados da tabela `product_order`
+--
+
+INSERT INTO `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) VALUES(1, 1, 5, 1);
+
+--
+-- Extraindo dados da tabela `section`
+--
+
+INSERT INTO `section` (`id`, `storage_type`, `volume`, `warehouse_id`) VALUES(1, 'FRESCO', 6100, 1);
+INSERT INTO `section` (`id`, `storage_type`, `volume`, `warehouse_id`) VALUES(2, 'CONGELADO', 4100, 1);
+INSERT INTO `section` (`id`, `storage_type`, `volume`, `warehouse_id`) VALUES(3, 'REFRIGERADO', 7100, 1);
+INSERT INTO `section` (`id`, `storage_type`, `volume`, `warehouse_id`) VALUES(4, 'FRESCO', 6200, 2);
+INSERT INTO `section` (`id`, `storage_type`, `volume`, `warehouse_id`) VALUES(5, 'CONGELADO', 4200, 2);
+INSERT INTO `section` (`id`, `storage_type`, `volume`, `warehouse_id`) VALUES(6, 'REFRIGERADO', 7300, 3);
+INSERT INTO `section` (`id`, `storage_type`, `volume`, `warehouse_id`) VALUES(7, 'FRESCO', 6300, 3);
+
+--
+-- Extraindo dados da tabela `seller`
+--
+
+INSERT INTO `seller` (`id`) VALUES(1);
+INSERT INTO `seller` (`id`) VALUES(2);
+INSERT INTO `seller` (`id`) VALUES(3);
+
+--
+-- Extraindo dados da tabela `warehouse`
+--
+
+INSERT INTO `warehouse` (`id`, `warehouse_operator_id`) VALUES(3, 1);
+INSERT INTO `warehouse` (`id`, `warehouse_operator_id`) VALUES(2, 2);
+INSERT INTO `warehouse` (`id`, `warehouse_operator_id`) VALUES(1, 3);
+
+--
+-- Extraindo dados da tabela `warehouse_operator`
+--
+
+INSERT INTO `warehouse_operator` (`id`) VALUES(1);
+INSERT INTO `warehouse_operator` (`id`) VALUES(2);
+INSERT INTO `warehouse_operator` (`id`) VALUES(3);
+SET FOREIGN_KEY_CHECKS=1;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2022-11-08 18:10:10
