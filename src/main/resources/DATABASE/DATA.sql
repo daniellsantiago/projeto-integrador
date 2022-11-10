@@ -46,6 +46,17 @@ INSERT INTO `seller` VALUES (1),(2),(3);
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `buyer`
+--
+
+LOCK TABLES `buyer` WRITE;
+/*!40000 ALTER TABLE `buyer` DISABLE KEYS */;
+INSERT INTO `buyer` VALUES (1),(2),(3);
+/*!40000 ALTER TABLE `buyer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+--
 -- Dumping data for table `warehouse`
 --
 
