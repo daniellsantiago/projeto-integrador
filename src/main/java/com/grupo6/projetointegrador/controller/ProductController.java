@@ -45,14 +45,14 @@ public class ProductController {
             return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/fresh-products/sort")
+    @GetMapping("/fresh-products/list")
     public ResponseEntity<?> findProductsBatch(
-            @RequestParam(name = "category", defaultValue = "FF", required = true) String categoryCode,
+            @RequestParam(name = "id", required = true) String id,
+            @RequestParam(name = "order", defaultValue = "V", required = true) String order,
             @RequestParam(value = "page", defaultValue = "0", required = true) int page) {
 
-        Category category = Category.fromCode(categoryCode);
         PageRequest pageRequest = PageRequest.of(page, MAX_LENGTH_ITENS);
-        PageableResponse result = this.productService.findProductsByCategory(pageRequest, category);
+        PageableResponse result = this.productService.findProductsByCategory(pageRequest, id, order);
         if(result.getContent().size() == 0)
             return ResponseEntity.notFound().build();
         else

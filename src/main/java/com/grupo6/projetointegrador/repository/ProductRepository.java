@@ -15,4 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT p FROM Product p WHERE p.category = ?1")
     Page<Product> findProductsByCategory(Pageable pageable, Category category);
 
+    //inner join product.id ->
+    @Query(value = "SELECT p FROM Product p INNER JOIN ON p.seller.id = ?1 ORDER BY p.price " + "?2")
+    Page<Product> findProductsByOrder(Pageable pageable, String id, String order);
 }

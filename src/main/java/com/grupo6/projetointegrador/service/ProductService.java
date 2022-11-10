@@ -26,4 +26,9 @@ public class ProductService {
         Page<Product> result =  productRepository.findProductsByCategory(pageable, category);
         return new PageableResponse().toResponse(result);
     }
+
+    public PageableResponse findProductsByOrder(Pageable pageable, String id, String order) {
+        Page<Product> result =  productRepository.findProductsByOrder(pageable, id, order);
+        return new PageableResponse().toResponse(result);
+    }
 }
