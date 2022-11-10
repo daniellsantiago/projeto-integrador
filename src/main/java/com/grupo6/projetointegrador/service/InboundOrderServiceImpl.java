@@ -52,22 +52,22 @@ public class InboundOrderServiceImpl implements InboundOrderService{
                 createInboundOrderDto.getItemBatches()
         );
 
-        InboundOrder inboundOrderToPersist = new InboundOrder();
+        InboundOrder createdInboundOrder = new InboundOrder();
         WarehouseOperator warehouseOperator = findWarehouseOperatorOrThrowNotFound(createInboundOrderDto.getWarehouseOperatorId());
         Warehouse warehouse = findWarehouseOrThrowNotFound(createInboundOrderDto.getWarehouseId());
         Section section = findSectionOrThrowNotFound(createInboundOrderDto.getSectionId());
         List<ItemBatch> itemBatches = createInboundOrderDto.getItemBatches().stream().map((batchDto) -> {
             Product product = findProductOrThrowNotFound(batchDto.getProductId());
-            return batchDto.toItemBatch(inboundOrderToPersist, product);
+            return batchDto.toItemBatch(createdInboundOrder, product);
         }).collect(Collectors.toList());
 
-        inboundOrderToPersist.setOrderDate(LocalDate.now());
-        inboundOrderToPersist.setSection(section);
-        inboundOrderToPersist.setWarehouse(warehouse);
-        inboundOrderToPersist.setWarehouseOperator(warehouseOperator);
-        inboundOrderToPersist.setItemBatches(itemBatches);
+        createdInboundOrder.setOrderDate(LocalDate.now());
+        createdInboundOrder.setSection(section);
+        createdInboundOrder.setWarehouse(warehouse);
+        createdInboundOrder.setWarehouseOperator(warehouseOperator);
+        createdInboundOrder.setItemBatches(itemBatches);
 
-        InboundOrder savedInboundOrder = inboundOrderRepo.save(inboundOrderToPersist);
+        InboundOrder savedInboundOrder = inboundOrderRepo.save(createdInboundOrder);
 
         return savedInboundOrder.getItemBatches().stream().map(ItemBatchDto::fromItemBatch).collect(Collectors.toList());
     }
