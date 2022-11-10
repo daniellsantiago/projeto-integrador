@@ -19,6 +19,11 @@ public class ProductOrder {
 
     private Long productId;
 
-    private Long quantity;
+    private int quantity;
+
+    public ProductOrder(Long productId, int quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
 }
 

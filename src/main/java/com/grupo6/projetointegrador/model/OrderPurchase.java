@@ -17,8 +17,8 @@ public class OrderPurchase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(mappedBy = "orderPurchase", cascade = CascadeType.PERSIST)
-    private Buyer buyerId;
+    @ManyToOne
+    private Buyer buyer;
 
     private LocalDate dateOrder;
 
@@ -27,4 +27,11 @@ public class OrderPurchase {
 
     @Enumerated(EnumType.ORDINAL)
     private StatusOrder status;
+
+    public OrderPurchase(Buyer buyer, LocalDate dateOrder, List<ProductOrder> productOrder, StatusOrder status) {
+        this.buyer = buyer;
+        this.dateOrder = dateOrder;
+        this.productOrders = productOrder;
+        this.status = status;
+    }
 }
