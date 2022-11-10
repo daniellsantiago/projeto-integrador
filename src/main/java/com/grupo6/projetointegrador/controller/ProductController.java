@@ -21,6 +21,32 @@ public class ProductController {
         this.productService = productService;
     }
 
+    /**
+     * Documentar aqui.
+     * L = ordenado por lote
+     * Q = ordenado por quantidade atual
+     * V = ordenado por data de vencimento
+     * @param id
+     * @param order
+     * @param page
+     * @return
+     */
+    @GetMapping("/fresh-products/list")
+    public ResponseEntity<?> findProductsBatch(
+            @RequestParam(name = "id", required = true) String id,
+            @RequestParam(name = "order", defaultValue = "V", required = true) String order,
+            @RequestParam(value = "page", defaultValue = "0", required = true) int page) {
+
+        PageRequest pageRequest = PageRequest.of(page, MAX_LENGTH_ITENS);
+        PageableResponse result = this.productService.findProductsByOrder(pageRequest, id, order);
+        if(result.getContent().size() == 0)
+            return ResponseEntity.notFound().build();
+        else
+            return ResponseEntity.ok(result);
+    }
+
+
+/*
     @GetMapping("/fresh-products")
     public ResponseEntity<?> findAllFreshProducts(@RequestParam(value = "page", defaultValue = "0", required = true) int page) {
         PageRequest pageRequest = PageRequest.of(page, MAX_LENGTH_ITENS);
@@ -45,18 +71,5 @@ public class ProductController {
             return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/fresh-products/list")
-    public ResponseEntity<?> findProductsBatch(
-            @RequestParam(name = "id", required = true) String id,
-            @RequestParam(name = "order", defaultValue = "V", required = true) String order,
-            @RequestParam(value = "page", defaultValue = "0", required = true) int page) {
-
-        PageRequest pageRequest = PageRequest.of(page, MAX_LENGTH_ITENS);
-        PageableResponse result = this.productService.findProductsByCategory(pageRequest, id, order);
-        if(result.getContent().size() == 0)
-            return ResponseEntity.notFound().build();
-        else
-            return ResponseEntity.ok(result);
-    }
-
+   */
 }
