@@ -84,7 +84,7 @@ public class InboundOrderServiceImplTest {
         assertThat(result).isNotEmpty();
         assertThat(result).hasSize(2);
 
-        assertThat(result.get(0).getId()).isEqualTo(updateArrozItemBatch.getItemBatchId());
+        assertThat(result.get(0).getItemBatchId()).isEqualTo(updateArrozItemBatch.getItemBatchId());
         assertThat(result.get(0).getPrice()).isEqualTo(updateArrozItemBatch.getPrice());
         assertThat(result.get(0).getProductId()).isEqualTo(updateArrozItemBatch.getProductId());
         assertThat(result.get(0).getVolume()).isEqualTo(updateArrozItemBatch.getVolume());
@@ -164,8 +164,8 @@ public class InboundOrderServiceImplTest {
     private Seller setupSellerContainingTwoProducts() {
         Seller seller = new Seller(1L, null);
 
-        Product arroz = new Product(1L, BigDecimal.valueOf(5), seller);
-        Product feijao = new Product(2L, BigDecimal.valueOf(8), seller);
+        Product arroz = new Product(1L, BigDecimal.valueOf(5), StorageType.FRESCO, seller);
+        Product feijao = new Product(2L, BigDecimal.valueOf(8), StorageType.FRESCO, seller);
 
         seller.setProducts(List.of(arroz, feijao));
         return seller;
