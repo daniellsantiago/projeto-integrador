@@ -7,17 +7,22 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ProductOrderDto {
-    private Long id;
 
     private Long productId;
 
-    private Long quantity;
+    private int quantity;
 
     public static ProductOrderDto fromProductOrder(ProductOrder productOrder) {
         return new ProductOrderDto(
-                productOrder.getId(),
                 productOrder.getProductId(),
                 productOrder.getQuantity()
+        );
+    }
+
+    public static ProductOrder toProductOrder(ProductOrderDto productOrderDto) {
+        return new ProductOrder(
+                productOrderDto.getProductId(),
+                productOrderDto.getQuantity()
         );
     }
 }

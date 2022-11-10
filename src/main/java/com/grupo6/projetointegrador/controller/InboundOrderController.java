@@ -2,9 +2,7 @@ package com.grupo6.projetointegrador.controller;
 
 import com.grupo6.projetointegrador.dto.CreateInboundOrderDto;
 import com.grupo6.projetointegrador.dto.ItemBatchDto;
-import com.grupo6.projetointegrador.repository.InboundOrderRepo;
 import com.grupo6.projetointegrador.service.InboundOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

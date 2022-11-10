@@ -15,4 +15,5 @@ public class CreateInboundOrderDto {
     private Long warehouseId;
     private Long sectionId;
     private List<CreateItemBatchDto> itemBatches;
+
 }

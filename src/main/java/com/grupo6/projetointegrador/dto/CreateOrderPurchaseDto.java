@@ -1,6 +1,7 @@
 package com.grupo6.projetointegrador.dto;
 
 import com.grupo6.projetointegrador.model.Buyer;
+import com.grupo6.projetointegrador.model.OrderPurchase;
 import com.grupo6.projetointegrador.model.ProductOrder;
 import com.grupo6.projetointegrador.model.StatusOrder;
 import lombok.AllArgsConstructor;
@@ -14,8 +15,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOrderPurchaseDto {
-  private Buyer buyerId;
+  private Long buyer;
   private LocalDate dateOrder;
-  private List<ProductOrder> productOrders;
   private StatusOrder status;
+  private List<ProductOrderDto> productOrders;
+  public static OrderPurchase toOrderPurchase(CreateOrderPurchaseDto createdOrderPurchase, List<ProductOrder> productOrder, Buyer buyer) {
+    return new OrderPurchase(
+            buyer,
+            createdOrderPurchase.getDateOrder(),
+            productOrder,
+            createdOrderPurchase.getStatus()   );
+  }
 }
