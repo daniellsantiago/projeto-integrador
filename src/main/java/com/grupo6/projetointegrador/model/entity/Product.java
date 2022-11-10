@@ -1,7 +1,10 @@
 package com.grupo6.projetointegrador.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+<<<<<<< HEAD:src/main/java/com/grupo6/projetointegrador/model/entity/Product.java
 import com.grupo6.projetointegrador.model.enumeration.Category;
+=======
+>>>>>>> refs/remotes/origin/feature/freshproductslist:src/main/java/com/grupo6/projetointegrador/model/Product.java
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

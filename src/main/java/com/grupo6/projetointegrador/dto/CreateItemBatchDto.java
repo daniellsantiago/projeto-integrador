@@ -24,4 +24,18 @@ public class CreateItemBatchDto {
     private BigDecimal price;
 
     private StorageType storageType;
+
+    public ItemBatch toItemBatch(InboundOrder inboundOrder, Product product) {
+        return new ItemBatch(
+                product,
+                productQuantity,
+                manufacturingDate,
+                manufacturingTime,
+                volume,
+                dueDate,
+                price,
+                inboundOrder,
+                storageType
+        );
+    }
 }

@@ -1,14 +1,19 @@
 package com.grupo6.projetointegrador.model.entity;
 
+<<<<<<< HEAD:src/main/java/com/grupo6/projetointegrador/model/entity/Section.java
 import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+=======
+import lombok.*;
+>>>>>>> refs/remotes/origin/feature/freshproductslist:src/main/java/com/grupo6/projetointegrador/model/Section.java
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Section {
