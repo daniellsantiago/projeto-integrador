@@ -17,14 +17,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long buyerId;
-
-    private BigDecimal price;
-
-    @Enumerated(EnumType.STRING)
-    private StorageType category;
-
     @ManyToOne
     @JsonBackReference
     private Seller seller;
+
+    private BigDecimal price;
+
+
+
+    @Enumerated(EnumType.STRING)
+    private StorageType category;
 }
