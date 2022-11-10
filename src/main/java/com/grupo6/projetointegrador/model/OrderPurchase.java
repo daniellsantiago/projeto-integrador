@@ -17,6 +17,9 @@ public class OrderPurchase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToOne(mappedBy = "orderPurchase", cascade = CascadeType.PERSIST)
+    private Buyer buyerId;
+
     private LocalDate dateOrder;
 
     @OneToMany(mappedBy = "orderPurchase")
