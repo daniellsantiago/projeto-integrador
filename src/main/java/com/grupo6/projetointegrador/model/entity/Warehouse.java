@@ -1,25 +1,24 @@
-package com.grupo6.projetointegrador.model;
+package com.grupo6.projetointegrador.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Section {
+public class Warehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    private Warehouse warehouse;
+    @OneToMany(mappedBy = "warehouse")
+    private List<Section> sections;
 
-    private Long volume;
-
-    @Enumerated(EnumType.STRING)
-    private StorageType storageType;
+    @OneToOne
+    private WarehouseOperator warehouseOperator;
 }

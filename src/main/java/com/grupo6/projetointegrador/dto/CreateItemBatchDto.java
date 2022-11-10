@@ -1,6 +1,6 @@
 package com.grupo6.projetointegrador.dto;
 
-import com.grupo6.projetointegrador.model.StorageType;
+import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import lombok.Data;
 
 import java.math.BigDecimal;

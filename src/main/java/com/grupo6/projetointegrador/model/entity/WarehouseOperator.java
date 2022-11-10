@@ -1,4 +1,4 @@
-package com.grupo6.projetointegrador.model;
+package com.grupo6.projetointegrador.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,14 +11,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Warehouse {
+public class WarehouseOperator {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "warehouse")
-    private List<Section> sections;
-
-    @OneToOne
-    private WarehouseOperator warehouseOperator;
+    @OneToMany(mappedBy = "warehouseOperator")
+    private List<InboundOrder> inboundOrders;
 }

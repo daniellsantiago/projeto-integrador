@@ -1,5 +1,6 @@
-package com.grupo6.projetointegrador.model;
+package com.grupo6.projetointegrador.model.entity;
 
+import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

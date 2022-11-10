@@ -1,7 +1,7 @@
-package com.grupo6.projetointegrador.model;
+package com.grupo6.projetointegrador.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.grupo6.projetointegrador.model.enumeration.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class Product {
     private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
-    private StorageType category;
+    private Category category;
 
     @ManyToOne
     @JsonBackReference
