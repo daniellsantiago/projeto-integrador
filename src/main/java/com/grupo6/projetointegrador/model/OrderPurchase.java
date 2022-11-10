@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,22 +13,15 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InboundOrder {
+public class OrderPurchase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    private WarehouseOperator warehouseOperator;
+    private LocalDate dateOrder;
+    @OneToMany(mappedBy = "orderPurchase")
+    private List<ProductOrder> productOrders;
 
-    @OneToOne
-    private Section section;
-
-    @OneToMany(mappedBy = "inboundOrder")
-    private List<ItemBatch> itemBatches;
-
-    @OneToOne
-    private Warehouse warehouse;
-
-    private LocalDate orderDate;
+    @Enumerated(EnumType.ORDINAL)
+    private StatusOrder status;
 }

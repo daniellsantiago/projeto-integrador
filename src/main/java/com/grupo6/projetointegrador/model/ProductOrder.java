@@ -5,21 +5,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class ProductOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long buyerId;
-
-    private BigDecimal price;
-
     @ManyToOne
-    private Seller seller;
+    private OrderPurchase orderPurchase;
+
+    private Long productId;
+
+    private Long quantity;
 }
+
