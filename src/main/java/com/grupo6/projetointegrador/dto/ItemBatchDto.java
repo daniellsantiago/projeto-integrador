@@ -4,6 +4,7 @@ import com.grupo6.projetointegrador.model.InboundOrder;
 import com.grupo6.projetointegrador.model.ItemBatch;
 import com.grupo6.projetointegrador.model.Product;
 import com.grupo6.projetointegrador.model.StorageType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 public class ItemBatchDto {
     private Long itemBatchId;
 
@@ -42,6 +44,20 @@ public class ItemBatchDto {
                 price,
                 inboundOrder,
                 storageType
+        );
+    }
+
+    public static ItemBatchDto fromItemBatch(ItemBatch itemBatch) {
+        return new ItemBatchDto(
+                itemBatch.getId(),
+                itemBatch.getProduct().getId(),
+                itemBatch.getProductQuantity(),
+                itemBatch.getManufacturingDate(),
+                itemBatch.getManufacturingTime(),
+                itemBatch.getVolume(),
+                itemBatch.getDueDate(),
+                itemBatch.getPrice(),
+                itemBatch.getStorageType()
         );
     }
 }

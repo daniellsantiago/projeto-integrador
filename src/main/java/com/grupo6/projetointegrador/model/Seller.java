@@ -1,5 +1,6 @@
 package com.grupo6.projetointegrador.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class Seller {
     private Long id;
 
     @OneToMany(mappedBy = "seller")
+    @JsonManagedReference
     private List<Product> products;
 }
