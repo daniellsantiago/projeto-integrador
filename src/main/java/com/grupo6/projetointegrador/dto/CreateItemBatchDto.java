@@ -1,8 +1,10 @@
 package com.grupo6.projetointegrador.dto;
 
+import com.grupo6.projetointegrador.model.entity.InboundOrder;
+import com.grupo6.projetointegrador.model.entity.ItemBatch;
+import com.grupo6.projetointegrador.model.entity.Product;
 import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import lombok.Data;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,14 +1,7 @@
 package com.grupo6.projetointegrador.model.entity;
 
-<<<<<<< HEAD:src/main/java/com/grupo6/projetointegrador/model/entity/ItemBatch.java
 import com.grupo6.projetointegrador.model.enumeration.StorageType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-=======
-import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import lombok.*;
->>>>>>> refs/remotes/origin/feature/freshproductslist:src/main/java/com/grupo6/projetointegrador/model/ItemBatch.java
 
 import javax.persistence.*;
 import java.math.BigDecimal;
