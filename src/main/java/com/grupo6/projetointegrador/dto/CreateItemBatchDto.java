@@ -4,6 +4,7 @@ import com.grupo6.projetointegrador.model.entity.InboundOrder;
 import com.grupo6.projetointegrador.model.entity.ItemBatch;
 import com.grupo6.projetointegrador.model.entity.Product;
 import com.grupo6.projetointegrador.model.enumeration.StorageType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

@@ -1,6 +1,6 @@
 package com.grupo6.projetointegrador.service;
 
-import com.grupo6.projetointegrador.model.Buyer;
+import com.grupo6.projetointegrador.model.entity.Buyer;
 import com.grupo6.projetointegrador.repository.BuyerRepo;
 import org.springframework.stereotype.Service;
 
