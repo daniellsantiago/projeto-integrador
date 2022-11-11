@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductRepo extends JpaRepository<Product, Long> {
 
@@ -21,6 +20,6 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
     @Query(value = "SELECT t3.warehouse_id AS warehouse, SUM(t2.product_quantity) as quantity FROM `product` t1 " +
             "RIGHT JOIN item_batch t2 ON t2.product_id = t1.id " +
             "LEFT JOIN inbound_order t3 ON t3.id = t2.inbound_order_id " +
-            "WHERE t1.id = (?1) GROUP BY t3.warehouse_id", nativeQuery = true)
-    Optional<List<WarehouseDto>> findWarehousesByProduct(Long id);
+            "WHERE t1.id = (?1) AND t2.product_quantity > 0 GROUP BY t3.warehouse_id", nativeQuery = true)
+    List<WarehouseDto> findWarehousesByProduct(Long id);
 }

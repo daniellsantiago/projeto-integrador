@@ -7,9 +7,7 @@ import com.grupo6.projetointegrador.repository.ProductRepo;
 import com.grupo6.projetointegrador.response.PageableResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,8 +26,10 @@ public class ProductService {
     }
 
     public ProductWarehousesDto findProductWarehouse(Long id) {
-        List<WarehouseDto> warehouses = productRepo.findWarehousesByProduct(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum armazém com esse produto encontrado."));
+        List<WarehouseDto> warehouses = productRepo.findWarehousesByProduct(id);
+        if (warehouses.isEmpty()) {
+            return null;
+        }
         return new ProductWarehousesDto(id, warehouses);
     }
 }

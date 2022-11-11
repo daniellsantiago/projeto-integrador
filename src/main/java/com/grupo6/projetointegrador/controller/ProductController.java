@@ -40,6 +40,10 @@ public class ProductController {
 
     @GetMapping("/warehouse/{id}")
     public ResponseEntity<ProductWarehousesDto> findProductWarehouses(@PathVariable Long id) {
+        ProductWarehousesDto response = productService.findProductWarehouse(id);
+        if(response == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(productService.findProductWarehouse(id));
     }
 }
