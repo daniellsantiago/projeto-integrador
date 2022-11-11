@@ -1,6 +1,7 @@
 package com.grupo6.projetointegrador.controller;
 
 import com.grupo6.projetointegrador.dto.ProductLocationDto;
+import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 import com.grupo6.projetointegrador.response.PageableResponse;
 import com.grupo6.projetointegrador.service.ProductService;
@@ -42,7 +43,7 @@ public class ProductController {
         PageRequest pageRequest = PageRequest.of(page, MAX_LENGTH_ITENS);
         PageableResponse result = this.productService.findPageableFreshProducts(pageRequest);
         if(result.getContent().size() == 0)
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Lotes para esse produto não encontrados.");
         else
             return ResponseEntity.ok(result);
     }
@@ -56,7 +57,7 @@ public class ProductController {
         PageRequest pageRequest = PageRequest.of(page, MAX_LENGTH_ITENS);
         PageableResponse result = this.productService.findProductsByCategory(pageRequest, category);
         if(result.getContent().size() == 0)
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Lotes para esse produto não encontrados.");
         else
             return ResponseEntity.ok(result);
     }

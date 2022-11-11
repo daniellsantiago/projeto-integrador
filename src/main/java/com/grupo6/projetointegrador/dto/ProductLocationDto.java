@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class ProductLocationDto {
-    private SectionDto sectionDto;
+    private List<SectionDto> sectionDto;
     private Long productId;
     private List<ItemBatchLocationDto> itemBatchLocationDto;
 }
