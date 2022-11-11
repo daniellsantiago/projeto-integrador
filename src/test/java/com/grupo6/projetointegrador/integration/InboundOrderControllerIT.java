@@ -6,7 +6,9 @@ import com.grupo6.projetointegrador.dto.CreateInboundOrderDto;
 import com.grupo6.projetointegrador.dto.CreateItemBatchDto;
 import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import com.grupo6.projetointegrador.dto.UpdateItemBatchDto;
-import com.grupo6.projetointegrador.model.*;
+import com.grupo6.projetointegrador.model.entity.*;
+import com.grupo6.projetointegrador.model.enumeration.Category;
+import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import com.grupo6.projetointegrador.repository.*;
 import com.grupo6.projetointegrador.service.InboundOrderService;
 import org.junit.jupiter.api.Test;
@@ -309,7 +311,7 @@ public class InboundOrderControllerIT {
 
     private void createProductAndSeller(Long productId, Long sellerId) {
         Seller seller = sellerRepo.save(new Seller(sellerId, null));
-        Product product = productRepo.save(new Product(productId, BigDecimal.valueOf(5), StorageType.FRESCO, seller));
+        Product product = productRepo.save(new Product(productId, BigDecimal.valueOf(5), Category.FRESCO, seller));
 
         seller.setProducts(List.of(product));
         sellerRepo.save(seller);

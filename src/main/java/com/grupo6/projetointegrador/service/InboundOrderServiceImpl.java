@@ -6,7 +6,7 @@ import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import com.grupo6.projetointegrador.dto.UpdateItemBatchDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
-import com.grupo6.projetointegrador.model.*;
+import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.repository.*;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package com.grupo6.projetointegrador.model;
+package com.grupo6.projetointegrador.model.entity;
 
-import com.grupo6.projetointegrador.dto.ItemBatchDto;
+import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import lombok.*;
 
 import javax.persistence.*;

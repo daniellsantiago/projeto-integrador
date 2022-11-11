@@ -1,4 +1,4 @@
-package com.grupo6.projetointegrador.model;
+package com.grupo6.projetointegrador.model.entity;
 
 import lombok.*;
 

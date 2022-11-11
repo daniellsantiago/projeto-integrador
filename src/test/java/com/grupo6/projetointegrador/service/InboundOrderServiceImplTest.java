@@ -6,7 +6,9 @@ import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import com.grupo6.projetointegrador.dto.UpdateItemBatchDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
-import com.grupo6.projetointegrador.model.*;
+import com.grupo6.projetointegrador.model.entity.*;
+import com.grupo6.projetointegrador.model.enumeration.Category;
+import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import com.grupo6.projetointegrador.repository.InboundOrderRepo;
 import com.grupo6.projetointegrador.repository.ProductRepo;
 import com.grupo6.projetointegrador.repository.SectionRepo;
@@ -275,8 +277,8 @@ public class InboundOrderServiceImplTest {
     private Seller setupSellerContainingTwoProducts() {
         Seller seller = new Seller(1L, null);
 
-        Product arroz = new Product(1L, BigDecimal.valueOf(5), StorageType.FRESCO, seller);
-        Product feijao = new Product(2L, BigDecimal.valueOf(8), StorageType.FRESCO, seller);
+        Product arroz = new Product(1L, BigDecimal.valueOf(5), Category.FRESCO, seller);
+        Product feijao = new Product(2L, BigDecimal.valueOf(8), Category.FRESCO, seller);
 
         seller.setProducts(List.of(arroz, feijao));
         return seller;

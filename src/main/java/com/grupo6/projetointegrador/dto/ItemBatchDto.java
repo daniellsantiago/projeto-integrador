@@ -1,12 +1,11 @@
 package com.grupo6.projetointegrador.dto;
 
-import com.grupo6.projetointegrador.model.InboundOrder;
-import com.grupo6.projetointegrador.model.ItemBatch;
-import com.grupo6.projetointegrador.model.Product;
-import com.grupo6.projetointegrador.model.StorageType;
+import com.grupo6.projetointegrador.model.entity.InboundOrder;
+import com.grupo6.projetointegrador.model.entity.ItemBatch;
+import com.grupo6.projetointegrador.model.entity.Product;
+import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

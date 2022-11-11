@@ -1,13 +1,23 @@
 package com.grupo6.projetointegrador.repository;
 
-import com.grupo6.projetointegrador.model.ItemBatch;
+import com.grupo6.projetointegrador.model.entity.ItemBatch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
+import java.util.List;
 
+public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
+    ItemBatch findByProductId(Long productId);
+
+    List<ItemBatch> findAllByProductId(Long productId);
+
+    List<ItemBatch> findAllByProductIdOrderByIdAsc(Long productId);
+
+    List<ItemBatch> findAllByProductIdOrderByProductQuantityAsc(Long productId);
+
+    List<ItemBatch> findAllByProductIdOrderByDueDateAsc(Long productId);
   /**
    * @param productId
    * @param productQuantity

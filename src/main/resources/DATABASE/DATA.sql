@@ -29,24 +29,32 @@ SET time_zone = "+00:00";
 INSERT INTO `buyer` (`id`) VALUES(1);
 INSERT INTO `buyer` (`id`) VALUES(2);
 INSERT INTO `buyer` (`id`) VALUES(3);
-
 --
 -- Extraindo dados da tabela `inbound_order`
 --
 
 INSERT INTO `inbound_order` (`id`, `order_date`, `section_id`, `warehouse_id`, `warehouse_operator_id`) VALUES(1, '2022-11-08', 1, 1, 3);
+INSERT INTO `inbound_order` (`id`, `order_date`, `section_id`, `warehouse_id`, `warehouse_operator_id`) VALUES(2, '2022-11-12', 6, 3, 1);
+INSERT INTO `inbound_order` (`id`, `order_date`, `section_id`, `warehouse_id`, `warehouse_operator_id`) VALUES(3, '2022-11-12', 5, 2, 2);
 
 --
 -- Extraindo dados da tabela `item_batch`
 --
 
-INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(1, '2022-11-11', '2022-11-08', '2022-11-08 22:27:42', '30.20', 5, 'FRESCO', 3, 1, 1);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(1, '2022-11-11', '2022-11-08', '2022-11-08 22:27:42', '30.20', 5, 'CONGELADO', 3, 1, 1);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(2, '2022-11-12', '2022-11-09', '2022-11-09 22:27:42', '55.20', 15, 'CONGELADO', 3, 1, 1);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(3, '2022-11-13', '2022-11-10', '2022-11-10 22:27:42', '45.20', 7, 'CONGELADO', 3, 1, 1);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(4, '2022-11-13', '2022-11-12', '2022-11-12 22:27:42', '75.20', 2, 'REFRIGERADO', 4, 2, 2);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(5, '2022-11-20', '2022-11-12', '2022-11-12 22:27:42', '75.20', 9, 'REFRIGERADO', 18, 2, 2);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(6, '2022-12-13', '2022-11-12', '2022-11-12 22:27:42', '75.20', 6, 'REFRIGERADO', 12, 2, 2);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(7, '2022-11-13', '2022-11-10', '2022-11-10 22:27:42', '45.20', 5, 'CONGELADO', 5, 1, 6);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(8, '2022-11-13', '2022-11-10', '2022-11-10 22:27:42', '45.20', 20, 'CONGELADO', 48, 3, 1);
 
 --
 -- Extraindo dados da tabela `order_purchase`
 --
-
 INSERT INTO `order_purchase` (`id`, `date_order`, `status`) VALUES(1, '2022-11-10', 0);
+
 
 --
 -- Extraindo dados da tabela `product`
@@ -70,7 +78,6 @@ INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(14, '33.50
 --
 -- Extraindo dados da tabela `product_order`
 --
-
 INSERT INTO `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) VALUES(1, 1, 5, 1);
 
 --
