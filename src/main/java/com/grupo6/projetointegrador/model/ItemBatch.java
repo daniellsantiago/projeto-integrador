@@ -1,8 +1,7 @@
 package com.grupo6.projetointegrador.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.grupo6.projetointegrador.dto.ItemBatchDto;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,12 +9,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemBatch {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
@@ -38,4 +38,16 @@ public class ItemBatch {
 
     @Enumerated(EnumType.STRING)
     private StorageType storageType;
+
+    public ItemBatch(Product product, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder, StorageType storageType) {
+        this.product = product;
+        this.productQuantity = productQuantity;
+        this.manufacturingDate = manufacturingDate;
+        this.manufacturingTime = manufacturingTime;
+        this.volume = volume;
+        this.dueDate = dueDate;
+        this.price = price;
+        this.inboundOrder = inboundOrder;
+        this.storageType = storageType;
+    }
 }
