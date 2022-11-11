@@ -12,4 +12,10 @@ public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
     ItemBatch findByProductId(Long productId);
 
     List<ItemBatch> findAllByProductId(Long productId);
+
+    List<ItemBatch> findAllByProductIdOrderByIdAsc(Long productId);
+
+    List<ItemBatch> findAllByProductIdOrderByProductQuantityAsc(Long productId);
+
+    List<ItemBatch> findAllByProductIdOrderByDueDateAsc(Long productId);
 }
