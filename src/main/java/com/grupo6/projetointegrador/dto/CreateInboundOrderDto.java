@@ -1,6 +1,5 @@
 package com.grupo6.projetointegrador.dto;
 
-import com.grupo6.projetointegrador.model.InboundOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

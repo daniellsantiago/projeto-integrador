@@ -1,9 +1,9 @@
 package com.grupo6.projetointegrador.dto;
 
-import com.grupo6.projetointegrador.model.Buyer;
-import com.grupo6.projetointegrador.model.OrderPurchase;
-import com.grupo6.projetointegrador.model.ProductOrder;
-import com.grupo6.projetointegrador.model.StatusOrder;
+import com.grupo6.projetointegrador.model.entity.Buyer;
+import com.grupo6.projetointegrador.model.entity.OrderPurchase;
+import com.grupo6.projetointegrador.model.entity.ProductOrder;
+import com.grupo6.projetointegrador.model.enumeration.StatusOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

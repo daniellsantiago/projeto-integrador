@@ -15,6 +15,8 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
     Page<Product> findPageableProducts(Pageable pageable);
 
     @Query(value = "SELECT p FROM Product p WHERE p.category = ?1")
+    Page<Product> findProductsByCategory(Pageable pageable, Category category);
+
     Page<Product> findPageableProductsByCategory(Pageable pageable, String category);
 
     @Query(value = "SELECT t3.warehouse_id AS warehouse, SUM(t2.product_quantity) as quantity FROM `product` t1 " +
