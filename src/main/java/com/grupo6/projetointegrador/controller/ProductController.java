@@ -1,19 +1,17 @@
 package com.grupo6.projetointegrador.controller;
 
 import com.grupo6.projetointegrador.dto.ProductLocationDto;
+import com.grupo6.projetointegrador.dto.ProductWarehousesDto;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 import com.grupo6.projetointegrador.response.PageableResponse;
 import com.grupo6.projetointegrador.service.ProductService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 public class ProductController {
 
     static final int MAX_LENGTH_ITENS = 5;
@@ -60,5 +58,14 @@ public class ProductController {
             throw new NotFoundException("Lotes para esse produto não encontrados.");
         else
             return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/warehouse/{id}")
+    public ResponseEntity<ProductWarehousesDto> findProductWarehouses(@PathVariable Long id) {
+        ProductWarehousesDto response = productService.findProductWarehouse(id);
+        if(response == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(productService.findProductWarehouse(id));
     }
 }
