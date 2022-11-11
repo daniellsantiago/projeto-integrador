@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ProductRepo extends JpaRepository<Product, Long> {
-
+/*
     @Query(value = "SELECT p FROM Product p")
     Page<Product> findPageableProducts(Pageable pageable);
 
@@ -17,5 +17,5 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 
     //inner join product.id ->
     // @Query(value = "SELECT p FROM Product p INNER JOIN ON p.seller.id = ?1 ORDER BY p.price " + "?2")
-    Page<Product> findProductsByOrder(Pageable pageable, String id, String order);
+    Page<Product> findProductsByOrder(Pageable pageable, String id, String order);*/
 }

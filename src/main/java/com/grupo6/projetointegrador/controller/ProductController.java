@@ -1,5 +1,6 @@
 package com.grupo6.projetointegrador.controller;
 
+import com.grupo6.projetointegrador.dto.ProductLocationDto;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 import com.grupo6.projetointegrador.response.PageableResponse;
 import com.grupo6.projetointegrador.service.ProductService;
@@ -31,6 +32,7 @@ public class ProductController {
      * @param page
      * @return
      */
+    /*
     @GetMapping("/fresh-products/list")
     public ResponseEntity<?> findProductsBatch(
             @RequestParam(name = "id", required = true) String id,
@@ -43,6 +45,12 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         else
             return ResponseEntity.ok(result);
+    }*/
+
+
+    @GetMapping("/fresh-products/list")
+    public ResponseEntity<ProductLocationDto> findProductById(@RequestParam(name = "id", required = true) Long id){
+        return ResponseEntity.ok(productService.findProductById(id));
     }
 
 
