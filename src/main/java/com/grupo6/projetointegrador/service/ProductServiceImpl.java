@@ -54,7 +54,6 @@ public class ProductServiceImpl implements ProductService {
         productRepo.findById(productId).orElseThrow(() -> new NotFoundException("Produto com esse id não cadastrado."));
     }
 
-
     private List<ItemBatch> findItemBatchByProductId(Long productId, String order){
         List<ItemBatch> itemBatchList;
         switch (order){
