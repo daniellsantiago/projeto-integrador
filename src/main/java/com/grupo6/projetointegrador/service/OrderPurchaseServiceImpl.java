@@ -5,10 +5,7 @@ import com.grupo6.projetointegrador.dto.OrderPurchaseDto;
 import com.grupo6.projetointegrador.dto.ProductOrderDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
-import com.grupo6.projetointegrador.model.Buyer;
-import com.grupo6.projetointegrador.model.OrderPurchase;
-import com.grupo6.projetointegrador.model.ProductOrder;
-import com.grupo6.projetointegrador.model.StatusOrder;
+import com.grupo6.projetointegrador.model.*;
 import com.grupo6.projetointegrador.repository.BuyerRepo;
 import com.grupo6.projetointegrador.repository.ItemBatchRepo;
 import com.grupo6.projetointegrador.repository.OrderPurchaseRepo;
@@ -53,7 +50,18 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
     List<ProductOrder> productOrderDtos = createOrderPurchaseDto.getProductOrders().stream().
             map(ProductOrderDto::toProductOrder).collect(Collectors.toList());
     orderPurchaseRepo.save(CreateOrderPurchaseDto.toOrderPurchase(createOrderPurchaseDto, productOrderDtos, buyer));
+    validationItem();
     return "Pedido criado com sucesso!";
+  }
+
+  /**
+   * Test method to get itemBatch
+   *
+   * @return StorageType(FRESCO, CONGELADO, REFRIGERADO) message
+   */
+  public void validationItem() {
+    ItemBatch itemBatch = batchRepo.findByDueDateAndQty(1L, 1);
+    System.out.println(itemBatch.getStorageType());
   }
 }
 
