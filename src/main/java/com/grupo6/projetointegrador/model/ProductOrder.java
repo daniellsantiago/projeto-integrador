@@ -1,6 +1,9 @@
 package com.grupo6.projetointegrador.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -22,6 +25,12 @@ public class ProductOrder {
     private int quantity;
 
     public ProductOrder(Long productId, int quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public ProductOrder(OrderPurchase orderPurchase, Long productId, int quantity) {
+        this.orderPurchase = orderPurchase;
         this.productId = productId;
         this.quantity = quantity;
     }

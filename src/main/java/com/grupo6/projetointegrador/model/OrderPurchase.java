@@ -1,9 +1,11 @@
 package com.grupo6.projetointegrador.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class OrderPurchase {
 
     private LocalDate dateOrder;
 
-    @OneToMany(mappedBy = "orderPurchase")
+    @OneToMany(mappedBy = "orderPurchase", cascade = CascadeType.PERSIST)
     private List<ProductOrder> productOrders;
 
     @Enumerated(EnumType.ORDINAL)

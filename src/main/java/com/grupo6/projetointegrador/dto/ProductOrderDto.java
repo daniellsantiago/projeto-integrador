@@ -1,5 +1,6 @@
 package com.grupo6.projetointegrador.dto;
 
+import com.grupo6.projetointegrador.model.OrderPurchase;
 import com.grupo6.projetointegrador.model.ProductOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,8 +20,9 @@ public class ProductOrderDto {
         );
     }
 
-    public static ProductOrder toProductOrder(ProductOrderDto productOrderDto) {
+    public static ProductOrder toProductOrder(ProductOrderDto productOrderDto, OrderPurchase orderPurchase) {
         return new ProductOrder(
+                orderPurchase,
                 productOrderDto.getProductId(),
                 productOrderDto.getQuantity()
         );
