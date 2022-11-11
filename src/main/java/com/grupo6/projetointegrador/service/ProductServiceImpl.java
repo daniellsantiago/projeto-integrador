@@ -1,8 +1,6 @@
 package com.grupo6.projetointegrador.service;
 
-import com.grupo6.projetointegrador.dto.ItemBatchLocationDto;
-import com.grupo6.projetointegrador.dto.ProductLocationDto;
-import com.grupo6.projetointegrador.dto.SectionDto;
+import com.grupo6.projetointegrador.dto.*;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.entity.ItemBatch;
 import com.grupo6.projetointegrador.model.entity.Product;
@@ -93,5 +91,14 @@ public class ProductServiceImpl implements ProductService {
         });
 
         return sectionDtoList;
+    }
+
+    @Override
+    public ProductWarehousesDto findProductWarehouse(Long id) {
+        List<WarehouseDto> warehouses = productRepo.findWarehousesByProduct(id);
+        if (warehouses.isEmpty()) {
+            return null;
+        }
+        return new ProductWarehousesDto(id, warehouses);
     }
 }

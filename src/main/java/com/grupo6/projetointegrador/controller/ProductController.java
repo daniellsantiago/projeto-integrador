@@ -1,7 +1,9 @@
 package com.grupo6.projetointegrador.controller;
 
-import com.grupo6.projetointegrador.exception.NotFoundException;
+import com.grupo6.projetointegrador.dto.ProductLocationDto;
 import com.grupo6.projetointegrador.dto.ProductWarehousesDto;
+import com.grupo6.projetointegrador.exception.NotFoundException;
+import com.grupo6.projetointegrador.model.enumeration.Category;
 import com.grupo6.projetointegrador.response.PageableResponse;
 import com.grupo6.projetointegrador.service.ProductService;
 import org.springframework.data.domain.PageRequest;
@@ -9,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 public class ProductController {
 
     static final int MAX_LENGTH_ITENS = 5;

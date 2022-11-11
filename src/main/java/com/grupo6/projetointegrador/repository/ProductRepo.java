@@ -1,7 +1,9 @@
 package com.grupo6.projetointegrador.repository;
 
 import com.grupo6.projetointegrador.dto.WarehouseDto;
-import com.grupo6.projetointegrador.model.Product;
+
+import com.grupo6.projetointegrador.model.entity.Product;
+import com.grupo6.projetointegrador.model.enumeration.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
