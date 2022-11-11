@@ -18,10 +18,10 @@ public class Product {
 
     private BigDecimal price;
 
-    @Enumerated(EnumType.STRING)
-    private StorageType category;
-
     @ManyToOne
     @JsonBackReference
     private Seller seller;
+
+    @Enumerated(EnumType.STRING)
+    private StorageType category;
 }

@@ -26,4 +26,5 @@ public class CreateInboundOrderDto {
     @NotEmpty
     @Valid
     private List<CreateItemBatchDto> itemBatches;
+
 }

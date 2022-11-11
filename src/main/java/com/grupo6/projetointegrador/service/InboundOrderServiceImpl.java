@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class InboundOrderServiceImpl implements InboundOrderService{
+public class InboundOrderServiceImpl implements InboundOrderService {
 
     private final InboundOrderRepo inboundOrderRepo;
     private final WarehouseRepo warehouseRepo;
