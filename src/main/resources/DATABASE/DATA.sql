@@ -26,6 +26,9 @@ SET time_zone = "+00:00";
 -- Extraindo dados da tabela `buyer`
 --
 
+INSERT INTO `buyer` (`id`) VALUES(1);
+INSERT INTO `buyer` (`id`) VALUES(2);
+INSERT INTO `buyer` (`id`) VALUES(3);
 --
 -- Extraindo dados da tabela `inbound_order`
 --
@@ -50,6 +53,7 @@ INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing
 --
 -- Extraindo dados da tabela `order_purchase`
 --
+INSERT INTO `order_purchase` (`id`, `date_order`, `status`) VALUES(1, '2022-11-10', 0);
 
 
 --
@@ -74,7 +78,7 @@ INSERT INTO `product` (`id`, `price`, `category`, `seller_id`) VALUES(14, '33.50
 --
 -- Extraindo dados da tabela `product_order`
 --
-
+INSERT INTO `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) VALUES(1, 1, 5, 1);
 
 --
 -- Extraindo dados da tabela `section`

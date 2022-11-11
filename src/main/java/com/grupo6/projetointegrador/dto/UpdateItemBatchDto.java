@@ -1,10 +1,11 @@
 package com.grupo6.projetointegrador.dto;
 
-import com.grupo6.projetointegrador.model.entity.InboundOrder;
-import com.grupo6.projetointegrador.model.entity.ItemBatch;
-import com.grupo6.projetointegrador.model.entity.Product;
-import com.grupo6.projetointegrador.model.enumeration.StorageType;
+import com.grupo6.projetointegrador.model.InboundOrder;
+import com.grupo6.projetointegrador.model.ItemBatch;
+import com.grupo6.projetointegrador.model.Product;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -14,7 +15,10 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class CreateItemBatchDto {
+@NoArgsConstructor
+public class UpdateItemBatchDto {
+    private Long itemBatchId;
+
     @NotNull
     private Long productId;
 
@@ -27,21 +31,20 @@ public class CreateItemBatchDto {
     @NotNull
     private LocalDateTime manufacturingTime;
 
-    @NotNull
     @Positive
+    @NotNull
     private Long volume;
 
     @NotNull
     private LocalDate dueDate;
 
+    @NotNull
     @Positive
     private BigDecimal price;
 
-    @NotNull
-    private StorageType storageType;
-
     public ItemBatch toItemBatch(InboundOrder inboundOrder, Product product) {
         return new ItemBatch(
+                itemBatchId,
                 product,
                 productQuantity,
                 manufacturingDate,
@@ -50,7 +53,7 @@ public class CreateItemBatchDto {
                 dueDate,
                 price,
                 inboundOrder,
-                storageType
+                inboundOrder.getSection().getStorageType()
         );
     }
 }
