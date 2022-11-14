@@ -72,7 +72,7 @@ public class OrderPurchaseControllerIT {
         assertThat(orderPurchaseDto).isNotNull();
         assertThat(orderPurchaseDto.getProductOrders().size()).isEqualTo(1);
         assertThat(orderPurchaseDto.getId()).isEqualTo(1);
-        assertThat(orderPurchaseDto.getStatus()).isEqualTo(StatusOrder.FINALIZADO);
+        assertThat(orderPurchaseDto.getStatus()).isEqualTo(StatusOrder.ABERTO);
         assertThat(orderPurchaseDto.getDateOrder()).isEqualTo(LocalDate.now());
     }
 
