@@ -98,7 +98,6 @@ public class OrderPurchaseServiceImplTest {
         CreateOrderPurchaseDto createOrderPurchaseDto = new CreateOrderPurchaseDto(
                 1L,
                 LocalDate.now(),
-                StatusOrder.ABERTO,
                 List.of(new ProductOrderDto(1L, 2))
         );
 
@@ -118,7 +117,6 @@ public class OrderPurchaseServiceImplTest {
         CreateOrderPurchaseDto createOrderPurchaseDto = new CreateOrderPurchaseDto(
                 1L,
                 LocalDate.now(),
-                StatusOrder.ABERTO,
                 List.of(new ProductOrderDto(1L, 2))
         );
 

@@ -25,7 +25,10 @@ public class OrderPurchase {
 
     private LocalDate dateOrder;
 
-    @OneToMany(mappedBy = "orderPurchase", cascade = CascadeType.PERSIST)
+    @OneToMany(
+            mappedBy = "orderPurchase",
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
     private List<ProductOrder> productOrders;
 
     @Enumerated(EnumType.ORDINAL)

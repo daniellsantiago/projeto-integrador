@@ -94,7 +94,7 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
     orderPurchase.setDateOrder(createOrderPurchaseDto.getDateOrder());
     orderPurchase.setProductOrders(productOrders);
     orderPurchase.setBuyer(buyer);
-    orderPurchase.setStatus(createOrderPurchaseDto.getStatus());
+    orderPurchase.setStatus(StatusOrder.ABERTO);
 
     orderPurchaseRepo.save(orderPurchase);
 
@@ -102,22 +102,18 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
   }
 
   private ItemBatch findValidItemBatch(Long productId, int quantity) {
-    return batchRepo.findByDueDate21AndProductIdAndQty(productId, quantity)
+      return batchRepo.findByDueDate21AndProductIdAndQty(productId, quantity)
             .orElseThrow(() -> new NotFoundException("Produto não encontrado."));
   }
 
   private BigDecimal calculateTotalCost(ProductOrderDto productOrderDto, Product product) {
-    return product.getPrice().multiply(BigDecimal.valueOf(productOrderDto.getQuantity()));
+      return product.getPrice().multiply(BigDecimal.valueOf(productOrderDto.getQuantity()));
   }
 
   private void updateStock(ProductOrder productOrder) {
-    ItemBatch itemBatch = findValidItemBatch(productOrder.getProduct().getId(), productOrder.getQuantity());
-
-    int quantity = itemBatch.getProductQuantity() - productOrder.getQuantity();
-
-    itemBatch.setProductQuantity(quantity);
-    batchRepo.save(itemBatch);
+      ItemBatch itemBatch = findValidItemBatch(productOrder.getProduct().getId(), productOrder.getQuantity());
+      int quantity = itemBatch.getProductQuantity() - productOrder.getQuantity();
+      itemBatch.setProductQuantity(quantity);
+      batchRepo.save(itemBatch);
   }
 }
-
-
