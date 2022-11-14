@@ -19,16 +19,17 @@ import com.grupo6.projetointegrador.repository.ProductRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
 public class OrderPurchaseServiceImpl implements OrderPurchaseService {
-  private OrderPurchaseRepo orderPurchaseRepo;
-  private BuyerRepo buyerRepo;
-  private ItemBatchRepo batchRepo;
-  private ProductRepo productRepo;
-  private double totalPrice = 0;
+  private final OrderPurchaseRepo orderPurchaseRepo;
+  private final BuyerRepo buyerRepo;
+  private final ItemBatchRepo batchRepo;
+  private final ProductRepo productRepo;
 
   public OrderPurchaseServiceImpl(OrderPurchaseRepo orderPurchaseRepo, BuyerRepo buyerRepo, ItemBatchRepo batchRepo, ProductRepo productRepo) {
     this.orderPurchaseRepo = orderPurchaseRepo;
@@ -80,55 +81,38 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
    */
   @Transactional
   public TotalPriceDto createOrderPurchase(CreateOrderPurchaseDto createOrderPurchaseDto) {
-    totalPrice = 0;
+    AtomicReference<BigDecimal> totalPrice = new AtomicReference<>(BigDecimal.ZERO);
     Buyer buyer = buyerRepo.findById(createOrderPurchaseDto.getBuyer()).orElseThrow(() -> new NotFoundException("Comprador não encontrado."));
 
     OrderPurchase orderPurchase = new OrderPurchase();
 
-    List<ProductOrder> productOrderDtos = createOrderPurchaseDto.getProductOrders().stream().
+    List<ProductOrder> productOrders = createOrderPurchaseDto.getProductOrders().stream().
             map(productOrder -> {
               findValidProduct(productOrder.getProductId(), productOrder.getQuantity());
-              calculateTotalCost(productOrder);
+              totalPrice.set(totalPrice.get().add(calculateTotalCost(productOrder)));
               return ProductOrderDto.toProductOrder(productOrder, orderPurchase);
             }).collect(Collectors.toList());
 
     orderPurchase.setDateOrder(createOrderPurchaseDto.getDateOrder());
-    orderPurchase.setProductOrders(productOrderDtos);
+    orderPurchase.setProductOrders(productOrders);
     orderPurchase.setBuyer(buyer);
     orderPurchase.setStatus(createOrderPurchaseDto.getStatus());
 
     orderPurchaseRepo.save(orderPurchase);
 
-    return new TotalPriceDto(totalPrice);
+    return new TotalPriceDto(totalPrice.get().doubleValue());
   }
 
-  /**
-   * Find product using query native
-   *
-   * @param id
-   * @param quantity
-   * @return itemBatch or NotFoundException
-   **/
-  public ItemBatch findValidProduct(Long id, int quantity) {
+  private ItemBatch findValidProduct(Long id, int quantity) {
     return batchRepo.findByDueDateAndQty(id, quantity).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
   }
 
-  /**
-   * Calculate total cost in order purchase (quantity * price)
-   *
-   * @param productOrder
-   */
-  public void calculateTotalCost(ProductOrderDto productOrder) {
+  private BigDecimal calculateTotalCost(ProductOrderDto productOrder) {
     Product product = productRepo.findById(productOrder.getProductId()).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
-    totalPrice += product.getPrice().doubleValue() * productOrder.getQuantity();
+    return product.getPrice().multiply(BigDecimal.valueOf(productOrder.getQuantity()));
   }
 
-  /**
-   * Set new stock
-   *
-   * @param productOrder
-   */
-  public void setStock(ProductOrder productOrder) {
+  private void setStock(ProductOrder productOrder) {
     ItemBatch itemBatch = findValidProduct(productOrder.getProductId(), productOrder.getQuantity());
 
     int quantity = itemBatch.getProductQuantity() - productOrder.getQuantity();
