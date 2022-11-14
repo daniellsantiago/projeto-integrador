@@ -12,7 +12,6 @@ import com.grupo6.projetointegrador.model.enumeration.StatusOrder;
 import com.grupo6.projetointegrador.repository.BuyerRepo;
 import com.grupo6.projetointegrador.repository.ItemBatchRepo;
 import com.grupo6.projetointegrador.repository.OrderPurchaseRepo;
-import com.grupo6.projetointegrador.repository.ProductRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
