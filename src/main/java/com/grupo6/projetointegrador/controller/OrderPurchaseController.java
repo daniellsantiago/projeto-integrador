@@ -7,6 +7,8 @@ import com.grupo6.projetointegrador.service.OrderPurchaseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/order-purchase")
 public class OrderPurchaseController {
@@ -17,7 +19,7 @@ public class OrderPurchaseController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public TotalPriceDto createOrderPurchase(@RequestBody CreateOrderPurchaseDto orderPurchaseDto) {
+  public TotalPriceDto createOrderPurchase(@RequestBody @Valid CreateOrderPurchaseDto orderPurchaseDto) {
       return service.createOrderPurchase(orderPurchaseDto);
   }
 

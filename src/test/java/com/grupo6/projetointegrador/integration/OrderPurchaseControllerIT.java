@@ -158,6 +158,21 @@ public class OrderPurchaseControllerIT {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void createOrderPurchase_throwsBadRequest_whenInputDataIsNotValid() throws Exception {
+        // Given
+        CreateOrderPurchaseDto createOrderPurchaseDto = new CreateOrderPurchaseDto(
+                1L,
+                LocalDate.now(),
+                List.of(new ProductOrderDto(null, 2))
+        );
+        // When / Then
+        mockMvc.perform(post("/api/order-purchase")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createOrderPurchaseDto)))
+                .andExpect(status().isBadRequest());
+    }
+
     private void createOrderPurchase(StatusOrder statusOrder) {
         ItemBatch itemBatch = createProductAndItemBatch();
         Buyer buyer = createBuyer();
