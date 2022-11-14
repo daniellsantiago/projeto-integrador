@@ -47,13 +47,15 @@ INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing
 INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(4, '2022-11-13', '2022-11-12', '2022-11-12 22:27:42', '75.20', 2, 'REFRIGERADO', 4, 2, 2);
 INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(5, '2022-11-20', '2022-11-12', '2022-11-12 22:27:42', '75.20', 9, 'REFRIGERADO', 18, 2, 2);
 INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(6, '2022-12-13', '2022-11-12', '2022-11-12 22:27:42', '75.20', 6, 'REFRIGERADO', 12, 2, 2);
-INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(7, '2022-11-13', '2022-11-10', '2022-11-10 22:27:42', '45.20', 5, 'CONGELADO', 5, 1, 6);
-INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(8, '2022-11-13', '2022-11-10', '2022-11-10 22:27:42', '45.20', 20, 'CONGELADO', 48, 3, 1);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(7, '2022-11-18', '2022-11-10', '2022-11-10 22:27:42', '45.20', 5, 'CONGELADO', 5, 1, 6);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(8, '2022-11-15', '2022-11-10', '2022-11-10 22:27:42', '85.20', 20, 'CONGELADO', 48, 3, 1);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(9, '2022-12-10', '2022-11-10', '2022-11-10 22:27:42', '5.20', 6, 'CONGELADO', 5, 3, 6);
+INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) VALUES(10, '2022-12-15', '2022-11-10', '2022-11-10 22:27:42', '521.20', 15, 'CONGELADO', 5, 3, 6);
 
 --
 -- Extraindo dados da tabela `order_purchase`
 --
-INSERT INTO `order_purchase` (`id`, `date_order`, `status`) VALUES(1, '2022-11-10', 0);
+INSERT INTO `order_purchase` (`id`, `date_order`, `status`, `buyer_id`) VALUES(1, '2022-11-10', 0, 1);
 
 
 --

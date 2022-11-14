@@ -120,7 +120,8 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     private void verifyIfSectionCanStoreItems(Long sectionId, Long warehouseId, List<CreateItemBatchDto> itemBatchDto){
         verifyWarehouseMatchSection(sectionId, warehouseId);
         verifySectionVolumeAvailability(itemBatchDto, sectionId);
-        verifyIfProductTypeMatchSection(itemBatchDto, sectionId);
+        verifyIfStorageTypeMatchSection(itemBatchDto, sectionId);
+        verifyIfProductTypeMatchStorageType(itemBatchDto);
     }
 
     private Section findSectionOrThrowNotFound(Long sectionId){
@@ -141,11 +142,20 @@ public class InboundOrderServiceImpl implements InboundOrderService {
         }
     }
 
-    private void verifyIfProductTypeMatchSection(List<CreateItemBatchDto> itemBatchDto, Long sectionId){
+    private void verifyIfStorageTypeMatchSection(List<CreateItemBatchDto> itemBatchDto, Long sectionId){
         Section section = findSectionOrThrowNotFound(sectionId);
         itemBatchDto.forEach((batch) -> {
-            if(!section.getStorageType().equals(batch.getStorageType())){
-                throw new BusinessRuleException("O tipo de armazenamento do produto não é compatível com a seção");
+            if(!section.getStorageType().getName().equals(batch.getStorageType().getName())){
+                throw new BusinessRuleException("O tipo de armazenamento do lote não é compatível com a seção.");
+            }
+        });
+    }
+
+    private void verifyIfProductTypeMatchStorageType(List<CreateItemBatchDto> itemBatchDto){
+        itemBatchDto.forEach((batch) -> {
+            Product product = productRepo.findById(batch.getProductId()).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
+            if(!product.getCategory().getName().equals(batch.getStorageType().getName())){
+                throw new BusinessRuleException("O tipo de armazenamento do lote não é compatível com o produto.");
             }
         });
     }
