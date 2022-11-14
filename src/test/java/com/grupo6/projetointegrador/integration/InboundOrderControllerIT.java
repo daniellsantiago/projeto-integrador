@@ -6,6 +6,7 @@ import com.grupo6.projetointegrador.dto.CreateInboundOrderDto;
 import com.grupo6.projetointegrador.dto.CreateItemBatchDto;
 import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import com.grupo6.projetointegrador.dto.UpdateItemBatchDto;
+import com.grupo6.projetointegrador.factory.WarehouseFactory;
 import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 import com.grupo6.projetointegrador.model.enumeration.StorageType;
@@ -65,7 +66,7 @@ public class InboundOrderControllerIT {
     @Test
     void createInboundOrder_createInboundOrder_whenAllProvidedDataIsValid() throws Exception {
         // Given
-        createOperatorAndWarehouseAndSection(1L, 1L, 1L);
+        createOperatorAndWarehouseAndSection();
         createProductAndSeller(1L, 1L);
         CreateItemBatchDto createItemBatchDto = new CreateItemBatchDto(
                 1L,
@@ -111,7 +112,7 @@ public class InboundOrderControllerIT {
     @Test
     void createInboundOrder_returns422_whenSectionVolumeIsNotAvailable() throws Exception {
         // Given
-        createOperatorAndWarehouseAndSection(1L, 1L, 1L);
+        createOperatorAndWarehouseAndSection();
         createProductAndSeller(1L, 1L);
         CreateItemBatchDto createItemBatchDto = new CreateItemBatchDto(
                 1L,
@@ -167,7 +168,7 @@ public class InboundOrderControllerIT {
     @Test
     void createInboundOrder_returns400_whenProductDoesNotExists() throws Exception {
         // given
-        createOperatorAndWarehouseAndSection(1L, 1L, 1L);
+        createOperatorAndWarehouseAndSection();
         CreateItemBatchDto createItemBatchDto = new CreateItemBatchDto(
                 1L,
                 10,
@@ -195,7 +196,7 @@ public class InboundOrderControllerIT {
     @Test
     void updateItemBatches_updateAnItemAndCreateOne_whenAllProvidedDataIsValid() throws Exception {
         // Given
-        createOperatorAndWarehouseAndSection(1L, 1L, 1L);
+        createOperatorAndWarehouseAndSection();
         createProductAndSeller(1L, 1L);
         createInboundWithOneItem();
         UpdateItemBatchDto updateExistingItemDto = new UpdateItemBatchDto(
@@ -299,13 +300,18 @@ public class InboundOrderControllerIT {
                 .andExpect(status().isNotFound());
     }
 
-    private void createOperatorAndWarehouseAndSection(Long operatorId, Long warehouseId, Long sectionId) {
-        WarehouseOperator warehouseOperator = warehouseOperatorRepo.save(new WarehouseOperator(operatorId, null));
-        Section section = sectionRepo.save(new Section(sectionId, null, 2000L, StorageType.FRESCO));
-        Warehouse warehouse = warehouseRepo.save(new Warehouse(warehouseId, List.of(section), warehouseOperator));
-        section.setWarehouse(warehouse);
-        sectionRepo.save(section);
-        warehouse.setSections(List.of(section));
+    private void createOperatorAndWarehouseAndSection() {
+        Warehouse warehouse = WarehouseFactory.build();
+        List<Section> sections = warehouse.getSections();
+
+        warehouseOperatorRepo.save(warehouse.getWarehouseOperator());
+
+        warehouse.setSections(List.of());
+        warehouseRepo.save(warehouse);
+
+        sectionRepo.saveAll(sections);
+
+        warehouse.setSections(sections);
         warehouseRepo.save(warehouse);
     }
 

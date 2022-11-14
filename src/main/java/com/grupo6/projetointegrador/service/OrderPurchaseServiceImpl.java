@@ -15,7 +15,6 @@ import com.grupo6.projetointegrador.model.entity.Product;
 import com.grupo6.projetointegrador.repository.BuyerRepo;
 import com.grupo6.projetointegrador.repository.ItemBatchRepo;
 import com.grupo6.projetointegrador.repository.OrderPurchaseRepo;
-import com.grupo6.projetointegrador.repository.ProductRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,13 +28,11 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
   private final OrderPurchaseRepo orderPurchaseRepo;
   private final BuyerRepo buyerRepo;
   private final ItemBatchRepo batchRepo;
-  private final ProductRepo productRepo;
 
-  public OrderPurchaseServiceImpl(OrderPurchaseRepo orderPurchaseRepo, BuyerRepo buyerRepo, ItemBatchRepo batchRepo, ProductRepo productRepo) {
+  public OrderPurchaseServiceImpl(OrderPurchaseRepo orderPurchaseRepo, BuyerRepo buyerRepo, ItemBatchRepo batchRepo) {
     this.orderPurchaseRepo = orderPurchaseRepo;
     this.buyerRepo = buyerRepo;
     this.batchRepo = batchRepo;
-    this.productRepo = productRepo;
   }
 
   /**
@@ -65,7 +62,7 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
       orderPurchaseRepo.save(orderPurchase);
 
       List<ProductOrder> productOrders = orderPurchase.getProductOrders();
-      productOrders.forEach(this::setStock);
+      productOrders.forEach(this::updateStock);
 
       return "Pedido finalizado com sucesso!";
     } else {
@@ -87,10 +84,11 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
     OrderPurchase orderPurchase = new OrderPurchase();
 
     List<ProductOrder> productOrders = createOrderPurchaseDto.getProductOrders().stream().
-            map(productOrder -> {
-              findValidProduct(productOrder.getProductId(), productOrder.getQuantity());
-              totalPrice.set(totalPrice.get().add(calculateTotalCost(productOrder)));
-              return ProductOrderDto.toProductOrder(productOrder, orderPurchase);
+            map(productOrderDto -> {
+              Product product = findValidItemBatch(productOrderDto.getProductId(), productOrderDto.getQuantity())
+                      .getProduct();
+              totalPrice.set(totalPrice.get().add(calculateTotalCost(productOrderDto, product)));
+              return productOrderDto.toProductOrder(orderPurchase, product);
             }).collect(Collectors.toList());
 
     orderPurchase.setDateOrder(createOrderPurchaseDto.getDateOrder());
@@ -103,17 +101,17 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
     return new TotalPriceDto(totalPrice.get().doubleValue());
   }
 
-  private ItemBatch findValidProduct(Long id, int quantity) {
-    return batchRepo.findByDueDateAndQty(id, quantity).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
+  private ItemBatch findValidItemBatch(Long productId, int quantity) {
+    return batchRepo.findByDueDate21AndProductIdAndQty(productId, quantity)
+            .orElseThrow(() -> new NotFoundException("Produto não encontrado."));
   }
 
-  private BigDecimal calculateTotalCost(ProductOrderDto productOrder) {
-    Product product = productRepo.findById(productOrder.getProductId()).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
-    return product.getPrice().multiply(BigDecimal.valueOf(productOrder.getQuantity()));
+  private BigDecimal calculateTotalCost(ProductOrderDto productOrderDto, Product product) {
+    return product.getPrice().multiply(BigDecimal.valueOf(productOrderDto.getQuantity()));
   }
 
-  private void setStock(ProductOrder productOrder) {
-    ItemBatch itemBatch = findValidProduct(productOrder.getProductId(), productOrder.getQuantity());
+  private void updateStock(ProductOrder productOrder) {
+    ItemBatch itemBatch = findValidItemBatch(productOrder.getProduct().getId(), productOrder.getQuantity());
 
     int quantity = itemBatch.getProductQuantity() - productOrder.getQuantity();
 

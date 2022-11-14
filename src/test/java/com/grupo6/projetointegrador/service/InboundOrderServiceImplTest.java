@@ -6,13 +6,12 @@ import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import com.grupo6.projetointegrador.dto.UpdateItemBatchDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
+import com.grupo6.projetointegrador.factory.InboundOrderFactory;
+import com.grupo6.projetointegrador.factory.WarehouseFactory;
 import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 import com.grupo6.projetointegrador.model.enumeration.StorageType;
-import com.grupo6.projetointegrador.repository.InboundOrderRepo;
-import com.grupo6.projetointegrador.repository.ProductRepo;
-import com.grupo6.projetointegrador.repository.SectionRepo;
-import com.grupo6.projetointegrador.repository.WarehouseRepo;
+import com.grupo6.projetointegrador.repository.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -39,6 +38,9 @@ public class InboundOrderServiceImplTest {
     private WarehouseRepo warehouseRepo;
 
     @Mock
+    private WarehouseOperatorRepo warehouseOperatorRepo;
+
+    @Mock
     private ProductRepo productRepo;
 
     @Mock
@@ -46,6 +48,41 @@ public class InboundOrderServiceImplTest {
 
     @InjectMocks
     private InboundOrderServiceImpl inboundOrderService;
+
+    @Test
+    void createInboundOrder_saveInboundOrder_AllProvidedDataIsValid() {
+        CreateItemBatchDto createItemBatchDto = new CreateItemBatchDto(
+                1L,
+                10,
+                LocalDate.now(),
+                LocalDateTime.now(),
+                20L,
+                LocalDate.now(),
+                BigDecimal.valueOf(40),
+                StorageType.FRESCO
+        );
+        CreateInboundOrderDto createInboundOrderDto = new CreateInboundOrderDto(
+                1L,
+                1L,
+                1L,
+                List.of(createItemBatchDto)
+        );
+
+        // When
+        Warehouse warehouse = WarehouseFactory.build();
+        Section section = warehouse.getSections().get(0);
+        InboundOrder inboundOrder = InboundOrderFactory
+                .build(section);
+        Mockito.when(warehouseRepo.findById(1L)).thenReturn(Optional.of(warehouse));
+        Mockito.when(sectionRepo.findById(1L)).thenReturn(Optional.of(section));
+        Mockito.when(warehouseOperatorRepo.findById(1L)).thenReturn(Optional.of(warehouse.getWarehouseOperator()));
+        Mockito.when(productRepo.findById(1L)).thenReturn(Optional.of(inboundOrder.getItemBatches().get(0).getProduct()));
+        Mockito.when(inboundOrderRepo.save(ArgumentMatchers.any())).thenReturn(inboundOrder);
+        List<ItemBatchDto> itemBatchDtos = inboundOrderService.createInboundOrder(createInboundOrderDto);
+
+        // Then
+        assertThat(itemBatchDtos).isNotEmpty();
+    }
 
     @Test
     void createInboundOrder_throwException_whenWarehouseDoesNotExists() {
@@ -108,7 +145,7 @@ public class InboundOrderServiceImplTest {
         );
 
         // When / Then
-        Warehouse warehouse = setupWarehouse();
+        Warehouse warehouse = WarehouseFactory.build();
         Mockito.when(warehouseRepo.findById(1L)).thenReturn(Optional.of(warehouse));
         Mockito.when(sectionRepo.findById(1L)).thenReturn(Optional.of(warehouse.getSections().get(0)));
         assertThatThrownBy(() -> inboundOrderService.createInboundOrder(createInboundOrderDto))
@@ -136,7 +173,7 @@ public class InboundOrderServiceImplTest {
         );
 
         // When / Then
-        Warehouse warehouse = setupWarehouse();
+        Warehouse warehouse = WarehouseFactory.build();
         Mockito.when(warehouseRepo.findById(1L)).thenReturn(Optional.of(warehouse));
         Mockito.when(sectionRepo.findById(1L)).thenReturn(Optional.of(warehouse.getSections().get(0)));
         assertThatThrownBy(() -> inboundOrderService.createInboundOrder(createInboundOrderDto))
@@ -234,44 +271,8 @@ public class InboundOrderServiceImplTest {
         ).isInstanceOf(NotFoundException.class);
     }
 
-    private Warehouse setupWarehouse() {
-        WarehouseOperator warehouseOperator = new WarehouseOperator(1L, null);
-        Section section = new Section(1L, null, 2000L, StorageType.FRESCO);
-        Warehouse warehouse = new Warehouse(1L, List.of(section), warehouseOperator);
-        section.setWarehouse(warehouse);
-
-        return warehouse;
-    }
-
     private InboundOrder setupGenericInboundOrder() {
-        Warehouse warehouse = setupWarehouse();
-
-        InboundOrder inboundOrder = new InboundOrder(
-                1L,
-                warehouse.getWarehouseOperator(),
-                warehouse.getSections().get(0),
-                null, warehouse,
-                LocalDate.of(2020, 11, 9)
-        );
-
-        Seller seller = setupSellerContainingTwoProducts();
-
-        ItemBatch arrozItemBatch = new ItemBatch(
-                1L,
-                seller.getProducts().get(0),
-                10,
-                LocalDate.of(2022, 10, 20),
-                LocalDateTime.of(2022, 10, 20, 1, 30, 10),
-                10L,
-                LocalDate.of(2022, 11, 20),
-                BigDecimal.valueOf(80),
-                inboundOrder,
-                StorageType.FRESCO
-        );
-
-        inboundOrder.setItemBatches(List.of(arrozItemBatch));
-
-        return inboundOrder;
+        return InboundOrderFactory.build(WarehouseFactory.build().getSections().get(0));
     }
 
     private Seller setupSellerContainingTwoProducts() {
