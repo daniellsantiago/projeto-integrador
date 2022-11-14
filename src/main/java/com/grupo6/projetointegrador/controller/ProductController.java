@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 public class ProductController {
 
     static final int MAX_LENGTH_ITENS = 5;
@@ -30,23 +30,23 @@ public class ProductController {
      * @param order
      * @return
      */
-    @GetMapping("/fresh-products/list")
-    public ResponseEntity<ProductLocationDto> findProductById(@RequestParam(name = "id", required = true) Long id,
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductLocationDto> findProductById(@PathVariable Long id,
                                                               @RequestParam(name = "order", defaultValue = "V", required = true) String order){
         return ResponseEntity.ok(productService.findProductById(id, order));
     }
 
-    @GetMapping("/fresh-products")
+    @GetMapping
     public ResponseEntity<?> findAllFreshProducts(@RequestParam(value = "page", defaultValue = "0", required = true) int page) {
         PageRequest pageRequest = PageRequest.of(page, MAX_LENGTH_ITENS);
         PageableResponse result = this.productService.findPageableFreshProducts(pageRequest);
         if(result.getContent().size() == 0)
-            throw new NotFoundException("Lotes para esse produto não encontrados.");
+            throw new NotFoundException("Nenhum lote encontrado.");
         else
             return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/fresh-products/search")
+    @GetMapping("/category-search")
     public ResponseEntity<?> findProductsCategory(
             @RequestParam(name = "category", defaultValue = "FF", required = true) String categoryCode,
             @RequestParam(value = "page", defaultValue = "0", required = true) int page) {
@@ -55,7 +55,7 @@ public class ProductController {
         PageRequest pageRequest = PageRequest.of(page, MAX_LENGTH_ITENS);
         PageableResponse result = this.productService.findProductsByCategory(pageRequest, category);
         if(result.getContent().size() == 0)
-            throw new NotFoundException("Lotes para esse produto não encontrados.");
+            throw new NotFoundException("Produtos para essa categoria não encontrados.");
         else
             return ResponseEntity.ok(result);
     }
@@ -64,7 +64,7 @@ public class ProductController {
     public ResponseEntity<ProductWarehousesDto> findProductWarehouses(@PathVariable Long id) {
         ProductWarehousesDto response = productService.findProductWarehouse(id);
         if(response == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Nenhum armazém encontrado com esse produto.");
         }
         return ResponseEntity.ok(productService.findProductWarehouse(id));
     }
