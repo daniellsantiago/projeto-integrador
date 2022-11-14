@@ -55,7 +55,7 @@ INSERT INTO `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing
 --
 -- Extraindo dados da tabela `order_purchase`
 --
-INSERT INTO `order_purchase` (`id`, `date_order`, `status`) VALUES(1, '2022-11-10', 0);
+INSERT INTO `order_purchase` (`id`, `date_order`, `status`, `buyer_id`) VALUES(1, '2022-11-10', 0, 1);
 
 
 --
