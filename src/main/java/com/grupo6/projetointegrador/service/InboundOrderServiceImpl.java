@@ -144,7 +144,7 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     private void verifyIfProductTypeMatchSection(List<CreateItemBatchDto> itemBatchDto, Long sectionId){
         Section section = findSectionOrThrowNotFound(sectionId);
         itemBatchDto.forEach((batch) -> {
-            if(!section.getStorageType().equals(batch.getStorageType())){
+            if(!section.getStorageType().getName().equals(batch.getStorageType().getName())){
                 throw new BusinessRuleException("O tipo de armazenamento do produto não é compatível com a seção");
             }
         });
