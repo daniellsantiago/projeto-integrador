@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -48,6 +49,14 @@ public class GlobalExceptionHandler {
     public ErrorMessageResponseDto handleBusinessRuleException(BusinessRuleException exception) {
         logger.error("BusinessRuleException: ", exception);
         return ErrorMessageResponseDto.of(exception.getMessage(), "BUSINESS_RULE_ERROR");
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessageResponseDto handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+        logger.error("MethodArgumentTypeMismatchException: ", exception);
+        return ErrorMessageResponseDto.of(exception.getMessage(), "METHOD_ARGUMENT_ERROR");
     }
 
     @ExceptionHandler(Exception.class)

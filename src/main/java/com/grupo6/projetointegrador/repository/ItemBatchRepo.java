@@ -2,13 +2,11 @@ package com.grupo6.projetointegrador.repository;
 
 import com.grupo6.projetointegrador.dto.DueDateItemBatchDto;
 import com.grupo6.projetointegrador.model.entity.ItemBatch;
-import com.grupo6.projetointegrador.model.enumeration.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.Optional;
-
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
     ItemBatch findByProductId(Long productId);
@@ -39,7 +37,7 @@ public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
       "    WHERE t2.section_id = ?1" +
       "    AND t1.product_quantity > 0" +
       "    AND due_date BETWEEN curdate() AND curdate() + interval ?2 day ORDER BY dueDate", nativeQuery = true)
-    Optional<List<DueDateItemBatchDto>> findByDueDateWithSectionId(Long sectionId, int days);
+    List<DueDateItemBatchDto> findByDueDateWithSectionId(Long sectionId, int days);
 
     @Query(value = "SELECT t1.id AS itemBatchId," +
             "    t1.product_id AS productId," +

@@ -22,7 +22,11 @@ public class DueDateServiceImpl implements DueDateService{
         if (days < 0){
             throw new BusinessRuleException("Intervalo de dias inválido. Precisa ser maior que zero.");
         }
-        return itemBatchRepo.findByDueDateWithSectionId(sectionId, days).orElseThrow(() -> new NotFoundException("Nenhum lote encontrado."));
+        List<DueDateItemBatchDto> dueDateItemBatchDtos = itemBatchRepo.findByDueDateWithSectionId(sectionId, days);
+        if (dueDateItemBatchDtos.isEmpty()){
+            throw new NotFoundException("Nenhum lote encontrado.");
+        }
+        return dueDateItemBatchDtos;
     }
 
     @Override
