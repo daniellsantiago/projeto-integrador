@@ -110,7 +110,7 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
    * @return itemBatch or NotFoundException
    **/
   public ItemBatch findValidProduct(Long id, int quantity) {
-    return batchRepo.findByDueDateAndQty(id, quantity).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
+    return batchRepo.findByDueDateAndQty(id, quantity).orElseThrow(() -> new NotFoundException("Produto indisponível ou fora da validade."));
   }
 
   /**
