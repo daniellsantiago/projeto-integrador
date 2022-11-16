@@ -1,0 +1,315 @@
+{
+	"info": {
+		"_postman_id": "6c57e799-9250-4a1d-8826-76eddb256322",
+		"name": "projeto-integrador",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23678263"
+	},
+	"item": [
+		{
+			"name": "US01 - Inserir lote no armazém",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"warehouseOperatorId\": 1,\n    \"warehouseId\": 3,\n    \"sectionId\": 6,\n    \"itemBatches\": [\n        {\n            \"productId\": 8,\n            \"productQuantity\": 10,\n            \"manufacturingDate\": \"2022-10-14\",\n            \"manufacturingTime\": \"2022-10-14T22:27:43\",\n            \"volume\": 80,\n            \"dueDate\": \"2023-01-14\",\n            \"price\": 415.00,\n            \"storageType\": \"REFRIGERADO\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/inboundorder",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"inboundorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US01 - Atualizando lote",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n    \"itemBatchId\": 4,\n    \"productId\": 2,\n    \"productQuantity\": 20,\n    \"manufacturingDate\": \"2022-11-10\",\n    \"manufacturingTime\": \"2022-11-10T21:25:00\",\n    \"volume\": 21,\n    \"dueDate\": \"2022-12-10\",\n    \"price\": 50\n}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/inboundorder/2/item-batch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"inboundorder",
+						"2",
+						"item-batch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US02 - Lista de produtos por categoria",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/category-search?category=RF",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"category-search"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "RF",
+							"description": "\"FRESCO\"=\"FS\"; \"CONGELADO\"=\"FF\"; \"REFRIGERADO\"=\"RF\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US02 - Lista de produtos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/?page=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0",
+							"description": "O endpoint retorna 5 itens por página. Basta alterar o parametro page para ver os itens das outras páginas."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US02 - Registra um pedido",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"buyer\": 1,\n    \"dateOrder\": \"2022-11-16\",\n    \"status\": \"ABERTO\",\n    \"productOrders\": [\n        {\n            \"productId\": 2,\n            \"quantity\": 5\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/order-purchase",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"order-purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US02 - Lista os produtos pelo id do pedido",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/order-purchase/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"order-purchase",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US02 - Altera o status do pedido para finalizado",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/order-purchase/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"order-purchase",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US03 - Produtos com todos os lotes onde aparece, com opção de ordenação pelo queryparam",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"2"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "V",
+							"description": "L = ordenado pelo id do lote; \nQ = ordenado por quantidade atual; \nV = ordenado por data de vencimento (Default)",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US04 - Quantidade total de produtos por armazém",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/warehouse/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"warehouse",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US05 - Lista de lotes dentro do prazo de validade solicitado, que pertencem a uma determinada categoria de produto",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/due-date/list?category=RF&days=50&order=desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"due-date",
+						"list"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "RF",
+							"description": "FS = Fresco\nRF = Refrigerado\nFF = Congelado"
+						},
+						{
+							"key": "days",
+							"value": "50"
+						},
+						{
+							"key": "order",
+							"value": "desc",
+							"description": "Defaul = asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US05 - Lotes armazenados em um setor de um armazém ordenados por sua data de vencimento",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/due-date?days=30&sectionId=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"due-date"
+					],
+					"query": [
+						{
+							"key": "days",
+							"value": "30"
+						},
+						{
+							"key": "sectionId",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
