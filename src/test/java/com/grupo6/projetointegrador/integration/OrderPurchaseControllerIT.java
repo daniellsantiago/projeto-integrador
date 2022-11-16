@@ -1,11 +1,13 @@
 package com.grupo6.projetointegrador.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo6.projetointegrador.dto.*;
+import com.grupo6.projetointegrador.dto.CreateOrderPurchaseDto;
+import com.grupo6.projetointegrador.dto.OrderPurchaseDto;
+import com.grupo6.projetointegrador.dto.ProductOrderDto;
+import com.grupo6.projetointegrador.dto.TotalPriceDto;
 import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 import com.grupo6.projetointegrador.model.enumeration.StatusOrder;
-import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import com.grupo6.projetointegrador.repository.BuyerRepo;
 import com.grupo6.projetointegrador.repository.ItemBatchRepo;
 import com.grupo6.projetointegrador.repository.OrderPurchaseRepo;
@@ -195,8 +197,7 @@ public class OrderPurchaseControllerIT {
                 20L,
                 LocalDate.of(2022, 12, 14),
                 BigDecimal.valueOf(100),
-                null,
-                StorageType.FRESCO
+                null
         ));
     }
 

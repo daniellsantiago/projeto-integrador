@@ -7,9 +7,11 @@ import com.grupo6.projetointegrador.dto.CreateItemBatchDto;
 import com.grupo6.projetointegrador.dto.ItemBatchDto;
 import com.grupo6.projetointegrador.dto.UpdateItemBatchDto;
 import com.grupo6.projetointegrador.factory.WarehouseFactory;
-import com.grupo6.projetointegrador.model.entity.*;
+import com.grupo6.projetointegrador.model.entity.Product;
+import com.grupo6.projetointegrador.model.entity.Section;
+import com.grupo6.projetointegrador.model.entity.Seller;
+import com.grupo6.projetointegrador.model.entity.Warehouse;
 import com.grupo6.projetointegrador.model.enumeration.Category;
-import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import com.grupo6.projetointegrador.repository.*;
 import com.grupo6.projetointegrador.service.InboundOrderService;
 import org.junit.jupiter.api.Test;
@@ -75,8 +77,7 @@ public class InboundOrderControllerIT {
                 LocalDateTime.now(),
                 20L,
                 LocalDate.now(),
-                BigDecimal.valueOf(40),
-                StorageType.FRESCO
+                BigDecimal.valueOf(40)
         );
         CreateInboundOrderDto createInboundOrderDto = new CreateInboundOrderDto(
                 1L,
@@ -121,8 +122,7 @@ public class InboundOrderControllerIT {
                 LocalDateTime.now(),
                 2000000L,
                 LocalDate.now(),
-                BigDecimal.valueOf(40),
-                StorageType.FRESCO
+                BigDecimal.valueOf(40)
         );
         CreateInboundOrderDto createInboundOrderDto = new CreateInboundOrderDto(
                 1L,
@@ -148,8 +148,7 @@ public class InboundOrderControllerIT {
                 LocalDateTime.now(),
                 20L,
                 LocalDate.now(),
-                null,
-                StorageType.FRESCO
+                null
         );
         CreateInboundOrderDto invalidCreateInboundOrderDto = new CreateInboundOrderDto(
                 1L,
@@ -176,8 +175,7 @@ public class InboundOrderControllerIT {
                 LocalDateTime.now(),
                 20L,
                 LocalDate.now(),
-                BigDecimal.valueOf(40),
-                StorageType.FRESCO
+                BigDecimal.valueOf(40)
         );
         CreateInboundOrderDto createInboundOrderDto = new CreateInboundOrderDto(
                 1L,
@@ -331,8 +329,7 @@ public class InboundOrderControllerIT {
                 LocalDateTime.of(2022, 11, 10, 4, 10, 30),
                 20L,
                 LocalDate.of(2023, 1, 20),
-                BigDecimal.valueOf(5000),
-                StorageType.FRESCO
+                BigDecimal.valueOf(5000)
         );
         CreateInboundOrderDto createInboundOrderDto = new CreateInboundOrderDto(
                 1L,

@@ -3,7 +3,7 @@ package com.grupo6.projetointegrador.factory;
 import com.grupo6.projetointegrador.model.entity.Section;
 import com.grupo6.projetointegrador.model.entity.Warehouse;
 import com.grupo6.projetointegrador.model.entity.WarehouseOperator;
-import com.grupo6.projetointegrador.model.enumeration.StorageType;
+import com.grupo6.projetointegrador.model.enumeration.Category;
 import lombok.Setter;
 
 import java.util.List;
@@ -28,8 +28,8 @@ public class WarehouseFactory {
 
     private static List<Section> genericSections(Warehouse warehouse) {
         List<Section> sections = List.of(
-                new Section(1L, warehouse, 200L, StorageType.FRESCO),
-                new Section(2L, warehouse, 200L, StorageType.CONGELADO)
+                new Section(1L, warehouse, 200L, Category.FRESCO),
+                new Section(2L, warehouse, 200L, Category.CONGELADO)
         );
         warehouse.setSections(sections);
         return sections;

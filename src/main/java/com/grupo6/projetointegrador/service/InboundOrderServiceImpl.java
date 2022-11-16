@@ -44,21 +44,27 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     @Override
     @Transactional
     public List<ItemBatchDto> createInboundOrder(CreateInboundOrderDto createInboundOrderDto) {
+        Warehouse warehouse = findWarehouseOrThrowNotFound(createInboundOrderDto.getWarehouseId());
+        Section section = findSectionOrThrowNotFound(createInboundOrderDto.getSectionId());
+        WarehouseOperator warehouseOperator = findWarehouseOperatorOrThrowNotFound(createInboundOrderDto.getWarehouseOperatorId());
+        List<Product> products = createInboundOrderDto.getItemBatches().stream()
+                .map((batchDto) -> findProductOrThrowNotFound(batchDto.getProductId()))
+                .collect(Collectors.toList());
 
         validateInboundOrderCreation(
-                createInboundOrderDto.getSectionId(),
-                createInboundOrderDto.getWarehouseId(),
-                createInboundOrderDto.getWarehouseOperatorId(),
-                createInboundOrderDto.getItemBatches()
+                createInboundOrderDto.getItemBatches(),
+                warehouse,
+                warehouseOperator,
+                section,
+                products
         );
 
         InboundOrder createdInboundOrder = new InboundOrder();
-        WarehouseOperator warehouseOperator = findWarehouseOperatorOrThrowNotFound(createInboundOrderDto.getWarehouseOperatorId());
-        Warehouse warehouse = findWarehouseOrThrowNotFound(createInboundOrderDto.getWarehouseId());
-        Section section = findSectionOrThrowNotFound(createInboundOrderDto.getSectionId());
         List<ItemBatch> itemBatches = createInboundOrderDto.getItemBatches().stream().map((batchDto) -> {
-            Product product = findProductOrThrowNotFound(batchDto.getProductId());
-            return batchDto.toItemBatch(createdInboundOrder, product);
+            Product foundProduct = products.stream()
+                    .filter(product -> product.getId().equals(batchDto.getProductId()))
+                    .findFirst().get();
+            return batchDto.toItemBatch(createdInboundOrder, foundProduct);
         }).collect(Collectors.toList());
 
         createdInboundOrder.setOrderDate(LocalDate.now());
@@ -93,16 +99,6 @@ public class InboundOrderServiceImpl implements InboundOrderService {
                 .collect(Collectors.toList());
     }
 
-    private void validateInboundOrderCreation(
-            Long sectionId,
-            Long warehouseId,
-            Long warehouseOperatorId,
-            List<CreateItemBatchDto> itemBatchDto
-    ){
-        verifyWarehouseMatchWithOperator(warehouseOperatorId, warehouseId);
-        verifyIfSectionCanStoreItems(sectionId, warehouseId, itemBatchDto);
-    }
-
     private Warehouse findWarehouseOrThrowNotFound(Long warehouseId){
         return warehouseRepo.findById(warehouseId).orElseThrow(() -> new NotFoundException("Armazém não encontrado."));
     }
@@ -111,56 +107,54 @@ public class InboundOrderServiceImpl implements InboundOrderService {
         return warehouseOperatorRepo.findById(warehouseOperatorId).orElseThrow(() -> new NotFoundException("Operador não encontrado."));
     }
 
-    private void verifyWarehouseMatchWithOperator(Long warehouseOperatorId, Long warehouseId){
-        if(!findWarehouseOrThrowNotFound(warehouseId).getWarehouseOperator().getId().equals(warehouseOperatorId)){
-            throw new BusinessRuleException("Este operador não faz parte do armazém.");
-        }
-    }
-
-    private void verifyIfSectionCanStoreItems(Long sectionId, Long warehouseId, List<CreateItemBatchDto> itemBatchDto){
-        verifyWarehouseMatchSection(sectionId, warehouseId);
-        verifySectionVolumeAvailability(itemBatchDto, sectionId);
-        verifyIfStorageTypeMatchSection(itemBatchDto, sectionId);
-        verifyIfProductTypeMatchStorageType(itemBatchDto);
-    }
-
     private Section findSectionOrThrowNotFound(Long sectionId){
         return sectionRepo.findById(sectionId).orElseThrow(() -> new NotFoundException("Seção não encontrada."));
     }
 
-    private void verifySectionVolumeAvailability(List<CreateItemBatchDto> itemBatchDto, Long sectionId) {
-        Long volumeTotal = itemBatchDto.stream().map(CreateItemBatchDto::getVolume).reduce(0L, Long::sum);
-        Section section = findSectionOrThrowNotFound(sectionId);
-        if (section.getVolume().compareTo(volumeTotal) < 0){
+    private Product findProductOrThrowNotFound(Long productId) {
+        return productRepo.findById(productId).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
+    }
+
+    private void validateInboundOrderCreation(
+            List<CreateItemBatchDto> itemBatchDtos,
+            Warehouse warehouse,
+            WarehouseOperator warehouseOperator,
+            Section section,
+            List<Product> products
+    ) {
+        Long volumeToBeStored = itemBatchDtos.stream().map(CreateItemBatchDto::getVolume)
+                .reduce(0L, Long::sum);
+
+        verifyWarehouseMatchWithOperator(warehouse, warehouseOperator);
+        verifyWarehouseMatchSection(section, warehouse);
+        verifyIfProductsCategoryDifferFromSection(products, section);
+        verifyIfSectionCanStoreItems(section, volumeToBeStored);
+    }
+
+    private void verifyIfSectionCanStoreItems(Section section, Long volumeToBeStored) {
+        if (section.getVolume().compareTo(volumeToBeStored) < 0) {
             throw new BusinessRuleException("Volume do lote é maior que a capacidade disponível.");
         }
     }
 
-    private void verifyWarehouseMatchSection(Long sectionId, Long warehouseId){
-        if(!findSectionOrThrowNotFound(sectionId).getWarehouse().getId().equals(warehouseId)){
+    private void verifyWarehouseMatchSection(Section section, Warehouse warehouse) {
+        if(!section.getWarehouse().getId().equals(warehouse.getId())){
             throw new BusinessRuleException("Esta seção não faz parte do armazém.");
         }
     }
 
-    private void verifyIfStorageTypeMatchSection(List<CreateItemBatchDto> itemBatchDto, Long sectionId){
-        Section section = findSectionOrThrowNotFound(sectionId);
-        itemBatchDto.forEach((batch) -> {
-            if(!section.getStorageType().getName().equals(batch.getStorageType().getName())){
-                throw new BusinessRuleException("O tipo de armazenamento do lote não é compatível com a seção.");
-            }
-        });
+    private void verifyIfProductsCategoryDifferFromSection(List<Product> products, Section section) {
+        boolean validStorageType = products.stream()
+                .map(Product::getCategory)
+                .allMatch(storageType -> section.getCategory().getName().equals(storageType.getName()));
+        if(!validStorageType) {
+            throw new BusinessRuleException("A categoria do Produto não é compatível com a seção.");
+        }
     }
 
-    private void verifyIfProductTypeMatchStorageType(List<CreateItemBatchDto> itemBatchDto){
-        itemBatchDto.forEach((batch) -> {
-            Product product = productRepo.findById(batch.getProductId()).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
-            if(!product.getCategory().getName().equals(batch.getStorageType().getName())){
-                throw new BusinessRuleException("O tipo de armazenamento do lote não é compatível com o produto.");
-            }
-        });
-    }
-
-    private Product findProductOrThrowNotFound(Long productId) {
-        return productRepo.findById(productId).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
+    private void verifyWarehouseMatchWithOperator(Warehouse warehouse, WarehouseOperator warehouseOperator) {
+        if(!warehouse.getWarehouseOperator().getId().equals(warehouseOperator.getId())){
+            throw new BusinessRuleException("Este operador não faz parte do armazém.");
+        }
     }
 }

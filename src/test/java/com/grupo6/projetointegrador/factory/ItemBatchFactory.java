@@ -5,7 +5,6 @@ import com.grupo6.projetointegrador.model.entity.ItemBatch;
 import com.grupo6.projetointegrador.model.entity.Product;
 import com.grupo6.projetointegrador.model.entity.Seller;
 import com.grupo6.projetointegrador.model.enumeration.Category;
-import com.grupo6.projetointegrador.model.enumeration.StorageType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,7 +20,6 @@ public class ItemBatchFactory {
     private static Long volume;
     private static LocalDate dueDate;
     private static BigDecimal price;
-    private static StorageType storageType;
 
     public static ItemBatch build(InboundOrder inboundOrder) {
         ItemBatch itemBatch = new ItemBatch();
@@ -34,7 +32,6 @@ public class ItemBatchFactory {
         if (volume == null) volume = 10L;
         if (dueDate == null) dueDate = LocalDate.of(2022, 11, 20);
         if (price == null) price = BigDecimal.valueOf(50);
-        if (storageType == null) storageType =  StorageType.FRESCO;
 
         itemBatch.setId(id);
         itemBatch.setProduct(product);
@@ -45,7 +42,6 @@ public class ItemBatchFactory {
         itemBatch.setProductQuantity(productQuantity);
         itemBatch.setManufacturingDate(manufacturingDate);
         itemBatch.setManufacturingTime(manufacturingTime);
-        itemBatch.setStorageType(storageType);
 
         itemBatch.setInboundOrder(inboundOrder);
 

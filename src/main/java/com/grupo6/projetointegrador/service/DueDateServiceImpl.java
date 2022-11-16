@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public class DueDateServiceImpl implements DueDateService{
-    private ItemBatchRepo itemBatchRepo;
+    private final ItemBatchRepo itemBatchRepo;
 
     public DueDateServiceImpl(ItemBatchRepo itemBatchRepo) {
         this.itemBatchRepo = itemBatchRepo;

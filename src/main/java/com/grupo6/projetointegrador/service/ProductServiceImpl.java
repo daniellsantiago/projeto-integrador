@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private ProductRepo productRepo;
+    private final ProductRepo productRepo;
 
-    private ItemBatchRepo itemBatchRepo;
+    private final ItemBatchRepo itemBatchRepo;
 
     public ProductServiceImpl(ProductRepo productRepo, ItemBatchRepo itemBatchRepo) {
         this.productRepo = productRepo;

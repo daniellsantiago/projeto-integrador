@@ -10,7 +10,6 @@ import com.grupo6.projetointegrador.factory.InboundOrderFactory;
 import com.grupo6.projetointegrador.factory.WarehouseFactory;
 import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.model.enumeration.Category;
-import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import com.grupo6.projetointegrador.repository.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,22 +50,8 @@ public class InboundOrderServiceImplTest {
 
     @Test
     void createInboundOrder_saveInboundOrder_AllProvidedDataIsValid() {
-        CreateItemBatchDto createItemBatchDto = new CreateItemBatchDto(
-                1L,
-                10,
-                LocalDate.now(),
-                LocalDateTime.now(),
-                20L,
-                LocalDate.now(),
-                BigDecimal.valueOf(40),
-                StorageType.FRESCO
-        );
-        CreateInboundOrderDto createInboundOrderDto = new CreateInboundOrderDto(
-                1L,
-                1L,
-                1L,
-                List.of(createItemBatchDto)
-        );
+        // Given
+        CreateInboundOrderDto createInboundOrderDto = setupCreateInboundOrderDto();
 
         // When
         Warehouse warehouse = WarehouseFactory.build();
@@ -91,6 +76,7 @@ public class InboundOrderServiceImplTest {
 
         // When / Then
         Mockito.when(warehouseRepo.findById(1L)).thenReturn(Optional.empty());
+
         assertThatThrownBy(() -> inboundOrderService.createInboundOrder(createInboundOrderDto))
                 .isInstanceOf(NotFoundException.class);
     }
@@ -99,12 +85,20 @@ public class InboundOrderServiceImplTest {
     void createInboundOrder_throwException_whenOperatorIsNotFromWarehouse() {
         // Given
         CreateInboundOrderDto createInboundOrderDto = setupCreateInboundOrderDto();
+        createInboundOrderDto.setWarehouseOperatorId(2L);
 
         // When / Then
         WarehouseOperator warehouseOperator = new WarehouseOperator(2L, null);
-        Warehouse warehouse = new Warehouse(1L, null, warehouseOperator);
+        Warehouse warehouse = WarehouseFactory.build();
 
+        Section section = warehouse.getSections().get(0);
+        InboundOrder inboundOrder = InboundOrderFactory
+                .build(section);
         Mockito.when(warehouseRepo.findById(1L)).thenReturn(Optional.of(warehouse));
+        Mockito.when(sectionRepo.findById(1L)).thenReturn(Optional.of(section));
+        Mockito.when(warehouseOperatorRepo.findById(2L)).thenReturn(Optional.of(warehouseOperator));
+        Mockito.when(productRepo.findById(1L)).thenReturn(Optional.of(inboundOrder.getItemBatches().get(0).getProduct()));
+
         assertThatThrownBy(() -> inboundOrderService.createInboundOrder(createInboundOrderDto))
                 .isInstanceOf(BusinessRuleException.class);
     }
@@ -113,13 +107,19 @@ public class InboundOrderServiceImplTest {
     void createInboundOrder_throwException_whenSectionIsNotFromWarehouse() {
         // Given
         CreateInboundOrderDto createInboundOrderDto = setupCreateInboundOrderDto();
+        createInboundOrderDto.setSectionId(2L);
 
         // When / Then
-        Section section = new Section(2L, null, 20L, StorageType.FRESCO);
-        WarehouseOperator warehouseOperator = new WarehouseOperator(2L, null);
-        Warehouse warehouse = new Warehouse(1L, List.of(section), warehouseOperator);
+        Section section = new Section(2L, new Warehouse(2L, null, null), 20L, Category.FRESCO);
+        Warehouse warehouse = WarehouseFactory.build();
 
+        InboundOrder inboundOrder = InboundOrderFactory
+                .build(section);
         Mockito.when(warehouseRepo.findById(1L)).thenReturn(Optional.of(warehouse));
+        Mockito.when(sectionRepo.findById(2L)).thenReturn(Optional.of(section));
+        Mockito.when(warehouseOperatorRepo.findById(1L)).thenReturn(Optional.of(warehouse.getWarehouseOperator()));
+        Mockito.when(productRepo.findById(1L)).thenReturn(Optional.of(inboundOrder.getItemBatches().get(0).getProduct()));
+
         assertThatThrownBy(() -> inboundOrderService.createInboundOrder(createInboundOrderDto))
                 .isInstanceOf(BusinessRuleException.class);
     }
@@ -127,27 +127,19 @@ public class InboundOrderServiceImplTest {
     @Test
     void createInboundOrder_throwException_whenSectionVolumeIsNotAvailable() {
         // Given
-        CreateItemBatchDto createItemBatchDto = new CreateItemBatchDto(
-                1L,
-                10,
-                LocalDate.now(),
-                LocalDateTime.now(),
-                2000000L,
-                LocalDate.now(),
-                BigDecimal.valueOf(40),
-                StorageType.FRESCO
-        );
-        CreateInboundOrderDto createInboundOrderDto = new CreateInboundOrderDto(
-                1L,
-                1L,
-                1L,
-                List.of(createItemBatchDto)
-        );
+        CreateInboundOrderDto createInboundOrderDto = setupCreateInboundOrderDto();
+        createInboundOrderDto.getItemBatches().get(0).setVolume(200000L);
 
         // When / Then
         Warehouse warehouse = WarehouseFactory.build();
+        Section section = warehouse.getSections().get(0);
+        InboundOrder inboundOrder = InboundOrderFactory
+                .build(section);
         Mockito.when(warehouseRepo.findById(1L)).thenReturn(Optional.of(warehouse));
-        Mockito.when(sectionRepo.findById(1L)).thenReturn(Optional.of(warehouse.getSections().get(0)));
+        Mockito.when(sectionRepo.findById(1L)).thenReturn(Optional.of(section));
+        Mockito.when(warehouseOperatorRepo.findById(1L)).thenReturn(Optional.of(warehouse.getWarehouseOperator()));
+        Mockito.when(productRepo.findById(1L)).thenReturn(Optional.of(inboundOrder.getItemBatches().get(0).getProduct()));
+
         assertThatThrownBy(() -> inboundOrderService.createInboundOrder(createInboundOrderDto))
                 .isInstanceOf(BusinessRuleException.class);
     }
@@ -155,27 +147,20 @@ public class InboundOrderServiceImplTest {
     @Test
     void createInboundOrder_throwException_whenProductTypeIsDifferentFromSection() {
         // Given
-        CreateItemBatchDto createItemBatchDto = new CreateItemBatchDto(
-                1L,
-                10,
-                LocalDate.now(),
-                LocalDateTime.now(),
-                20L,
-                LocalDate.now(),
-                BigDecimal.valueOf(40),
-                StorageType.CONGELADO
-        );
-        CreateInboundOrderDto createInboundOrderDto = new CreateInboundOrderDto(
-                1L,
-                1L,
-                1L,
-                List.of(createItemBatchDto)
-        );
+        CreateInboundOrderDto createInboundOrderDto = setupCreateInboundOrderDto();
+        createInboundOrderDto.setSectionId(2L);
 
         // When / Then
+        Section section = new Section(2L, new Warehouse(2L, null, null), 20L, Category.CONGELADO);
+
+        InboundOrder inboundOrder = InboundOrderFactory
+                .build(section);
         Warehouse warehouse = WarehouseFactory.build();
         Mockito.when(warehouseRepo.findById(1L)).thenReturn(Optional.of(warehouse));
-        Mockito.when(sectionRepo.findById(1L)).thenReturn(Optional.of(warehouse.getSections().get(0)));
+        Mockito.when(sectionRepo.findById(2L)).thenReturn(Optional.of(section));
+        Mockito.when(warehouseOperatorRepo.findById(1L)).thenReturn(Optional.of(warehouse.getWarehouseOperator()));
+        Mockito.when(productRepo.findById(1L)).thenReturn(Optional.of(inboundOrder.getItemBatches().get(0).getProduct()));
+
         assertThatThrownBy(() -> inboundOrderService.createInboundOrder(createInboundOrderDto))
                 .isInstanceOf(BusinessRuleException.class);
     }
@@ -293,8 +278,7 @@ public class InboundOrderServiceImplTest {
                 LocalDateTime.now(),
                 20L,
                 LocalDate.now(),
-                BigDecimal.valueOf(40),
-                StorageType.FRESCO
+                BigDecimal.valueOf(40)
         );
         return new CreateInboundOrderDto(
                 1L,

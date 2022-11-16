@@ -3,7 +3,6 @@ package com.grupo6.projetointegrador.dto;
 import com.grupo6.projetointegrador.model.entity.InboundOrder;
 import com.grupo6.projetointegrador.model.entity.ItemBatch;
 import com.grupo6.projetointegrador.model.entity.Product;
-import com.grupo6.projetointegrador.model.enumeration.StorageType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -38,9 +37,6 @@ public class CreateItemBatchDto {
     @Positive
     private BigDecimal price;
 
-    @NotNull
-    private StorageType storageType;
-
     public ItemBatch toItemBatch(InboundOrder inboundOrder, Product product) {
         return new ItemBatch(
                 product,
@@ -50,8 +46,7 @@ public class CreateItemBatchDto {
                 volume,
                 dueDate,
                 price,
-                inboundOrder,
-                storageType
+                inboundOrder
         );
     }
 }

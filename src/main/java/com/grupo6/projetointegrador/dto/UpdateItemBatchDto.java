@@ -52,8 +52,7 @@ public class UpdateItemBatchDto {
                 volume,
                 dueDate,
                 price,
-                inboundOrder,
-                inboundOrder.getSection().getStorageType()
+                inboundOrder
         );
     }
 }
