@@ -256,6 +256,63 @@ public class InboundOrderServiceImplTest {
         ).isInstanceOf(NotFoundException.class);
     }
 
+    @Test
+    void updateItemBatch_throwsBusinessException_whenSectionCategoryDifferFromProductsOne() {
+        List<Product> products = setupSellerContainingTwoProducts().getProducts();
+        products.get(0).setCategory(Category.REFRIGERADO);
+
+        InboundOrder savedInboundOrder = setupGenericInboundOrder();
+        UpdateItemBatchDto updateArrozItemBatch = new UpdateItemBatchDto(
+                1L,
+                1L,
+                1,
+                LocalDate.of(2021, 10, 20),
+                LocalDateTime.of(2021, 10, 20, 1, 30, 10),
+                4L,
+                LocalDate.of(2021, 11, 20),
+                BigDecimal.valueOf(50)
+        );
+
+        // When
+        Mockito.when(inboundOrderRepo.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(savedInboundOrder));
+        Mockito.when(productRepo.findById(1L))
+                .thenReturn(products.stream().filter(product -> product.getId().equals(1L)).findFirst());
+
+        // Then
+        assertThatThrownBy(
+                () -> inboundOrderService.updateItemBatch(1L, List.of(updateArrozItemBatch))
+        ).isInstanceOf(BusinessRuleException.class);
+    }
+
+    @Test
+    void updateItemBatch_throwsBusinessException_whenSectionVolumeIsNotAvailable() {
+        List<Product> products = setupSellerContainingTwoProducts().getProducts();
+
+        InboundOrder savedInboundOrder = setupGenericInboundOrder();
+        UpdateItemBatchDto updateArrozItemBatch = new UpdateItemBatchDto(
+                1L,
+                1L,
+                1,
+                LocalDate.of(2021, 10, 20),
+                LocalDateTime.of(2021, 10, 20, 1, 30, 10),
+                400000L,
+                LocalDate.of(2021, 11, 20),
+                BigDecimal.valueOf(50)
+        );
+
+        // When
+        Mockito.when(inboundOrderRepo.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(savedInboundOrder));
+        Mockito.when(productRepo.findById(1L))
+                .thenReturn(products.stream().filter(product -> product.getId().equals(1L)).findFirst());
+
+        // Then
+        assertThatThrownBy(
+                () -> inboundOrderService.updateItemBatch(1L, List.of(updateArrozItemBatch))
+        ).isInstanceOf(BusinessRuleException.class);
+    }
+
     private InboundOrder setupGenericInboundOrder() {
         return InboundOrderFactory.build(WarehouseFactory.build().getSections().get(0));
     }

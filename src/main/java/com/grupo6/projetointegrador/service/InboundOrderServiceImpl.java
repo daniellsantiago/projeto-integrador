@@ -83,11 +83,17 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     public List<ItemBatchDto> updateItemBatch(Long inboundOrderId, List<UpdateItemBatchDto> updateItemBatchDtos) {
         InboundOrder inboundOrder = inboundOrderRepo.findById(inboundOrderId)
                 .orElseThrow(() -> new NotFoundException("InboundOrder não encontrado"));
+        List<Product> products = updateItemBatchDtos.stream()
+                .map(updateDto -> findProductOrThrowNotFound(updateDto.getProductId()))
+                        .collect(Collectors.toList());
+        validateInboundOrderUpdate(updateItemBatchDtos, inboundOrder, products);
 
         List<ItemBatch> updatedItemBatches = updateItemBatchDtos.stream()
                 .map(itemBatchDto -> itemBatchDto.toItemBatch(
                         inboundOrder,
-                        findProductOrThrowNotFound(itemBatchDto.getProductId())
+                        products.stream()
+                                .filter(product -> itemBatchDto.getProductId().equals(product.getId()))
+                                .findFirst().get()
                 ))
                 .collect(Collectors.toList());
 
@@ -127,6 +133,18 @@ public class InboundOrderServiceImpl implements InboundOrderService {
 
         verifyWarehouseMatchWithOperator(warehouse, warehouseOperator);
         verifyWarehouseMatchSection(section, warehouse);
+        verifyIfProductsCategoryDifferFromSection(products, section);
+        verifyIfSectionCanStoreItems(section, volumeToBeStored);
+    }
+
+    private void validateInboundOrderUpdate(
+            List<UpdateItemBatchDto> itemBatchDtos,
+            InboundOrder inboundOrder,
+            List<Product> products
+    ) {
+        Long volumeToBeStored = itemBatchDtos.stream().map(UpdateItemBatchDto::getVolume)
+                .reduce(0L, Long::sum);
+        Section section = inboundOrder.getSection();
         verifyIfProductsCategoryDifferFromSection(products, section);
         verifyIfSectionCanStoreItems(section, volumeToBeStored);
     }
