@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,9 +18,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOrderPurchaseDto {
+  @NotNull
+  @Positive
   private Long buyer;
+
+  @NotNull
   private LocalDate dateOrder;
+
+  @NotNull
   private StatusOrder status;
+
+  @NotNull
+  @Valid
   private List<ProductOrderDto> productOrders;
   public static OrderPurchase toOrderPurchase(CreateOrderPurchaseDto createdOrderPurchase, List<ProductOrder> productOrder, Buyer buyer) {
     return new OrderPurchase(
