@@ -1,13 +1,12 @@
 package com.grupo6.projetointegrador.dto;
 
-import com.grupo6.projetointegrador.model.entity.Buyer;
-import com.grupo6.projetointegrador.model.entity.OrderPurchase;
-import com.grupo6.projetointegrador.model.entity.ProductOrder;
-import com.grupo6.projetointegrador.model.enumeration.StatusOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.List;
