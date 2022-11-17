@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"warehouseOperatorId\": 1,\n    \"warehouseId\": 3,\n    \"sectionId\": 6,\n    \"itemBatches\": [\n        {\n            \"productId\": 8,\n            \"productQuantity\": 10,\n            \"manufacturingDate\": \"2022-10-14\",\n            \"manufacturingTime\": \"2022-10-14T22:27:43\",\n            \"volume\": 80,\n            \"dueDate\": \"2023-01-14\",\n            \"price\": 415.00,\n            \"storageType\": \"REFRIGERADO\"\n        }\n    ]\n}",
+					"raw": "{\n    \"warehouseOperatorId\": 8,\n    \"warehouseId\": 3,\n    \"sectionId\": 6,\n    \"itemBatches\": [\n        {\n            \"productId\": 5,\n            \"productQuantity\": 10,\n            \"manufacturingDate\": \"2022-10-14\",\n            \"manufacturingTime\": \"2022-10-14T22:27:43\",\n            \"volume\": 80,\n            \"dueDate\": \"2023-01-14\",\n            \"price\": 415.00,\n            \"storageType\": \"REFRIGERADO\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -42,7 +42,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[{\n    \"itemBatchId\": 4,\n    \"productId\": 2,\n    \"productQuantity\": 20,\n    \"manufacturingDate\": \"2022-11-10\",\n    \"manufacturingTime\": \"2022-11-10T21:25:00\",\n    \"volume\": 21,\n    \"dueDate\": \"2022-12-10\",\n    \"price\": 50\n}]",
+					"raw": "[{\n    \"itemBatchId\": 4,\n    \"productId\": 4,\n    \"productQuantity\": 20,\n    \"manufacturingDate\": \"2022-11-10\",\n    \"manufacturingTime\": \"2022-11-10T21:25:00\",\n    \"volume\": 21,\n    \"dueDate\": \"2022-12-10\",\n    \"price\": 51\n}]",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -129,7 +129,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"buyer\": 1,\n    \"dateOrder\": \"2022-11-16\",\n    \"status\": \"ABERTO\",\n    \"productOrders\": [\n        {\n            \"productId\": 2,\n            \"quantity\": 5\n        }\n    ]\n}",
+					"raw": "{\n    \"buyer\": 1,\n    \"dateOrder\": \"2022-11-16\",\n    \"status\": \"ABERTO\",\n    \"productOrders\": [\n        {\n            \"productId\": 6,\n            \"quantity\": 5\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -199,7 +199,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/products/2",
+					"raw": "http://localhost:8080/api/products/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -208,7 +208,7 @@
 					"path": [
 						"api",
 						"products",
-						"2"
+						"4"
 					],
 					"query": [
 						{
@@ -250,7 +250,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/due-date/list?category=RF&days=50&order=desc",
+					"raw": "http://localhost:8080/api/due-date/list?category=FS&days=50&order=desc",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -264,7 +264,7 @@
 					"query": [
 						{
 							"key": "category",
-							"value": "RF",
+							"value": "FS",
 							"description": "FS = Fresco\nRF = Refrigerado\nFF = Congelado"
 						},
 						{
@@ -287,7 +287,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/due-date?days=30&sectionId=5",
+					"raw": "http://localhost:8080/api/due-date?days=30&sectionId=2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -304,7 +304,7 @@
 						},
 						{
 							"key": "sectionId",
-							"value": "5"
+							"value": "2"
 						}
 					]
 				}

@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class ProductOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
