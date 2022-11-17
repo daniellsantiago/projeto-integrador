@@ -76,7 +76,7 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     @Transactional
     public List<ItemBatchDto> updateItemBatch(Long inboundOrderId, List<UpdateItemBatchDto> updateItemBatchDtos) {
         InboundOrder inboundOrder = inboundOrderRepo.findById(inboundOrderId)
-                .orElseThrow(() -> new NotFoundException("InboundOrder não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Ordem de entrada não encontrado."));
 
         List<ItemBatch> updatedItemBatches = updateItemBatchDtos.stream()
                 .map(itemBatchDto -> itemBatchDto.toItemBatch(

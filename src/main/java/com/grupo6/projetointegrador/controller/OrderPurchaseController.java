@@ -7,6 +7,8 @@ import com.grupo6.projetointegrador.service.OrderPurchaseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/order-purchase")
 public class OrderPurchaseController {
@@ -26,7 +28,7 @@ public class OrderPurchaseController {
   }
 
   @PostMapping
-  public ResponseEntity<TotalPriceDto> createOrderPurchase(@RequestBody CreateOrderPurchaseDto orderPurchaseDto) {
+  public ResponseEntity<TotalPriceDto> createOrderPurchase(@RequestBody @Valid CreateOrderPurchaseDto orderPurchaseDto) {
     return ResponseEntity.ok(service.createOrderPurchase(orderPurchaseDto));
   }
 }
