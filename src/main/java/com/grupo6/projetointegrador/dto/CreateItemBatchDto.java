@@ -46,7 +46,8 @@ public class CreateItemBatchDto {
                 volume,
                 dueDate,
                 price,
-                inboundOrder
+                inboundOrder,
+                product.getCategory()
         );
     }
 }

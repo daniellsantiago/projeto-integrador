@@ -52,7 +52,8 @@ public class UpdateItemBatchDto {
                 volume,
                 dueDate,
                 price,
-                inboundOrder
+                inboundOrder,
+                product.getCategory()
         );
     }
 }

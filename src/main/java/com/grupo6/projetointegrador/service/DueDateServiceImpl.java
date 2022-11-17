@@ -38,6 +38,5 @@ public class DueDateServiceImpl implements DueDateService{
         } catch (NullPointerException exception){
             throw new BusinessRuleException("A categoria passada é inválida.");
         }
-
     }
 }

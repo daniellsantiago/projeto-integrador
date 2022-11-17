@@ -197,7 +197,8 @@ public class OrderPurchaseControllerIT {
                 20L,
                 LocalDate.of(2022, 12, 14),
                 BigDecimal.valueOf(100),
-                null
+                null,
+                product.getCategory()
         ));
     }
 
