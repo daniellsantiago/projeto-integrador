@@ -25,11 +25,11 @@ public class OrderPurchaseController {
 
   @GetMapping("/{id}")
   public OrderPurchaseDto findOrderPurchase(@PathVariable Long id) {
-    return service.findById(id);
+      return service.findById(id);
   }
 
   @PutMapping("/{id}")
   public String alterOrderPurchase(@PathVariable Long id) {
-    return service.endOrder(id);
+      return service.endOrder(id);
   }
 }

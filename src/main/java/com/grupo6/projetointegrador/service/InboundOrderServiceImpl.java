@@ -82,7 +82,7 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     @Transactional
     public List<ItemBatchDto> updateItemBatch(Long inboundOrderId, List<UpdateItemBatchDto> updateItemBatchDtos) {
         InboundOrder inboundOrder = inboundOrderRepo.findById(inboundOrderId)
-                .orElseThrow(() -> new NotFoundException("InboundOrder não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Ordem de entrada não encontrado."));
         List<Product> products = updateItemBatchDtos.stream()
                 .map(updateDto -> findProductOrThrowNotFound(updateDto.getProductId()))
                         .collect(Collectors.toList());
@@ -105,18 +105,35 @@ public class InboundOrderServiceImpl implements InboundOrderService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Method to find a warehouse by id or throw a not found exception.
+     *
+     * @param warehouseId The ID of the warehouse.
+     * @return A warehouse object or {@link NotFoundException} - if none found.<p>
+     */
     private Warehouse findWarehouseOrThrowNotFound(Long warehouseId){
         return warehouseRepo.findById(warehouseId).orElseThrow(() -> new NotFoundException("Armazém não encontrado."));
     }
 
-    private WarehouseOperator findWarehouseOperatorOrThrowNotFound(Long warehouseOperatorId){
+    /**
+     * Method to find a warehouse operator by id or throw a not found exception.
+     *
+     * @param warehouseOperatorId The ID of the warehouse operator to be updated.
+     * @return A WarehouseOperator object or {@link NotFoundException} - if none found.<p>
+     */
+    private WarehouseOperator findWarehouseOperatorOrThrowNotFound(Long warehouseOperatorId) {
         return warehouseOperatorRepo.findById(warehouseOperatorId).orElseThrow(() -> new NotFoundException("Operador não encontrado."));
     }
 
     private Section findSectionOrThrowNotFound(Long sectionId){
         return sectionRepo.findById(sectionId).orElseThrow(() -> new NotFoundException("Seção não encontrada."));
     }
-
+    /**
+     * Method to find a product giving id.
+     *
+     * @param productId The id of the product.
+     * @return A product with the given id or {@link NotFoundException} - if none found.
+     */
     private Product findProductOrThrowNotFound(Long productId) {
         return productRepo.findById(productId).orElseThrow(() -> new NotFoundException("Produto não encontrado."));
     }

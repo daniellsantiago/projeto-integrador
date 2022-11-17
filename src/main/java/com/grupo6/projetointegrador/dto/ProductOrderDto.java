@@ -13,6 +13,7 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class ProductOrderDto {
     @NotNull
+    @Positive
     private Long productId;
 
     @Positive
