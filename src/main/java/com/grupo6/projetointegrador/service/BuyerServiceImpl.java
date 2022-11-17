@@ -14,6 +14,12 @@ public class BuyerServiceImpl implements BuyerService {
     this.buyerRepo = buyerRepo;
   }
 
+  /**
+   * Find a buyer by id, and return the buyer.
+   *
+   * @param id The id of the buyer you want to find.
+   * @return The buyer object is being returned.
+   */
   public Buyer findById(Long id) {
     Optional<Buyer> buyer = buyerRepo.findById(id);
     return buyer.get();
