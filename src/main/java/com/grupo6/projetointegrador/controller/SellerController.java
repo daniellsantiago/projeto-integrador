@@ -4,6 +4,7 @@ import com.grupo6.projetointegrador.dto.CreateSellerDto;
 import com.grupo6.projetointegrador.model.entity.Seller;
 import com.grupo6.projetointegrador.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,23 +20,23 @@ public class SellerController {
 
     @PostMapping
     public ResponseEntity<Seller> createSeller(@RequestBody @Valid CreateSellerDto createSellerDto) {
-        return ResponseEntity.ok(sellerService.createSeller(createSellerDto));
+        return new ResponseEntity<>(sellerService.createSeller(createSellerDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Seller> findSeller(@PathVariable Long id) {
-        return ResponseEntity.ok(sellerService.findSeller(id));
+        return new ResponseEntity<>(sellerService.findSeller(id), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Seller> updateSeller(@PathVariable Long id,
                                                @RequestBody @Valid CreateSellerDto createSellerDto) {
-        return ResponseEntity.ok(sellerService.updateSeller(id, createSellerDto));
+        return new ResponseEntity<>(sellerService.updateSeller(id, createSellerDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.HeadersBuilder<?> deleteSeller(@PathVariable Long id) {
+    public ResponseEntity<?> deleteSeller(@PathVariable Long id) {
         sellerService.deleteSeller(id);
-        return ResponseEntity.noContent();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

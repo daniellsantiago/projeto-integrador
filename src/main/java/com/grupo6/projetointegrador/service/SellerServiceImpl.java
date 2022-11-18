@@ -6,6 +6,7 @@ import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.entity.Product;
 import com.grupo6.projetointegrador.model.entity.Seller;
+import com.grupo6.projetointegrador.model.enumeration.Active;
 import com.grupo6.projetointegrador.repository.SellerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class SellerServiceImpl implements SellerService {
         List<Product> products = new ArrayList<>();
 
         newSeller.setProducts(products);
+        newSeller.setActive(Active.ATIVO);
         newSeller.setAddress(createSellerDto.getAddress());
         newSeller.setZipCode(createSellerDto.getZipCode());
         newSeller.setEmail(createSellerDto.getEmail());
@@ -71,6 +73,9 @@ public class SellerServiceImpl implements SellerService {
     @Transactional
     public Seller updateSeller(Long id, CreateSellerDto createSellerDto) {
         Seller seller = sellerRepo.findById(id).orElseThrow(() -> new NotFoundException("Vendedor não encontrado."));
+        if (seller.getActive().equals(Active.INATIVO)) {
+            throw new BusinessRuleException("Usuário inativo.");
+        }
 
         updateCheckZipAndAddress(createSellerDto, seller);
         if (createSellerDto.getEmail() != null) {
@@ -98,14 +103,18 @@ public class SellerServiceImpl implements SellerService {
     }
 
     /**
-     * This method deletes a Seller.
+     * This method makes a Seller inactive.
      *
      * @param id This is the id of the seller set to be deleted.
      */
     @Override
     public void deleteSeller(Long id) {
         Seller seller = sellerRepo.findById(id).orElseThrow(() -> new NotFoundException("Vendedor não encontrado."));
-        sellerRepo.delete(seller);
+        if (seller.getActive().equals(Active.INATIVO)) {
+            throw new BusinessRuleException("Usuário já está inativo.");
+        }
+        seller.setActive(Active.INATIVO);
+        sellerRepo.save(seller);
     }
 
     /**

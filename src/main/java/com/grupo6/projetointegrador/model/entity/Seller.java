@@ -1,6 +1,7 @@
 package com.grupo6.projetointegrador.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.grupo6.projetointegrador.model.enumeration.Active;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,9 @@ public class Seller {
 
     @NotNull
     private String zipCode;
+
+    @Enumerated(EnumType.STRING)
+    private Active active;
 
     @OneToMany(mappedBy = "seller")
     @JsonManagedReference
