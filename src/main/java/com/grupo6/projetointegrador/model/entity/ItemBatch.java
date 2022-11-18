@@ -36,9 +36,9 @@ public class ItemBatch {
     @ManyToOne
     private InboundOrder inboundOrder;
 
-    private Category storageType;
+    private Category category;
 
-    public ItemBatch(Product product, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder, Category storageType) {
+    public ItemBatch(Product product, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder, Category category) {
         this.product = product;
         this.productQuantity = productQuantity;
         this.manufacturingDate = manufacturingDate;
@@ -47,6 +47,6 @@ public class ItemBatch {
         this.dueDate = dueDate;
         this.price = price;
         this.inboundOrder = inboundOrder;
-        this.storageType = storageType;
+        this.category = category;
     }
 }
