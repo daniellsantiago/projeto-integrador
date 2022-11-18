@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DueDateServiceImpl implements DueDateService {
-    private ItemBatchRepo itemBatchRepo;
+public class DueDateServiceImpl implements DueDateService{
+    private final ItemBatchRepo itemBatchRepo;
 
     public DueDateServiceImpl(ItemBatchRepo itemBatchRepo) {
         this.itemBatchRepo = itemBatchRepo;
@@ -56,5 +56,6 @@ public class DueDateServiceImpl implements DueDateService {
         } catch (NullPointerException exception) {
             throw new BusinessRuleException("A categoria passada é inválida.");
         }
+
     }
 }

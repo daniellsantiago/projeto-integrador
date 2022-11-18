@@ -116,26 +116,26 @@ insert into `product` (`id`, `price`, `category`, `seller_id`) values(25, '14.20
 -- Extraindo dados da tabela `section`
 --
 
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(1, 'FRESCO', 6100, 1);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(2, 'CONGELADO', 4100, 1);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(3, 'REFRIGERADO', 7100, 1);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(4, 'FRESCO', 6200, 2);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(5, 'CONGELADO', 4200, 2);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(6, 'REFRIGERADO', 7300, 3);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(7, 'FRESCO', 3000, 3);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(8, 'FRESCO', 2300, 4);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(9, 'CONGELADO', 1000, 4);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(10, 'REFRIGERADO', 5500, 4);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(11, 'FRESCO', 6200, 5);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(12, 'CONGELADO', 4200, 6);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(13, 'REFRIGERADO', 7300, 6);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(14, 'FRESCO', 7800, 7);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(15, 'FRESCO', 1800, 8);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(16, 'CONGELADO', 2000, 8);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(17, 'REFRIGERADO', 2300, 9);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(18, 'FRESCO', 4100, 10);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(19, 'CONGELADO', 5400, 10);
-insert into `section` (`id`, `storage_type`, `volume`, `warehouse_id`) values(20, 'REFRIGERADO', 1900, 10);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(1, 'FRESCO', 6100, 1);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(2, 'CONGELADO', 4100, 1);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(3, 'REFRIGERADO', 7100, 1);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(4, 'FRESCO', 6200, 2);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(5, 'CONGELADO', 4200, 2);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(6, 'REFRIGERADO', 7300, 3);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(7, 'FRESCO', 3000, 3);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(8, 'FRESCO', 2300, 4);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(9, 'CONGELADO', 1000, 4);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(10, 'REFRIGERADO', 5500, 4);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(11, 'FRESCO', 6200, 5);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(12, 'CONGELADO', 4200, 6);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(13, 'REFRIGERADO', 7300, 6);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(14, 'FRESCO', 7800, 7);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(15, 'FRESCO', 1800, 8);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(16, 'CONGELADO', 2000, 8);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(17, 'REFRIGERADO', 2300, 9);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(18, 'FRESCO', 4100, 10);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(19, 'CONGELADO', 5400, 10);
+insert into `section` (`id`, `category`, `volume`, `warehouse_id`) values(20, 'REFRIGERADO', 1900, 10);
 
 --
 -- Extraindo dados da tabela `inbound_order`
@@ -156,16 +156,16 @@ insert into `inbound_order` (`id`, `order_date`, `section_id`, `warehouse_id`, `
 -- Extraindo dados da tabela `item_batch`
 --
 
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(1, '2023-01-11', '2022-11-08', '2022-11-08 22:27:42', '30.20', 5, 'CONGELADO', 3, 1, 1);
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(2, '2022-12-12', '2022-11-09', '2022-11-09 22:27:42', '55.20', 13, 'CONGELADO', 3, 1, 1);
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(3, '2023-01-13', '2022-11-10', '2022-11-10 22:27:42', '45.20', 7, 'CONGELADO', 3, 1, 1);
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(4, '2022-12-10', '2022-11-10', '2022-11-10 21:25:00', '50.00', 20, 'FRESCO', 21, 2, 4);
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(5, '2022-12-30', '2022-11-12', '2022-11-12 22:27:42', '75.20', 9, 'FRESCO', 18, 2, 4);
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(6, '2022-12-13', '2022-11-12', '2022-11-12 22:27:42', '75.20', 6, 'FRESCO', 12, 2, 4);
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(7, '2022-12-18', '2022-11-10', '2022-11-10 22:27:42', '45.20', 5, 'CONGELADO', 5, 1, 6);
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(8, '2022-12-30', '2022-11-10', '2022-11-10 22:27:42', '85.20', 20, 'CONGELADO', 48, 3, 1);
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(9, '2022-12-30', '2022-11-10', '2022-11-10 22:27:42', '5.20', 6, 'CONGELADO', 5, 3, 6);
-insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `storage_type`, `volume`, `inbound_order_id`, `product_id`) values(10, '2022-11-20', '2022-11-10', '2022-11-10 22:27:42', '521.20', 15, 'CONGELADO', 5, 3, 6);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(1, '2023-01-11', '2022-11-08', '2022-11-08 22:27:42', '30.20', 5, 'CONGELADO', 3, 1, 1);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(2, '2022-12-12', '2022-11-09', '2022-11-09 22:27:42', '55.20', 13, 'CONGELADO', 3, 1, 1);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(3, '2023-01-13', '2022-11-10', '2022-11-10 22:27:42', '45.20', 7, 'CONGELADO', 3, 1, 1);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(4, '2022-12-10', '2022-11-10', '2022-11-10 21:25:00', '50.00', 20, 'FRESCO', 21, 2, 4);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(5, '2022-12-30', '2022-11-12', '2022-11-12 22:27:42', '75.20', 9, 'FRESCO', 18, 2, 4);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(6, '2022-12-13', '2022-11-12', '2022-11-12 22:27:42', '75.20', 6, 'FRESCO', 12, 2, 4);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(7, '2022-12-18', '2022-11-10', '2022-11-10 22:27:42', '45.20', 5, 'CONGELADO', 5, 1, 6);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(8, '2022-12-30', '2022-11-10', '2022-11-10 22:27:42', '85.20', 20, 'CONGELADO', 48, 3, 1);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(9, '2022-12-30', '2022-11-10', '2022-11-10 22:27:42', '5.20', 6, 'CONGELADO', 5, 3, 6);
+insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing_time`, `price`, `product_quantity`, `category`, `volume`, `inbound_order_id`, `product_id`) values(10, '2022-11-20', '2022-11-10', '2022-11-10 22:27:42', '521.20', 15, 'CONGELADO', 5, 3, 6);
 
 --
 -- Extraindo dados da tabela `order_purchase`

@@ -23,7 +23,7 @@ public class InboundOrder {
 
     @OneToMany(
             mappedBy = "inboundOrder",
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
     )
     private List<ItemBatch> itemBatches;
 
