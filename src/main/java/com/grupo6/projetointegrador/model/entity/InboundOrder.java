@@ -1,4 +1,4 @@
-package com.grupo6.projetointegrador.model;
+package com.grupo6.projetointegrador.model.entity;
 
 import lombok.*;
 
@@ -23,7 +23,7 @@ public class InboundOrder {
 
     @OneToMany(
             mappedBy = "inboundOrder",
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
     )
     private List<ItemBatch> itemBatches;
 
@@ -31,6 +31,4 @@ public class InboundOrder {
     private Warehouse warehouse;
 
     private LocalDate orderDate;
-
-
 }

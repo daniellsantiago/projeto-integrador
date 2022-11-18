@@ -1,9 +1,8 @@
 package com.grupo6.projetointegrador.dto;
 
-import com.grupo6.projetointegrador.model.InboundOrder;
-import com.grupo6.projetointegrador.model.ItemBatch;
-import com.grupo6.projetointegrador.model.Product;
-import com.grupo6.projetointegrador.model.StorageType;
+import com.grupo6.projetointegrador.model.entity.InboundOrder;
+import com.grupo6.projetointegrador.model.entity.ItemBatch;
+import com.grupo6.projetointegrador.model.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -38,9 +37,6 @@ public class CreateItemBatchDto {
     @Positive
     private BigDecimal price;
 
-    @NotNull
-    private StorageType storageType;
-
     public ItemBatch toItemBatch(InboundOrder inboundOrder, Product product) {
         return new ItemBatch(
                 product,
@@ -51,7 +47,7 @@ public class CreateItemBatchDto {
                 dueDate,
                 price,
                 inboundOrder,
-                storageType
+                product.getCategory()
         );
     }
 }

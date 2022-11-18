@@ -1,9 +1,13 @@
 package com.grupo6.projetointegrador.response;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 
 import java.util.Collection;
 
+@Getter
+@Setter
 public class PageableResponse {
     private Collection<?> content;
     private int totalPages;
@@ -14,29 +18,5 @@ public class PageableResponse {
         this.totalPages = page.getTotalPages();
         this.totalRecords = page.getTotalElements();
         return this;
-    }
-
-    public Collection<?> getContent() {
-        return content;
-    }
-
-    public void setContent(Collection<?> content) {
-        this.content = content;
-    }
-
-    public int getTotalPages() {
-        return totalPages;
-    }
-
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    public Long getTotalRecords() {
-        return totalRecords;
-    }
-
-    public void setTotalRecords(Long totalRecords) {
-        this.totalRecords = totalRecords;
     }
 }

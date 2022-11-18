@@ -1,8 +1,8 @@
 package com.grupo6.projetointegrador.dto;
 
-import com.grupo6.projetointegrador.model.InboundOrder;
-import com.grupo6.projetointegrador.model.ItemBatch;
-import com.grupo6.projetointegrador.model.Product;
+import com.grupo6.projetointegrador.model.entity.InboundOrder;
+import com.grupo6.projetointegrador.model.entity.ItemBatch;
+import com.grupo6.projetointegrador.model.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,7 +53,7 @@ public class UpdateItemBatchDto {
                 dueDate,
                 price,
                 inboundOrder,
-                inboundOrder.getSection().getStorageType()
+                product.getCategory()
         );
     }
 }
