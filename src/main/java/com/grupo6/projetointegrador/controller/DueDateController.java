@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/due-date")
 @Validated
 public class DueDateController {
-    private DueDateService dueDateService;
+    private final DueDateService dueDateService;
 
     public DueDateController(DueDateService dueDateService) {
         this.dueDateService = dueDateService;

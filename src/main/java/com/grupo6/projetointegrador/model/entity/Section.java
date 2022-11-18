@@ -1,6 +1,6 @@
 package com.grupo6.projetointegrador.model.entity;
 
-import com.grupo6.projetointegrador.model.enumeration.StorageType;
+import com.grupo6.projetointegrador.model.enumeration.Category;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,5 +21,5 @@ public class Section {
     private Long volume;
 
     @Enumerated(EnumType.STRING)
-    private StorageType storageType;
+    private Category category;
 }

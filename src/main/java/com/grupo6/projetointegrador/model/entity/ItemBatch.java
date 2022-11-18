@@ -1,6 +1,6 @@
 package com.grupo6.projetointegrador.model.entity;
 
-import com.grupo6.projetointegrador.model.enumeration.StorageType;
+import com.grupo6.projetointegrador.model.enumeration.Category;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,10 +36,9 @@ public class ItemBatch {
     @ManyToOne
     private InboundOrder inboundOrder;
 
-    @Enumerated(EnumType.STRING)
-    private StorageType storageType;
+    private Category storageType;
 
-    public ItemBatch(Product product, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder, StorageType storageType) {
+    public ItemBatch(Product product, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder, Category storageType) {
         this.product = product;
         this.productQuantity = productQuantity;
         this.manufacturingDate = manufacturingDate;

@@ -18,14 +18,14 @@ public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
     List<ItemBatch> findAllByProductIdOrderByProductQuantityAsc(Long productId);
 
     List<ItemBatch> findAllByProductIdOrderByDueDateAsc(Long productId);
-  /**
-   * @param productId
-   * @param productQuantity
-   * @return Optional<ItemBatch>
-   */
-    @Query(value = "SELECT * FROM `item_batch` WHERE DATEDIFF(due_date, CURDATE()) > 21 AND product_id = (?1) " +
-          "AND product_quantity >= (?2) ORDER BY due_date ASC LIMIT 1 ;", nativeQuery = true)
-    Optional<ItemBatch> findByDueDateAndQty(Long productId, int productQuantity);
+    /**
+     * @param productId
+     * @param productQuantity
+     * @return Optional<ItemBatch>
+     */
+    @Query(value = "SELECT * FROM `item_batch` WHERE due_date > CURRENT_DATE + 21  AND product_id = (?1) " +
+            "AND product_quantity >= (?2) ORDER BY due_date ASC LIMIT 1 ;", nativeQuery = true)
+    Optional<ItemBatch> findByDueDate21AndProductIdAndQty(Long productId, int productQuantity);
 
     @Query(value = "SELECT t1.id AS itemBatchId," +
       "    t1.product_id AS productId," +
