@@ -21,6 +21,13 @@ public class SellerServiceImpl implements SellerService {
     @Autowired
     private SellerRepo sellerRepo;
 
+    /**
+     * This method returns a new Seller.
+     *
+     * @param createSellerDto This is the entry object of seller information,
+     *                        containing first name, last name, email, address, house number and zip code.
+     * @return A Seller object containing the information received.
+     */
     @Override
     @Transactional
     public Seller createSeller(CreateSellerDto createSellerDto) {
@@ -41,11 +48,25 @@ public class SellerServiceImpl implements SellerService {
         return sellerRepo.save(newSeller);
     }
 
+    /**
+     * This method returns a Seller.
+     *
+     * @param id This is the id of the searched seller.
+     * @return A Seller object of the searched seller.
+     */
     @Override
     public Seller findSeller(Long id) {
         return sellerRepo.findById(id).orElseThrow(() -> new NotFoundException("Vendedor não encontrado."));
     }
 
+    /**
+     * This method returns an updated Seller.
+     *
+     * @param id This is the id of the seller set to be updated.
+     * @param createSellerDto This is the entry object of seller information,
+     *                        it may contain first name, last name, email, address, house number and zip code.
+     * @return A Seller object containing the updated information.
+     */
     @Override
     @Transactional
     public Seller updateSeller(Long id, CreateSellerDto createSellerDto) {
@@ -76,12 +97,23 @@ public class SellerServiceImpl implements SellerService {
         return sellerRepo.save(seller);
     }
 
+    /**
+     * This method deletes a Seller.
+     *
+     * @param id This is the id of the seller set to be deleted.
+     */
     @Override
     public void deleteSeller(Long id) {
         Seller seller = sellerRepo.findById(id).orElseThrow(() -> new NotFoundException("Vendedor não encontrado."));
         sellerRepo.delete(seller);
     }
 
+    /**
+     * This method checks if the zip code matches the address received.
+     *
+     * @param zipCode This is the seller's zip code.
+     * @param address This is the seller's address.
+     */
     private void checkZipCode(String zipCode, String address) {
         ZipCodeDto zipCodeDtoDto = new RestTemplate()
                 .getForEntity("https://viacep.com.br/ws/"+zipCode+"/json/", ZipCodeDto.class)
@@ -91,6 +123,12 @@ public class SellerServiceImpl implements SellerService {
         }
     }
 
+    /**
+     * This method checks if the email received already exists in the database, excluding the own seller entry.
+     *
+     * @param email This is the seller's email.
+     * @param id This is the seller's id.
+     */
     private void checkEmail(String email, Long id) {
         List<Seller> sellers = sellerRepo.findAll();
         sellers.forEach((seller) -> {
@@ -100,6 +138,13 @@ public class SellerServiceImpl implements SellerService {
         });
     }
 
+    /**
+     * This method checks if the zip code matches the address received, depending on the information provided.
+     *
+     * @param createSellerDto This is the entry object of seller information,
+     *                        containing first name, last name, email, address, house number and zip code.
+     * @param seller Seller object containing all the seller's information.
+     */
     private void updateCheckZipAndAddress(CreateSellerDto createSellerDto, Seller seller) {
         if(createSellerDto.getZipCode() != null && createSellerDto.getAddress() != null) {
             checkZipCode(createSellerDto.getZipCode(), createSellerDto.getAddress());
