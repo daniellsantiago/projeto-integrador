@@ -122,8 +122,8 @@ public class DueDateServiceImplTest {
             }
 
             @Override
-            public String getCategory() {
-                return "FRESCO";
+            public Category getCategory() {
+                return Category.FRESCO;
             }
 
             @Override

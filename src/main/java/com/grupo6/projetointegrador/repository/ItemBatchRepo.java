@@ -29,7 +29,7 @@ public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
 
     @Query(value = "SELECT t1.id AS itemBatchId," +
       "    t1.product_id AS productId," +
-      "    t1.storage_type as category," +
+      "    t1.category as category," +
       "    t1.due_date AS dueDate," +
       "    t1.product_quantity AS quantity" +
       "    FROM item_batch AS t1" +
@@ -41,11 +41,11 @@ public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
 
     @Query(value = "SELECT t1.id AS itemBatchId," +
             "    t1.product_id AS productId," +
-            "    t1.storage_type as category," +
+            "    t1.category as category," +
             "    t1.due_date AS dueDate," +
             "    t1.product_quantity AS quantity" +
             "    FROM item_batch AS t1" +
-            "    WHERE t1.storage_type = ?1" +
+            "    WHERE t1.category = ?1" +
             "    AND t1.product_quantity > 0" +
             "    AND due_date BETWEEN curdate() AND curdate() + interval ?2 day" +
             "    ORDER BY CASE WHEN ?3 = 'desc' THEN dueDate end DESC," +
