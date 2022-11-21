@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -38,6 +39,8 @@ public class ItemBatch {
 
     @Enumerated(EnumType.STRING)
     private Category category;
+
+    private LocalDateTime lastChangeDateTime;
 
     public ItemBatch(Product product, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, InboundOrder inboundOrder, Category category) {
         this.product = product;

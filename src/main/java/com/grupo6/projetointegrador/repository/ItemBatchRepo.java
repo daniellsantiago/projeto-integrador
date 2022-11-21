@@ -51,4 +51,11 @@ public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
             "    ORDER BY CASE WHEN ?3 = 'desc' THEN dueDate end DESC," +
             "    CASE WHEN ?3 != 'desc' THEN dueDate end ASC;", nativeQuery = true)
     Optional<List<DueDateItemBatchDto>> findByDueDateWithCategory(String category, int days, String order);
+
+    @Query(value = "SELECT * FROM `item_batch` WHERE DATEDIFF(due_date, CURDATE()) <= 21;", nativeQuery = true)
+    Optional<List<ItemBatch>> findAllOutOfDate();
+
+    @Query(value = "SELECT * FROM item_batch" +
+            "   WHERE DATE(last_change_date_time) BETWEEN ?1 AND ?2", nativeQuery = true)
+    Optional<List<ItemBatch>> findAllBetweenTwoDates(String dateMin, String dateMax);
 }

@@ -42,7 +42,7 @@ public class UpdateItemBatchDto {
     @Positive
     private BigDecimal price;
 
-    public ItemBatch toItemBatch(InboundOrder inboundOrder, Product product) {
+    public ItemBatch toItemBatch(InboundOrder inboundOrder, Product product, LocalDateTime lastChangeDateTime) {
         return new ItemBatch(
                 itemBatchId,
                 product,
@@ -53,7 +53,8 @@ public class UpdateItemBatchDto {
                 dueDate,
                 price,
                 inboundOrder,
-                product.getCategory()
+                product.getCategory(),
+                lastChangeDateTime
         );
     }
 }

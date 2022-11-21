@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,7 +94,8 @@ public class InboundOrderServiceImpl implements InboundOrderService {
                         inboundOrder,
                         products.stream()
                                 .filter(product -> itemBatchDto.getProductId().equals(product.getId()))
-                                .findFirst().get()
+                                .findFirst().get(),
+                        LocalDateTime.now()
                 ))
                 .collect(Collectors.toList());
 
