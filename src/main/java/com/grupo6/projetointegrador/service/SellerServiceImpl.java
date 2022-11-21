@@ -126,6 +126,7 @@ public class SellerServiceImpl implements SellerService {
 
     /**
      * This method checks if the zip code matches the address received.
+     * Or throws a {@link BusinessRuleException} if the zip code isn't valid.
      * Or throws a {@link BusinessRuleException} if the zip code doesn't match the address provided.
      *
      * @param zipCode This is the seller's zip code.
@@ -135,6 +136,9 @@ public class SellerServiceImpl implements SellerService {
         ZipCodeDto zipCodeDtoDto = new RestTemplate()
                 .getForEntity("https://viacep.com.br/ws/"+zipCode+"/json/", ZipCodeDto.class)
                 .getBody();
+        if (zipCodeDtoDto.getErro() != null) {
+            throw new BusinessRuleException("CEP inválido.");
+        }
         if (!zipCodeDtoDto.getLogradouro().equals(address)) {
             throw new BusinessRuleException("CEP não corresponde ao endereço passado.");
         }

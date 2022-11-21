@@ -16,4 +16,5 @@ public class ZipCodeDto implements Serializable {
     private String bairro;
     private String localidade;
     private String uf;
+    private String erro;
 }
