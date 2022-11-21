@@ -24,6 +24,8 @@ public class SellerServiceImpl implements SellerService {
 
     /**
      * This method returns a new Seller.
+     * Or throws a {@link BusinessRuleException} if the zip code doesn't match the address given.
+     * Or throws a {@link BusinessRuleException} if the email provided already exists in the database.
      *
      * @param createSellerDto This is the entry object of seller information,
      *                        containing first name, last name, email, address, house number and zip code.
@@ -52,6 +54,7 @@ public class SellerServiceImpl implements SellerService {
 
     /**
      * This method returns a Seller.
+     * Or throws a {@link NotFoundException} if the seller is not found.
      *
      * @param id This is the id of the searched seller.
      * @return A Seller object of the searched seller.
@@ -63,6 +66,8 @@ public class SellerServiceImpl implements SellerService {
 
     /**
      * This method returns an updated Seller.
+     * Or throws a {@link NotFoundException} if the seller is not found.
+     * Or throws a {@link BusinessRuleException} if the seller is inactive.
      *
      * @param id This is the id of the seller set to be updated.
      * @param createSellerDto This is the entry object of seller information,
@@ -104,6 +109,8 @@ public class SellerServiceImpl implements SellerService {
 
     /**
      * This method makes a Seller inactive.
+     * Or throws a {@link NotFoundException} if the seller is not found.
+     * Or throws a {@link BusinessRuleException} if the seller is already inactive.
      *
      * @param id This is the id of the seller set to be deleted.
      */
@@ -119,6 +126,7 @@ public class SellerServiceImpl implements SellerService {
 
     /**
      * This method checks if the zip code matches the address received.
+     * Or throws a {@link BusinessRuleException} if the zip code doesn't match the address provided.
      *
      * @param zipCode This is the seller's zip code.
      * @param address This is the seller's address.
@@ -134,6 +142,8 @@ public class SellerServiceImpl implements SellerService {
 
     /**
      * This method checks if the email received already exists in the database, excluding the own seller entry.
+     * Or throws a {@link BusinessRuleException} if the email provided already exists in the database
+     *                                           and is not associated with the current seller.
      *
      * @param email This is the seller's email.
      * @param id This is the seller's id.
@@ -149,6 +159,8 @@ public class SellerServiceImpl implements SellerService {
 
     /**
      * This method checks if the zip code matches the address received, depending on the information provided.
+     * * Or throws a {@link BusinessRuleException} if the zip code or address provided doesn't match each other
+     *                                             or the information from the database.
      *
      * @param createSellerDto This is the entry object of seller information,
      *                        containing first name, last name, email, address, house number and zip code.
