@@ -41,4 +41,8 @@ Deleta os dados de um cliente cujo id foi inserido.
 Retorna 404 caso nenhum cliente com o id provido seja encontrado.
 
 
-
+## Validações
+Ao inserir novo cliente, é validado:
+* se o CEP corresponde ao endereço cadastrado
+* se o CPF é válido
+* se o CPF é único
