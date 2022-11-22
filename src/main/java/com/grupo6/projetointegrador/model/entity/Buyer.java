@@ -1,9 +1,12 @@
 package com.grupo6.projetointegrador.model.entity;
 
+import br.com.caelum.stella.bean.validation.CPF;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.grupo6.projetointegrador.model.enumeration.Active;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,36 +18,31 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Buyer {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-  @OneToMany(mappedBy = "buyer")
-  @JsonManagedReference
-  private List<OrderPurchase> orders;
+    @OneToMany(mappedBy = "buyer")
+    @JsonManagedReference
+    private List<OrderPurchase> orders;
 
-  @NotNull
-  private String name;
+    private String name;
 
-  @NotNull
-  private String cpf;
+    @CPF
+    @Column(unique = true)
+    private String cpf;
 
-  @NotNull
-  private String address;
+    private String address;
 
-  @NotNull
-  private String neighborhood;
+    private String neighborhood;
 
-  @NotNull
-  private String city;
+    private String city;
 
-  @NotNull
-  private String state;
+    private String state;
 
-  @NotNull
-  @Pattern(regexp = "^[0-9]*$")
-  @Size(min = 8, max = 8)
-  private String zipCode;
+    private String zipCode;
+
+    @Enumerated(EnumType.STRING)
+    private Active active;
 }
