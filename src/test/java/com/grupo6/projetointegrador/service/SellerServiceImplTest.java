@@ -2,9 +2,11 @@ package com.grupo6.projetointegrador.service;
 
 import com.grupo6.projetointegrador.dto.CreateSellerDto;
 import com.grupo6.projetointegrador.dto.InactiveSellerBatchDto;
+import com.grupo6.projetointegrador.dto.ZipCodeDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.factory.SellerFactory;
+import com.grupo6.projetointegrador.factory.ZipCodeDtoFactory;
 import com.grupo6.projetointegrador.model.entity.Seller;
 import com.grupo6.projetointegrador.model.entity.Warehouse;
 import com.grupo6.projetointegrador.model.enumeration.Active;
@@ -19,6 +21,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +31,17 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class SellerServiceImplTest {
 
     @Mock
     private SellerRepo sellerRepo;
+
+    @Mock
+    private RestTemplate restTemplate;
 
     @Mock
     private WarehouseRepo warehouseRepo;
@@ -49,6 +59,9 @@ public class SellerServiceImplTest {
 
         // When
         Seller newSeller = SellerFactory.build(createSellerDto);
+        ZipCodeDto zipCodeDto = ZipCodeDtoFactory.build(createSellerDto);
+        Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(new ResponseEntity<>(zipCodeDto, HttpStatus.OK));
         Mockito.when(sellerRepo.findAll()).thenReturn(new ArrayList<>());
         Mockito.when(sellerRepo.save(ArgumentMatchers.any())).thenReturn(newSeller);
         Seller result = sellerService.createSeller(createSellerDto);
@@ -75,7 +88,19 @@ public class SellerServiceImplTest {
                 "22793420"
         );
 
-        // When / Then
+        // When
+        Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(new ResponseEntity<>(new ZipCodeDto(
+                        createSellerDto.getZipCode(),
+                        "Rua Teste",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                        ), HttpStatus.OK));
+
+        // Then
         assertThatThrownBy(() -> sellerService.createSeller(createSellerDto))
                 .isInstanceOf(BusinessRuleException.class);
     }
@@ -92,7 +117,19 @@ public class SellerServiceImplTest {
                 "00000000"
         );
 
-        // When / Then
+        // When
+        Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(new ResponseEntity<>(new ZipCodeDto(
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        "Erro"
+                ), HttpStatus.OK));
+
+        // Then
         assertThatThrownBy(() -> sellerService.createSeller(createSellerDto))
                 .isInstanceOf(BusinessRuleException.class);
     }
@@ -112,6 +149,9 @@ public class SellerServiceImplTest {
         sellers.add(SellerFactory.build(setupCreateSellerDto()));
 
         // When
+        ZipCodeDto zipCodeDto = ZipCodeDtoFactory.build(createSellerDto);
+        Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(new ResponseEntity<>(zipCodeDto, HttpStatus.OK));
         Mockito.when(sellerRepo.findAll()).thenReturn(sellers);
 
         // Then
@@ -150,11 +190,11 @@ public class SellerServiceImplTest {
         CreateSellerDto createSellerDto = setupCreateSellerDto();
         CreateSellerDto updateSellerDto = new CreateSellerDto(
                 "Ciclano",
-                null,
+                "Teste",
                 "ciclano.dtal@teste.com",
-                null,
-                null,
-                null
+                "Rua H",
+                890,
+                "69902772"
         );
 
         // When
@@ -171,6 +211,9 @@ public class SellerServiceImplTest {
                 seller.getProducts()
         );
         Mockito.when(sellerRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(seller));
+        ZipCodeDto zipCodeDto = ZipCodeDtoFactory.build(updateSellerDto);
+        Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(new ResponseEntity<>(zipCodeDto, HttpStatus.OK));
         Mockito.when(sellerRepo.findAll()).thenReturn(new ArrayList<>());
         Mockito.when(sellerRepo.save(ArgumentMatchers.any())).thenReturn(updatedSeller);
         Seller result = sellerService.updateSeller(seller.getId(), updateSellerDto);
@@ -228,6 +271,16 @@ public class SellerServiceImplTest {
         // When
         Seller seller = SellerFactory.build(createSellerDto);
         Mockito.when(sellerRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(seller));
+        Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(new ResponseEntity<>(new ZipCodeDto(
+                        updateSellerDto.getZipCode(),
+                        "Avenida Teste",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                ), HttpStatus.OK));
 
         // Then
         assertThatThrownBy(() -> sellerService.updateSeller(seller.getId(), updateSellerDto))
@@ -250,6 +303,16 @@ public class SellerServiceImplTest {
         // When
         Seller seller = SellerFactory.build(createSellerDto);
         Mockito.when(sellerRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(seller));
+        Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(new ResponseEntity<>(new ZipCodeDto(
+                        updateSellerDto.getZipCode(),
+                        "Avenida Teste",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                ), HttpStatus.OK));
 
         // Then
         assertThatThrownBy(() -> sellerService.updateSeller(seller.getId(), updateSellerDto))
@@ -272,6 +335,16 @@ public class SellerServiceImplTest {
         // When
         Seller seller = SellerFactory.build(createSellerDto);
         Mockito.when(sellerRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(seller));
+        Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(new ResponseEntity<>(new ZipCodeDto(
+                        createSellerDto.getZipCode(),
+                        createSellerDto.getAddress(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                ), HttpStatus.OK));
 
         // Then
         assertThatThrownBy(() -> sellerService.updateSeller(seller.getId(), updateSellerDto))
@@ -313,6 +386,7 @@ public class SellerServiceImplTest {
         // Then
         assertThatThrownBy(() -> sellerService.updateSeller(seller.getId(), updateSellerDto))
                 .isInstanceOf(BusinessRuleException.class);
+        verify(restTemplate, never()).getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any());
     }
 
     @Test
