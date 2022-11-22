@@ -14,3 +14,9 @@ Uma vez que a aplicação está rodando, você pode importar a coleção da API 
 ### Swagger
 
 Com a aplicação rodando, acesse `localhost:8080/swagger-ui/index.html` para consultar a documentação da API
+
+### US06 - Solicitação de Reembolso de Compra
+
+O objetivo desse requisito é de reembolsar uma compra de produto realizada por um comprador.
+
+Os detalhes de regras de negócios podem ser encontrados no seguinte [`documento`](./doc/US06-reembolso-compra.pdf)

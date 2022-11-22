@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "404ac091-1309-4dca-aa02-bce3e3ac960f",
+		"_postman_id": "ac7d1042-b2b7-4eed-880e-cc72face0974",
 		"name": "projeto-integrador",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -305,6 +305,111 @@
 							"key": "sectionId",
 							"value": "1"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US06 - Solicitar Reembolso de Compra",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"purchaseId\": 4,\n    \"reason\": \"DEFEITO\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/order-purchase-refund",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"order-purchase-refund"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US06 - Listar Reembolsos com filtros",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"purchaseId\": 4,\n    \"reason\": \"DEFEITO\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/order-purchase-refund?buyerId=1&sellerId=1&reason=DEFEITO",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"order-purchase-refund"
+					],
+					"query": [
+						{
+							"key": "buyerId",
+							"value": "1"
+						},
+						{
+							"key": "sellerId",
+							"value": "1"
+						},
+						{
+							"key": "reason",
+							"value": "DEFEITO"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US06 - Detalhes de um Reembolso por seu ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"purchaseId\": 4,\n    \"reason\": \"DEFEITO\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/order-purchase-refund/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"order-purchase-refund",
+						"1"
 					]
 				}
 			},
