@@ -26,16 +26,16 @@ SET time_zone = "+00:00";
 -- Extraindo dados da tabela `buyer`
 --
 
-insert into `buyer` (`id`) values(1);
-insert into `buyer` (`id`) values(2);
-insert into `buyer` (`id`) values(3);
-insert into `buyer` (`id`) values(4);
-insert into `buyer` (`id`) values(5);
-insert into `buyer` (`id`) values(6);
-insert into `buyer` (`id`) values(7);
-insert into `buyer` (`id`) values(8);
-insert into `buyer` (`id`) values(9);
-insert into `buyer` (`id`) values(10);
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(1, 'Ana Almeida', '89891064000', 'Rua Tenente Tavares', 'Centro','São Paulo', 'São Paulo','78040085', 'ATIVO');
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(2, 'Jorge Souza' ,'46540955006',  'Rua Giacomo Busnardo', 'Jardim das Hortênsias','Rio do Oeste', 'Santa Catarina','89180000', 'ATIVO');
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(3, 'Maria Silva', '35211802047', 'Rodovia BR-262', 'Alto Laje','Cariacica', 'Espirito Santo','29151026', 'ATIVO');
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(4, 'João da Silva', '98200215024', 'Rua Joaquim Gomes da Costa', 'Piçarreira','Teresina', 'Piauí','64055517', 'ATIVO');
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(5, 'José Camargo', '93766775014', 'Estrada das Neves', 'Vila Aparecida','Suzano', 'São Paulo','08650000', 'ATIVO');
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(6, 'Gabriela Ferreira', '30212789066', 'Rua dos Moricotes', 'Jardim Celeste','Sinop', 'Mato Grosso','78556606', 'ATIVO');
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(7, 'Júlia Melo', '16999373035', 'Avenida André Luís', 'Infraero','Macapá', 'Amapá','64055517', 'ATIVO');
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(8, 'Pedro Alves', '51268309028', 'Quadra Quatro', 'Nova Marabá','Marabá', 'Pará','68512030', 'ATIVO');
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(9, 'Paulo Almeida', '45881896033', 'Rua Isaura Parente', 'Bosque','Rio Branco', 'Acre','69900490', 'ATIVO');
+insert into `buyer` (`id`, `name`, `cpf`, `address`, `neighborhood`, `city`, `state`, `zip_code`, `active`) values(10, 'Ana Celeste', '75291401087','Rua Piscicultura', 'Jardim Primavera','Boa Vista', 'Roraima','69314228', 'ATIVO');
 
 --
 -- Extraindo dados da tabela `seller`
