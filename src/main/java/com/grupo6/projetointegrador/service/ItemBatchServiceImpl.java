@@ -9,10 +9,7 @@ import com.grupo6.projetointegrador.repository.ItemBatchRepo;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +24,10 @@ public class ItemBatchServiceImpl implements ItemBatchService{
 
     @Override
     public List<ItemBatchDto> getItemBatchesOutOfDate() {
-        List<ItemBatch> itemBatchList = itemBatchRepo.findAllOutOfDate()
-                .orElseThrow(() -> new NotFoundException("Nenhum item com menos de 21 dias da validade encontrado."));
+        List<ItemBatch> itemBatchList = itemBatchRepo.findAllOutOfDate();
+            if (itemBatchList.isEmpty()){
+                throw new NotFoundException("Nenhum item com menos de 21 dias da validade encontrado.");
+            }
 
         return itemBatchList.stream().map(ItemBatchDto::fromItemBatch).collect(Collectors.toList());
     }

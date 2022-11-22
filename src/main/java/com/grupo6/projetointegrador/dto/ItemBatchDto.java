@@ -27,6 +27,8 @@ public class ItemBatchDto {
 
     private BigDecimal price;
 
+    private LocalDateTime lastChangeDateTime;
+
     public static ItemBatchDto fromItemBatch(ItemBatch itemBatch) {
         return new ItemBatchDto(
                 itemBatch.getId(),
@@ -36,7 +38,8 @@ public class ItemBatchDto {
                 itemBatch.getManufacturingTime(),
                 itemBatch.getVolume(),
                 itemBatch.getDueDate(),
-                itemBatch.getPrice()
+                itemBatch.getPrice(),
+                itemBatch.getLastChangeDateTime()
         );
     }
 }
