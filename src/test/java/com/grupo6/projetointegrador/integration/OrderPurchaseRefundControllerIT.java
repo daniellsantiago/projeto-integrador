@@ -62,7 +62,6 @@ public class OrderPurchaseRefundControllerIT {
         OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.FINALIZADO, LocalDate.now());
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 orderPurchase.getId(),
-                orderPurchase.getBuyer().getId(),
                 RefundReason.ARREPENDIMENTO
         );
         int itemBatch1QntBeforeRefund = itemBatches.get(0).getProductQuantity();
@@ -101,7 +100,6 @@ public class OrderPurchaseRefundControllerIT {
         OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.FINALIZADO, LocalDate.now());
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 orderPurchase.getId(),
-                orderPurchase.getBuyer().getId(),
                 RefundReason.DEFEITO
         );
 
@@ -133,7 +131,6 @@ public class OrderPurchaseRefundControllerIT {
         OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.FINALIZADO, invalidDateOrder);
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 orderPurchase.getId(),
-                orderPurchase.getBuyer().getId(),
                 RefundReason.DEFEITO
         );
 
@@ -152,7 +149,6 @@ public class OrderPurchaseRefundControllerIT {
         OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.FINALIZADO, invalidDateOrder);
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 orderPurchase.getId(),
-                orderPurchase.getBuyer().getId(),
                 RefundReason.ARREPENDIMENTO
         );
 
@@ -168,7 +164,6 @@ public class OrderPurchaseRefundControllerIT {
         // Given
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 null,
-                1L,
                 RefundReason.DEFEITO
         );
 
@@ -184,7 +179,6 @@ public class OrderPurchaseRefundControllerIT {
         // Given
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 -5L,
-                1L,
                 RefundReason.DEFEITO
         );
 
@@ -199,7 +193,6 @@ public class OrderPurchaseRefundControllerIT {
     void refund_throwNotFound_whenOrderPurchaseDoesNotExists() throws Exception {
         // Given
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
-                1L,
                 1L,
                 RefundReason.DEFEITO
         );
@@ -218,7 +211,6 @@ public class OrderPurchaseRefundControllerIT {
         OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.ABERTO, LocalDate.now());
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 orderPurchase.getId(),
-                orderPurchase.getBuyer().getId(),
                 RefundReason.DEFEITO
         );
 

@@ -53,7 +53,6 @@ public class OrderPurchaseRefundServiceImplTest {
         OrderPurchase orderPurchase = createOrderPurchase(products, LocalDate.now());
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 orderPurchase.getId(),
-                orderPurchase.getBuyer().getId(),
                 RefundReason.ARREPENDIMENTO
         );
         ItemBatch itemBatch1 = createItemBatch(products.get(0));
@@ -95,7 +94,6 @@ public class OrderPurchaseRefundServiceImplTest {
         OrderPurchase orderPurchase = createOrderPurchase(products, LocalDate.now());
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 orderPurchase.getId(),
-                orderPurchase.getBuyer().getId(),
                 RefundReason.DEFEITO
         );
 
@@ -121,7 +119,6 @@ public class OrderPurchaseRefundServiceImplTest {
         // Given
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 1L,
-                1L,
                 RefundReason.DEFEITO
         );
         // When / Then
@@ -138,7 +135,6 @@ public class OrderPurchaseRefundServiceImplTest {
         OrderPurchase orderPurchase = createOrderPurchase(products, LocalDate.now().minusDays(10));
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 orderPurchase.getId(),
-                orderPurchase.getBuyer().getId(),
                 RefundReason.ARREPENDIMENTO
         );
         // When / Then
@@ -155,7 +151,6 @@ public class OrderPurchaseRefundServiceImplTest {
         OrderPurchase orderPurchase = createOrderPurchase(products, LocalDate.now().minusDays(91));
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
                 orderPurchase.getId(),
-                orderPurchase.getBuyer().getId(),
                 RefundReason.DEFEITO
         );
         // When / Then

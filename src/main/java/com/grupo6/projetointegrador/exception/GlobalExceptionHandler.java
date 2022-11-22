@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -57,6 +58,14 @@ public class GlobalExceptionHandler {
     public ErrorMessageResponseDto handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
         logger.error("MethodArgumentTypeMismatchException: ", exception);
         return ErrorMessageResponseDto.of(exception.getMessage(), "METHOD_ARGUMENT_ERROR");
+    }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessageResponseDto handleBeanPropertyBindingResult(BindException exception) {
+        logger.error("BindException: ", exception);
+        return ErrorMessageResponseDto.withFieldErrors(exception.getFieldErrors());
     }
 
     @ExceptionHandler(Exception.class)

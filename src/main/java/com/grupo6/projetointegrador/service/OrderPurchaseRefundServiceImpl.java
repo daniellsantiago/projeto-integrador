@@ -1,5 +1,7 @@
 package com.grupo6.projetointegrador.service;
 
+import com.grupo6.projetointegrador.dto.ListRefundsParamsDto;
+import com.grupo6.projetointegrador.dto.OrderPurchaseRefundDto;
 import com.grupo6.projetointegrador.dto.RefundPurchaseResponseDto;
 import com.grupo6.projetointegrador.dto.RefundPurchaseDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
@@ -47,6 +49,15 @@ public class OrderPurchaseRefundServiceImpl implements OrderPurchaseRefundServic
                 new OrderPurchaseRefund(null, orderPurchase, refundPurchaseDto.getReason(), LocalDate.now())
         );
         return RefundPurchaseResponseDto.fromOrderPurchaseRefund(createdOrderPurchaseRefund);
+    }
+
+    @Override
+    public List<OrderPurchaseRefundDto> listRefundsFiltered(ListRefundsParamsDto listRefundsParamsDto) {
+        return orderPurchaseRefundRepo.findAllFiltered(
+                listRefundsParamsDto.getBuyerId(),
+                listRefundsParamsDto.getReason(),
+                listRefundsParamsDto.getSellerId()
+        );
     }
 
     private boolean isOrderPurchaseRefundable(OrderPurchase orderPurchase, RefundReason refundReason) {
