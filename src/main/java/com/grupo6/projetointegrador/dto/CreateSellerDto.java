@@ -17,7 +17,7 @@ public class CreateSellerDto {
     @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Caracteres inválidos.")
     private String lastName;
 
-    @Pattern(regexp = "^[^\\s@]+@[^\\s@]+\\.com(\\.br)?$", message = "Email deve ser um email válido.")
+    @Pattern(regexp = "^[^\\s@]+@[a-z]+\\.com(\\.br)?$", message = "Email deve ser um email válido.")
     private String email;
 
     @Pattern(regexp = "^[a-zA-Z0-9\\s]*$", message = "Caracteres inválidos.")
