@@ -217,6 +217,6 @@ public class OrderPurchaseControllerIT {
     }
 
     private Buyer createBuyer() {
-        return buyerRepo.save(new Buyer(1L, List.of()));
+        return buyerRepo.save(new Buyer(1L, List.of(), null, null, null, null, null, null, null, null));
     }
 }

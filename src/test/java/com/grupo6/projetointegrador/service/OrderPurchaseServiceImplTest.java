@@ -94,7 +94,7 @@ public class OrderPurchaseServiceImplTest {
         // Given
         ItemBatch itemBatch = setupGenericItemBatch();
 
-        Buyer buyer = new Buyer(1L, null);
+        Buyer buyer = new Buyer(1L, null, null, null, null, null, null, null, null, null);;
         CreateOrderPurchaseDto createOrderPurchaseDto = new CreateOrderPurchaseDto(
                 1L,
                 LocalDate.now(),
@@ -134,7 +134,7 @@ public class OrderPurchaseServiceImplTest {
     }
 
     private OrderPurchase setupGenericOrderPurchase(Product product) {
-        Buyer buyer = new Buyer(1L, null);
+        Buyer buyer = new Buyer(1L, null, null, null, null, null, null, null, null, null);
         OrderPurchase orderPurchase = new OrderPurchase(1L, buyer, LocalDate.now(), null, StatusOrder.ABERTO);
         ProductOrder productOrder = new ProductOrder(1L, orderPurchase, product, 2);
 
