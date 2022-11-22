@@ -1,16 +1,16 @@
 package com.grupo6.projetointegrador.integration;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo6.projetointegrador.dto.ListRefundDto;
+import com.grupo6.projetointegrador.dto.OrderPurchaseRefundDto;
 import com.grupo6.projetointegrador.dto.RefundPurchaseDto;
 import com.grupo6.projetointegrador.dto.RefundPurchaseResponseDto;
 import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 import com.grupo6.projetointegrador.model.enumeration.RefundReason;
 import com.grupo6.projetointegrador.model.enumeration.StatusOrder;
-import com.grupo6.projetointegrador.repository.BuyerRepo;
-import com.grupo6.projetointegrador.repository.ItemBatchRepo;
-import com.grupo6.projetointegrador.repository.OrderPurchaseRepo;
-import com.grupo6.projetointegrador.repository.ProductRepo;
+import com.grupo6.projetointegrador.repository.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -45,6 +46,9 @@ public class OrderPurchaseRefundControllerIT {
 
     @Autowired
     private OrderPurchaseRepo orderPurchaseRepo;
+
+    @Autowired
+    private OrderPurchaseRefundRepo orderPurchaseRefundRepo;
 
     @Autowired
     private ProductRepo productRepo;
@@ -221,6 +225,108 @@ public class OrderPurchaseRefundControllerIT {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void listRefunds_returnAllRefunds_whenItExistsAndNoParameterIsProvided() throws Exception {
+        // Given
+        OrderPurchaseRefund orderPurchaseRefund = createOrderPurchaseRefund();
+
+        // When
+        MvcResult result = mockMvc.perform(get("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<ListRefundDto> listRefundDtos = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                new TypeReference<>() {
+                }
+        );
+
+        // Then
+        assertThat(listRefundDtos).isNotEmpty();
+
+        assertThat(listRefundDtos.get(0).getId()).isEqualTo(orderPurchaseRefund.getId());
+    }
+
+    @Test
+    void listRefunds_returnRefundsFilteredByBuyer_whenItExistsBuyerIdIsProvided() throws Exception {
+        // Given
+        OrderPurchaseRefund orderPurchaseRefund = createOrderPurchaseRefund();
+        createOrderPurchaseRefund();
+        Long buyerId = orderPurchaseRefund.getOrderPurchase().getBuyer().getId();
+        // When
+        MvcResult result = mockMvc.perform(get("/api/order-purchase-refund?buyerId=" + buyerId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<ListRefundDto> listRefundDtos = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                new TypeReference<>() {
+                }
+        );
+        OrderPurchase foundOrderPurchase = orderPurchaseRepo.findById(listRefundDtos.get(0).getPurchaseId()).get();
+
+        // Then
+        assertThat(listRefundDtos).isNotEmpty();
+
+        assertThat(foundOrderPurchase.getBuyer().getId()).isEqualTo(buyerId);
+    }
+
+    @Test
+    void listRefunds_returnEmptyList_whenItDoesNotExists() throws Exception {
+        // When
+        MvcResult result = mockMvc.perform(get("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<ListRefundDto> listRefundDtos = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                new TypeReference<>() {
+                }
+        );
+
+        // Then
+        assertThat(listRefundDtos).isEmpty();
+    }
+
+    @Test
+    void getRefundById_getOrderPurchaseRefundDto_whenItExists() throws Exception {
+        // Given
+        OrderPurchaseRefund orderPurchaseRefund = createOrderPurchaseRefund();
+
+        // When
+        MvcResult result = mockMvc.perform(get("/api/order-purchase-refund/" + orderPurchaseRefund.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        OrderPurchaseRefundDto orderPurchaseRefundDto = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                OrderPurchaseRefundDto.class
+        );
+
+        // Then
+        assertThat(orderPurchaseRefundDto).isNotNull();
+    }
+
+    @Test
+    void getRefundById_throwNotFound_whenItDoesNotExists() throws Exception {
+        // When / Yhen
+        mockMvc.perform(get("/api/order-purchase-refund/" + 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    private OrderPurchaseRefund createOrderPurchaseRefund() {
+        List<ItemBatch> itemBatches = createProductsAndItemBatches();
+        OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.FINALIZADO, LocalDate.now());
+        return orderPurchaseRefundRepo.save(
+                new OrderPurchaseRefund(null, orderPurchase, RefundReason.ARREPENDIMENTO, LocalDate.now())
+        );
+    }
+
     private OrderPurchase createOrderPurchase(List<ItemBatch> itemBatches, StatusOrder statusOrder, LocalDate dateOrder) {
         Buyer buyer = createBuyer();
         OrderPurchase orderPurchase = orderPurchaseRepo.save(
@@ -267,6 +373,6 @@ public class OrderPurchaseRefundControllerIT {
     }
 
     private Buyer createBuyer() {
-        return buyerRepo.save(new Buyer(1L, List.of()));
+        return buyerRepo.save(new Buyer(null, List.of()));
     }
 }
