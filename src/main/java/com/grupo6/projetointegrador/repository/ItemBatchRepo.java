@@ -51,4 +51,7 @@ public interface ItemBatchRepo extends JpaRepository<ItemBatch, Long> {
             "    ORDER BY CASE WHEN ?3 = 'desc' THEN dueDate end DESC," +
             "    CASE WHEN ?3 != 'desc' THEN dueDate end ASC;", nativeQuery = true)
     Optional<List<DueDateItemBatchDto>> findByDueDateWithCategory(String category, int days, String order);
+
+    @Query(value = "SELECT ItemBatch FROM ItemBatch WHERE id IN (?1)")
+    List<ItemBatch> findByProductIds(List<Long> productIds);
 }
