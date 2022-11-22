@@ -2,7 +2,6 @@ package com.grupo6.projetointegrador.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo6.projetointegrador.dto.ProductLocationDto;
-import com.grupo6.projetointegrador.dto.ProductWarehousesDto;
 import com.grupo6.projetointegrador.factory.InboundOrderFactory;
 import com.grupo6.projetointegrador.factory.WarehouseFactory;
 import com.grupo6.projetointegrador.model.entity.*;

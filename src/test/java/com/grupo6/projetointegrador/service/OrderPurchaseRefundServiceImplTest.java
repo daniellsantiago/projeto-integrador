@@ -67,7 +67,8 @@ public class OrderPurchaseRefundServiceImplTest {
         List<Long> productIds = products.stream().map(Product::getId).collect(Collectors.toList());
 
         // When
-        when(orderPurchaseRepo.findById(refundPurchaseDto.getPurchaseId())).thenReturn(Optional.of(orderPurchase));
+        when(orderPurchaseRepo.findByIdAndStatus(refundPurchaseDto.getPurchaseId(), StatusOrder.FINALIZADO))
+                .thenReturn(Optional.of(orderPurchase));
         when(itemBatchRepo.findByProductIdIn(productIds)).thenReturn(List.of(itemBatch1, itemBatch2));
         when(orderPurchaseRefundRepo.save(ArgumentMatchers.any())).thenReturn(
                 new OrderPurchaseRefund(1L, orderPurchase, refundPurchaseDto.getReason(), LocalDate.now())
@@ -88,6 +89,34 @@ public class OrderPurchaseRefundServiceImplTest {
     }
 
     @Test
+    void refund_createRefundAndUpdateOrderStatus_whenReasonIsDefeitoAndDateOrderIsValid() {
+        // Given
+        List<Product> products = createProducts();
+        OrderPurchase orderPurchase = createOrderPurchase(products, LocalDate.now());
+        RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
+                orderPurchase.getId(),
+                orderPurchase.getBuyer().getId(),
+                RefundReason.DEFEITO
+        );
+
+        // When
+        when(orderPurchaseRepo.findByIdAndStatus(refundPurchaseDto.getPurchaseId(), StatusOrder.FINALIZADO))
+                .thenReturn(Optional.of(orderPurchase));
+        when(orderPurchaseRefundRepo.save(ArgumentMatchers.any())).thenReturn(
+                new OrderPurchaseRefund(1L, orderPurchase, refundPurchaseDto.getReason(), LocalDate.now())
+        );
+        RefundPurchaseResponseDto response = refundService.refund(refundPurchaseDto);
+
+        // Then
+        assertThat(response).isNotNull();
+        assertThat(response.getRefundId()).isEqualTo(1L);
+        assertThat(response.getReason()).isEqualTo(refundPurchaseDto.getReason());
+
+        assertThat(orderPurchase.getStatus()).isEqualTo(StatusOrder.REEMBOLSADO);
+        verify(orderPurchaseRefundRepo, times(1)).save(ArgumentMatchers.any());
+    }
+
+    @Test
     void refund_NotFoundException_whenOrderPurchaseDoesNotExists() {
         // Given
         RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
@@ -96,6 +125,8 @@ public class OrderPurchaseRefundServiceImplTest {
                 RefundReason.DEFEITO
         );
         // When / Then
+        when(orderPurchaseRepo.findByIdAndStatus(ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(Optional.empty());
         assertThatThrownBy(() -> refundService.refund(refundPurchaseDto))
                 .isInstanceOf(NotFoundException.class);
     }
@@ -111,13 +142,14 @@ public class OrderPurchaseRefundServiceImplTest {
                 RefundReason.ARREPENDIMENTO
         );
         // When / Then
-        when(orderPurchaseRepo.findById(refundPurchaseDto.getPurchaseId())).thenReturn(Optional.of(orderPurchase));
+        when(orderPurchaseRepo.findByIdAndStatus(refundPurchaseDto.getPurchaseId(), StatusOrder.FINALIZADO))
+                .thenReturn(Optional.of(orderPurchase));
         assertThatThrownBy(() -> refundService.refund(refundPurchaseDto))
                 .isInstanceOf(BusinessRuleException.class);
     }
 
     @Test
-    void refund_throwBusinesssException_whenReasonIsDefeitoAndDateOrderIsGreaterThan90Days() {
+    void refund_throwBusinessException_whenReasonIsDefeitoAndDateOrderIsGreaterThan90Days() {
         // Given
         List<Product> products = createProducts();
         OrderPurchase orderPurchase = createOrderPurchase(products, LocalDate.now().minusDays(91));
@@ -127,7 +159,8 @@ public class OrderPurchaseRefundServiceImplTest {
                 RefundReason.DEFEITO
         );
         // When / Then
-        when(orderPurchaseRepo.findById(refundPurchaseDto.getPurchaseId())).thenReturn(Optional.of(orderPurchase));
+        when(orderPurchaseRepo.findByIdAndStatus(refundPurchaseDto.getPurchaseId(), StatusOrder.FINALIZADO))
+                .thenReturn(Optional.of(orderPurchase));
         assertThatThrownBy(() -> refundService.refund(refundPurchaseDto))
                 .isInstanceOf(BusinessRuleException.class);
     }

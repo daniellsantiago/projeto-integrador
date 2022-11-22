@@ -1,7 +1,11 @@
 package com.grupo6.projetointegrador.integration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo6.projetointegrador.dto.RefundPurchaseDto;
+import com.grupo6.projetointegrador.dto.RefundPurchaseResponseDto;
 import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.model.enumeration.Category;
+import com.grupo6.projetointegrador.model.enumeration.RefundReason;
 import com.grupo6.projetointegrador.model.enumeration.StatusOrder;
 import com.grupo6.projetointegrador.repository.BuyerRepo;
 import com.grupo6.projetointegrador.repository.ItemBatchRepo;
@@ -12,13 +16,20 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -26,6 +37,11 @@ import java.util.List;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class OrderPurchaseRefundControllerIT {
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private OrderPurchaseRepo orderPurchaseRepo;
@@ -40,20 +56,189 @@ public class OrderPurchaseRefundControllerIT {
     private BuyerRepo buyerRepo;
 
     @Test
-    void refund_saveRefundAndUpdateOrderStatusAndUpdateItemStock_whenReasonIsArrependimentoAndDateOrderIsValid() {
+    void refund_saveRefundAndUpdateOrderStatusAndUpdateItemStock_whenReasonIsArrependimentoAndDateOrderIsValid() throws Exception {
+        // Given
+        List<ItemBatch> itemBatches = createProductsAndItemBatches();
+        OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.FINALIZADO, LocalDate.now());
+        RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
+                orderPurchase.getId(),
+                orderPurchase.getBuyer().getId(),
+                RefundReason.ARREPENDIMENTO
+        );
+        int itemBatch1QntBeforeRefund = itemBatches.get(0).getProductQuantity();
+        int itemBatch2QntBeforeRefund = itemBatches.get(1).getProductQuantity();
 
+        // When
+        MvcResult result = mockMvc.perform(post("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refundPurchaseDto)))
+                .andExpect(status().isCreated())
+                .andReturn();
+        RefundPurchaseResponseDto refundPurchaseResponseDto = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                RefundPurchaseResponseDto.class
+        );
+
+        OrderPurchase updatedPurchase = orderPurchaseRepo.findById(orderPurchase.getId()).get();
+        ItemBatch updatedItem1 = itemBatchRepo.findById(itemBatches.get(0).getId()).get();
+        ItemBatch updatedItem2 = itemBatchRepo.findById(itemBatches.get(1).getId()).get();
+
+        // Then
+        assertThat(refundPurchaseResponseDto).isNotNull();
+        assertThat(refundPurchaseResponseDto.getRefundId()).isEqualTo(1L);
+        assertThat(refundPurchaseResponseDto.getReason()).isEqualTo(RefundReason.ARREPENDIMENTO);
+
+        assertThat(updatedPurchase.getStatus()).isEqualTo(StatusOrder.REEMBOLSADO);
+
+        assertThat(updatedItem1.getProductQuantity()).isGreaterThan(itemBatch1QntBeforeRefund);
+        assertThat(updatedItem2.getProductQuantity()).isGreaterThan(itemBatch2QntBeforeRefund);
     }
 
-    private void createOrderPurchase(StatusOrder statusOrder) {
+    @Test
+    void refund_saveRefundAndUpdateOrderStatus_whenReasonIsDefeitoAndDateOrderIsValid() throws Exception {
+        // Given
         List<ItemBatch> itemBatches = createProductsAndItemBatches();
+        OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.FINALIZADO, LocalDate.now());
+        RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
+                orderPurchase.getId(),
+                orderPurchase.getBuyer().getId(),
+                RefundReason.DEFEITO
+        );
+
+        // When
+        MvcResult result = mockMvc.perform(post("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refundPurchaseDto)))
+                .andExpect(status().isCreated())
+                .andReturn();
+        RefundPurchaseResponseDto refundPurchaseResponseDto = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                RefundPurchaseResponseDto.class
+        );
+        OrderPurchase updatedPurchase = orderPurchaseRepo.findById(orderPurchase.getId()).get();
+
+        // Then
+        assertThat(refundPurchaseResponseDto).isNotNull();
+        assertThat(refundPurchaseResponseDto.getRefundId()).isEqualTo(1L);
+        assertThat(refundPurchaseResponseDto.getReason()).isEqualTo(RefundReason.DEFEITO);
+
+        assertThat(updatedPurchase.getStatus()).isEqualTo(StatusOrder.REEMBOLSADO);
+    }
+
+    @Test
+    void refund_throwUnprocessedEntity_whenReasonIsDefeitoAndDateOrderIsOver90Days() throws Exception {
+        // Given
+        LocalDate invalidDateOrder = LocalDate.now().minusDays(91);
+        List<ItemBatch> itemBatches = createProductsAndItemBatches();
+        OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.FINALIZADO, invalidDateOrder);
+        RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
+                orderPurchase.getId(),
+                orderPurchase.getBuyer().getId(),
+                RefundReason.DEFEITO
+        );
+
+        // When / Then
+        mockMvc.perform(post("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refundPurchaseDto)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void refund_throwUnprocessedEntity_whenReasonIsArrependimentoAndDateOrderIsOver7Days() throws Exception {
+        // Given
+        LocalDate invalidDateOrder = LocalDate.now().minusDays(8);
+        List<ItemBatch> itemBatches = createProductsAndItemBatches();
+        OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.FINALIZADO, invalidDateOrder);
+        RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
+                orderPurchase.getId(),
+                orderPurchase.getBuyer().getId(),
+                RefundReason.ARREPENDIMENTO
+        );
+
+        // When / Then
+        mockMvc.perform(post("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refundPurchaseDto)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void refund_throwBadRequest_whenPurchaseIdIsNull() throws Exception {
+        // Given
+        RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
+                null,
+                1L,
+                RefundReason.DEFEITO
+        );
+
+        // When / Then
+        mockMvc.perform(post("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refundPurchaseDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void refund_throwBadRequest_whenPurchaseIdIsNegative() throws Exception {
+        // Given
+        RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
+                -5L,
+                1L,
+                RefundReason.DEFEITO
+        );
+
+        // When / Then
+        mockMvc.perform(post("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refundPurchaseDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void refund_throwNotFound_whenOrderPurchaseDoesNotExists() throws Exception {
+        // Given
+        RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
+                1L,
+                1L,
+                RefundReason.DEFEITO
+        );
+
+        // When / Then
+        mockMvc.perform(post("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refundPurchaseDto)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void refund_throwNotFound_whenOrderPurchaseStatusIsDifferentFromFinalizado() throws Exception {
+        // Given
+        List<ItemBatch> itemBatches = createProductsAndItemBatches();
+        OrderPurchase orderPurchase = createOrderPurchase(itemBatches, StatusOrder.ABERTO, LocalDate.now());
+        RefundPurchaseDto refundPurchaseDto = new RefundPurchaseDto(
+                orderPurchase.getId(),
+                orderPurchase.getBuyer().getId(),
+                RefundReason.DEFEITO
+        );
+
+        // When / Then
+        mockMvc.perform(post("/api/order-purchase-refund")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refundPurchaseDto)))
+                .andExpect(status().isNotFound());
+    }
+
+    private OrderPurchase createOrderPurchase(List<ItemBatch> itemBatches, StatusOrder statusOrder, LocalDate dateOrder) {
         Buyer buyer = createBuyer();
         OrderPurchase orderPurchase = orderPurchaseRepo.save(
-                new OrderPurchase(null, buyer, LocalDate.now(), List.of(), statusOrder)
+                new OrderPurchase(null, buyer, dateOrder, List.of(), statusOrder)
         );
         ProductOrder productOrder1 = new ProductOrder(null, orderPurchase, itemBatches.get(0).getProduct(), 2);
         ProductOrder productOrder2 = new ProductOrder(null, orderPurchase, itemBatches.get(1).getProduct(), 1);
         orderPurchase.setProductOrders(List.of(productOrder1, productOrder2));
-        orderPurchaseRepo.save(orderPurchase);
+
+        return orderPurchaseRepo.save(orderPurchase);
     }
 
     private List<ItemBatch> createProductsAndItemBatches() {

@@ -12,6 +12,7 @@ import com.grupo6.projetointegrador.repository.OrderPurchaseRefundRepo;
 import com.grupo6.projetointegrador.repository.OrderPurchaseRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,33 +28,25 @@ public class OrderPurchaseRefundServiceImpl implements OrderPurchaseRefundServic
     private final OrderPurchaseRefundRepo orderPurchaseRefundRepo;
 
     @Override
+    @Transactional
     public RefundPurchaseResponseDto refund(RefundPurchaseDto refundPurchaseDto) {
-        OrderPurchase orderPurchase = orderPurchaseRepo.findById(refundPurchaseDto.getPurchaseId())
+        OrderPurchase orderPurchase = orderPurchaseRepo.findByIdAndStatus(refundPurchaseDto.getPurchaseId(), StatusOrder.FINALIZADO)
                 .orElseThrow(() -> new NotFoundException("Compra não encontrada"));
 
         if (!isOrderPurchaseRefundable(orderPurchase, refundPurchaseDto.getReason())) {
             throw new BusinessRuleException("A compra não está no prazo válido para reembolso.");
         }
 
-        List<ItemBatch> itemBatches = itemBatchRepo.findByProductIdIn(
-                orderPurchase.getProductOrders().stream()
-                        .map(ProductOrder::getProduct)
-                        .map(Product::getId)
-                        .collect(Collectors.toList())
-        );
+        if (refundPurchaseDto.getReason().equals(RefundReason.ARREPENDIMENTO)) {
+            returnProductsToWarehouse(orderPurchase);
+        }
 
-        List<ItemBatch> updatedItemBatches = updateItemBatchesQuantities(itemBatches, orderPurchase.getProductOrders());
+        refundOrderPurchase(orderPurchase);
 
-        itemBatchRepo.saveAll(updatedItemBatches);
-
-        OrderPurchaseRefund orderPurchaseRefund = orderPurchaseRefundRepo.save(
+        OrderPurchaseRefund createdOrderPurchaseRefund = orderPurchaseRefundRepo.save(
                 new OrderPurchaseRefund(null, orderPurchase, refundPurchaseDto.getReason(), LocalDate.now())
         );
-
-        orderPurchase.setStatus(StatusOrder.REEMBOLSADO);
-        orderPurchaseRepo.save(orderPurchase);
-
-        return RefundPurchaseResponseDto.fromOrderPurchaseRefund(orderPurchaseRefund);
+        return RefundPurchaseResponseDto.fromOrderPurchaseRefund(createdOrderPurchaseRefund);
     }
 
     private boolean isOrderPurchaseRefundable(OrderPurchase orderPurchase, RefundReason refundReason) {
@@ -66,14 +59,28 @@ public class OrderPurchaseRefundServiceImpl implements OrderPurchaseRefundServic
                 orderPurchase.getDateOrder().plusDays(90).isEqual(LocalDate.now());
     }
 
-    private List<ItemBatch> updateItemBatchesQuantities(List<ItemBatch> itemBatches, List<ProductOrder> productOrders) {
-        return itemBatches.stream()
-                .peek(itemBatch -> {
-                    ProductOrder itemBatchProductOrder = productOrders.stream()
-                            .filter(productOrder -> productOrder.getProduct().getId().equals(itemBatch.getProduct().getId()))
-                            .findFirst()
-                            .orElseThrow(() -> new NotFoundException("Lote não encontrado."));
-                    itemBatch.setProductQuantity(itemBatch.getProductQuantity() + itemBatchProductOrder.getQuantity());
-                }).collect(Collectors.toList());
+    private void returnProductsToWarehouse(OrderPurchase orderPurchase) {
+        List<ProductOrder> productOrders = orderPurchase.getProductOrders();
+        List<ItemBatch> itemBatches = itemBatchRepo.findByProductIdIn(
+                productOrders.stream()
+                        .map(ProductOrder::getProduct)
+                        .map(Product::getId)
+                        .collect(Collectors.toList())
+        );
+
+        itemBatches.forEach(itemBatch -> {
+            ProductOrder itemBatchProductOrder = productOrders.stream()
+                    .filter(productOrder -> productOrder.getProduct().getId().equals(itemBatch.getProduct().getId()))
+                    .findFirst()
+                    .orElseThrow(() -> new NotFoundException("Lote não encontrado."));
+            itemBatch.setProductQuantity(itemBatch.getProductQuantity() + itemBatchProductOrder.getQuantity());
+        });
+
+        itemBatchRepo.saveAll(itemBatches);
+    }
+
+    private void refundOrderPurchase(OrderPurchase orderPurchase) {
+        orderPurchase.setStatus(StatusOrder.REEMBOLSADO);
+        orderPurchaseRepo.save(orderPurchase);
     }
 }
