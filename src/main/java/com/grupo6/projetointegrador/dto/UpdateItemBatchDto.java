@@ -53,7 +53,7 @@ public class UpdateItemBatchDto {
                 dueDate,
                 price,
                 inboundOrder,
-                inboundOrder.getSection().getStorageType()
+                product.getCategory()
         );
     }
 }

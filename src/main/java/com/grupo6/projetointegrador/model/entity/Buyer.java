@@ -18,8 +18,8 @@ import java.util.List;
 
 public class Buyer {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
   @OneToMany(mappedBy = "buyer")
   @JsonManagedReference

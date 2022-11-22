@@ -14,24 +14,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class ProductOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     private OrderPurchase orderPurchase;
 
-    private Long productId;
+    @OneToOne
+    private Product product;
 
     private int quantity;
 
-    public ProductOrder(Long productId, int quantity) {
-        this.productId = productId;
-        this.quantity = quantity;
-    }
-
-    public ProductOrder(OrderPurchase orderPurchase, Long productId, int quantity) {
+    public ProductOrder(OrderPurchase orderPurchase, Product product, int quantity) {
         this.orderPurchase = orderPurchase;
-        this.productId = productId;
+        this.product = product;
         this.quantity = quantity;
     }
 }

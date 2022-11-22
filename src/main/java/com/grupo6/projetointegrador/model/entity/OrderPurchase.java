@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderPurchase {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -25,16 +25,12 @@ public class OrderPurchase {
 
     private LocalDate dateOrder;
 
-    @OneToMany(mappedBy = "orderPurchase", cascade = CascadeType.PERSIST)
+    @OneToMany(
+            mappedBy = "orderPurchase",
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
+    )
     private List<ProductOrder> productOrders;
 
     @Enumerated(EnumType.ORDINAL)
     private StatusOrder status;
-
-    public OrderPurchase(Buyer buyer, LocalDate dateOrder, List<ProductOrder> productOrder, StatusOrder status) {
-        this.buyer = buyer;
-        this.dateOrder = dateOrder;
-        this.productOrders = productOrder;
-        this.status = status;
-    }
 }
