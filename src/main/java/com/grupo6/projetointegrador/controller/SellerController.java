@@ -1,6 +1,7 @@
 package com.grupo6.projetointegrador.controller;
 
 import com.grupo6.projetointegrador.dto.CreateSellerDto;
+import com.grupo6.projetointegrador.dto.InactiveSellerBatchDto;
 import com.grupo6.projetointegrador.model.entity.Seller;
 import com.grupo6.projetointegrador.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/seller")
@@ -38,5 +40,10 @@ public class SellerController {
     public ResponseEntity<?> deleteSeller(@PathVariable Long id) {
         sellerService.deleteSeller(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/warehouse/{id}")
+    public ResponseEntity<List<InactiveSellerBatchDto>> getInactiveSellerBatches(@PathVariable Long id) {
+        return new ResponseEntity<>(sellerService.getInactiveSellerBatches(id), HttpStatus.OK);
     }
 }

@@ -1,7 +1,7 @@
 package com.grupo6.projetointegrador.repository;
 
+import com.grupo6.projetointegrador.dto.InactiveSellerBatchDto;
 import com.grupo6.projetointegrador.dto.WarehouseDto;
-
 import com.grupo6.projetointegrador.model.entity.Product;
 import com.grupo6.projetointegrador.model.entity.Seller;
 import com.grupo6.projetointegrador.model.enumeration.Category;
@@ -33,4 +33,16 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT s FROM Seller s LEFT JOIN Product p ON s = p.seller WHERE p.id = ?1")
     Optional<Seller> findSellerByProductId(Long id);
+
+    @Query(value = "SELECT t3.seller_id AS sellerId, " +
+            "t4.active, " +
+            "t1.product_id AS productId, " +
+            "t1.product_quantity AS quantity, " +
+            "t2.section_id AS sectionId, " +
+            "t1.category FROM item_batch AS t1 " +
+            "LEFT JOIN inbound_order AS t2 ON t1.inbound_order_id = t2.id " +
+            "LEFT JOIN product AS t3 ON t1.product_id = t3.id " +
+            "LEFT JOIN seller AS t4 ON t3.seller_id = t4.id " +
+            "WHERE t2.warehouse_id = ?1 AND t4.active = 'INATIVO' AND t1.product_quantity > 0", nativeQuery = true)
+    List<InactiveSellerBatchDto> findBatchesInWarehouseFromInactiveSellers(Long warehouseId);
 }

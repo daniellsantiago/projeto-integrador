@@ -1,13 +1,16 @@
 package com.grupo6.projetointegrador.service;
 
 import com.grupo6.projetointegrador.dto.CreateSellerDto;
+import com.grupo6.projetointegrador.dto.InactiveSellerBatchDto;
 import com.grupo6.projetointegrador.dto.ZipCodeDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.entity.Product;
 import com.grupo6.projetointegrador.model.entity.Seller;
 import com.grupo6.projetointegrador.model.enumeration.Active;
+import com.grupo6.projetointegrador.repository.ProductRepo;
 import com.grupo6.projetointegrador.repository.SellerRepo;
+import com.grupo6.projetointegrador.repository.WarehouseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,12 @@ public class SellerServiceImpl implements SellerService {
 
     @Autowired
     private SellerRepo sellerRepo;
+
+    @Autowired
+    private ProductRepo productRepo;
+
+    @Autowired
+    private WarehouseRepo warehouseRepo;
 
     /**
      * This method returns a new Seller.
@@ -122,6 +131,27 @@ public class SellerServiceImpl implements SellerService {
         }
         seller.setActive(Active.INATIVO);
         sellerRepo.save(seller);
+    }
+
+    /**
+     * This method gets a list of batches that belongs to an inactive seller, if the product quantity is above 0.
+     * Or throws a {@link NotFoundException} if the warehouse doesn't exist.
+     * Or throws a {@link NotFoundException} if there is no inactive seller batches for this warehouse.
+     *
+     * @param warehouseId This is the warehouse id.
+     * @return List<InactiveSellerBatchDto> a list of InactiveSellerBatchDto containing the seller id,
+     *                                      the active status of the seller, the product id, the product quantity,
+     *                                      the section id and the section category.
+     */
+    @Override
+    public List<InactiveSellerBatchDto> getInactiveSellerBatches(Long warehouseId) {
+        warehouseRepo.findById(warehouseId).orElseThrow(() -> new NotFoundException("Armazém não encontrado."));
+        List<InactiveSellerBatchDto> inactiveSellerBatches = productRepo
+                .findBatchesInWarehouseFromInactiveSellers(warehouseId);
+        if (inactiveSellerBatches.isEmpty()) {
+            throw new NotFoundException("Nenhum lote de vendedor inativo encontrado neste armazém.");
+        }
+        return inactiveSellerBatches;
     }
 
     /**
