@@ -1,9 +1,6 @@
 package com.grupo6.projetointegrador.controller;
 
-import com.grupo6.projetointegrador.dto.ListRefundsParamsDto;
-import com.grupo6.projetointegrador.dto.OrderPurchaseRefundDto;
-import com.grupo6.projetointegrador.dto.RefundPurchaseDto;
-import com.grupo6.projetointegrador.dto.RefundPurchaseResponseDto;
+import com.grupo6.projetointegrador.dto.*;
 import com.grupo6.projetointegrador.service.OrderPurchaseRefundService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +22,12 @@ public class OrderPurchaseRefundController {
     }
 
     @GetMapping
-    public List<OrderPurchaseRefundDto> listRefunds(ListRefundsParamsDto listRefundsParamsDto) {
+    public List<ListRefundDto> listRefunds(ListRefundsParamsDto listRefundsParamsDto) {
         return orderPurchaseRefundService.listRefundsFiltered(listRefundsParamsDto);
+}
+
+    @GetMapping("/{id}")
+    public OrderPurchaseRefundDto getRefundById(@PathVariable Long id) {
+        return orderPurchaseRefundService.getRefundById(id);
     }
 }

@@ -1,7 +1,6 @@
 package com.grupo6.projetointegrador.service;
 
-import com.grupo6.projetointegrador.dto.RefundPurchaseDto;
-import com.grupo6.projetointegrador.dto.RefundPurchaseResponseDto;
+import com.grupo6.projetointegrador.dto.*;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.factory.InboundOrderFactory;
@@ -158,6 +157,66 @@ public class OrderPurchaseRefundServiceImplTest {
                 .thenReturn(Optional.of(orderPurchase));
         assertThatThrownBy(() -> refundService.refund(refundPurchaseDto))
                 .isInstanceOf(BusinessRuleException.class);
+    }
+
+    @Test
+    void listRefundsFiltered_getListRefundsDto_whenRepositoryReturnsIt() {
+        // Given
+        ListRefundsParamsDto params = new ListRefundsParamsDto(
+                1L,
+                1L,
+                RefundReason.ARREPENDIMENTO
+        );
+        ListRefundDto listRefundDto = new ListRefundDto(
+                1L,
+                1L,
+                RefundReason.ARREPENDIMENTO,
+                LocalDate.now()
+        );
+
+        // When
+        when(orderPurchaseRefundRepo.findAllFiltered(params.getBuyerId(), params.getReason(), params.getSellerId()))
+                .thenReturn(List.of(listRefundDto));
+        List<ListRefundDto> result = refundService.listRefundsFiltered(params);
+
+        // Then
+        assertThat(result).isNotEmpty();
+    }
+
+    @Test
+    void getRefundById_getOrderPurchaseRefundDto_whenItIsStored() {
+        // Given
+        Long refundId = 1L;
+        ProductOrder productOrder = new ProductOrder(
+                1L,
+                null,
+                new Product(1L, BigDecimal.valueOf(50), Category.FRESCO, null),
+                10
+        );
+        OrderPurchaseRefund orderPurchaseRefund = new OrderPurchaseRefund(
+                1L,
+                new OrderPurchase(1L, new Buyer(), LocalDate.now(), List.of(productOrder), StatusOrder.REEMBOLSADO),
+                RefundReason.ARREPENDIMENTO,
+                LocalDate.now()
+        );
+
+        // When
+        when(orderPurchaseRefundRepo.findById(refundId)).thenReturn(Optional.of(orderPurchaseRefund));
+        OrderPurchaseRefundDto result = refundService.getRefundById(refundId);
+
+        // Then
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    void getRefundById_throwNotFound_whenItIsNotStored() {
+        // Given
+        Long refundId = 1L;
+
+        // When / Then
+        when(orderPurchaseRefundRepo.findById(refundId)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> refundService.getRefundById(refundId))
+                .isInstanceOf(NotFoundException.class);
     }
 
     private List<Product> createProducts() {

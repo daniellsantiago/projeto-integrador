@@ -40,9 +40,7 @@ public class OrderPurchaseServiceImpl implements OrderPurchaseService {
     */
     public OrderPurchaseDto findById(Long id) {
         OrderPurchase orderPurchase = orderPurchaseRepo.findById(id).orElseThrow(() -> new NotFoundException("Pedido não encontrado."));
-        List<ProductOrderDto> productOrderDtos = orderPurchase.getProductOrders().stream().
-              map(ProductOrderDto::fromProductOrder).collect(Collectors.toList());
-       return OrderPurchaseDto.fromOrderPurchase(orderPurchase, productOrderDtos);
+       return OrderPurchaseDto.fromOrderPurchase(orderPurchase);
     }
 
     /**

@@ -1,9 +1,6 @@
 package com.grupo6.projetointegrador.service;
 
-import com.grupo6.projetointegrador.dto.ListRefundsParamsDto;
-import com.grupo6.projetointegrador.dto.OrderPurchaseRefundDto;
-import com.grupo6.projetointegrador.dto.RefundPurchaseResponseDto;
-import com.grupo6.projetointegrador.dto.RefundPurchaseDto;
+import com.grupo6.projetointegrador.dto.*;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.entity.*;
@@ -52,11 +49,23 @@ public class OrderPurchaseRefundServiceImpl implements OrderPurchaseRefundServic
     }
 
     @Override
-    public List<OrderPurchaseRefundDto> listRefundsFiltered(ListRefundsParamsDto listRefundsParamsDto) {
+    public List<ListRefundDto> listRefundsFiltered(ListRefundsParamsDto listRefundsParamsDto) {
         return orderPurchaseRefundRepo.findAllFiltered(
                 listRefundsParamsDto.getBuyerId(),
                 listRefundsParamsDto.getReason(),
                 listRefundsParamsDto.getSellerId()
+        );
+    }
+
+    @Override
+    public OrderPurchaseRefundDto getRefundById(Long id) {
+        OrderPurchaseRefund refund = orderPurchaseRefundRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Reembolso não encontrado."));
+        return new OrderPurchaseRefundDto(
+                refund.getOrderPurchase().getId(),
+                refund.getReason(),
+                refund.getRefundDate(),
+                OrderPurchaseDto.fromOrderPurchase(refund.getOrderPurchase())
         );
     }
 

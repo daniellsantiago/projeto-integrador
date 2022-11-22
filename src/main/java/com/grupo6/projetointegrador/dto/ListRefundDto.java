@@ -8,9 +8,12 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class OrderPurchaseRefundDto {
+public class ListRefundDto {
     private Long id;
+
+    private Long purchaseId;
+
     private RefundReason reason;
+
     private LocalDate refundDate;
-    private OrderPurchaseDto purchase;
 }
