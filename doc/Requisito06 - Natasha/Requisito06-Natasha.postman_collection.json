@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "514f1ec9-514e-4199-bdd1-d94126c906f0",
+		"name": "Requisito06-Natasha",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Buyer",
+			"item": [
+				{
+					"name": "getBuyerId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/buyer/1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"buyer",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveBuyer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jorge da Silva Lima\",\n    \"cpf\": 10886019959,\n    \"address\": \"Rua 25 de Março\",\n    \"neighborhood\":\"Centro\",\n    \"city\": \"Rio do Oeste\",\n    \"state\": \"Santa Catarina\",\n    \"zipCode\": \"89180000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/buyer",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"buyer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBuyer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"José Filho\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/buyer/1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"buyer",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteBuyer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/buyer/1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"buyer",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ListProdutosCategoria",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/api/v1/fresh-products/search",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"search"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "12",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
