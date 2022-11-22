@@ -2,6 +2,7 @@ package com.grupo6.projetointegrador.service;
 
 import com.grupo6.projetointegrador.dto.RefundPurchaseResponseDto;
 import com.grupo6.projetointegrador.dto.RefundPurchaseDto;
+import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.model.enumeration.RefundReason;
@@ -30,7 +31,11 @@ public class OrderPurchaseRefundServiceImpl implements OrderPurchaseRefundServic
         OrderPurchase orderPurchase = orderPurchaseRepo.findById(refundPurchaseDto.getPurchaseId())
                 .orElseThrow(() -> new NotFoundException("Compra não encontrada"));
 
-        List<ItemBatch> itemBatches = itemBatchRepo.findByProductIds(
+        if (!isOrderPurchaseRefundable(orderPurchase, refundPurchaseDto.getReason())) {
+            throw new BusinessRuleException("A compra não está no prazo válido para reembolso.");
+        }
+
+        List<ItemBatch> itemBatches = itemBatchRepo.findByProductIdIn(
                 orderPurchase.getProductOrders().stream()
                         .map(ProductOrder::getProduct)
                         .map(Product::getId)
@@ -49,6 +54,16 @@ public class OrderPurchaseRefundServiceImpl implements OrderPurchaseRefundServic
         orderPurchaseRepo.save(orderPurchase);
 
         return RefundPurchaseResponseDto.fromOrderPurchaseRefund(orderPurchaseRefund);
+    }
+
+    private boolean isOrderPurchaseRefundable(OrderPurchase orderPurchase, RefundReason refundReason) {
+        if (refundReason.equals(RefundReason.ARREPENDIMENTO)) {
+            return orderPurchase.getDateOrder().plusDays(7).isAfter(LocalDate.now()) ||
+                    orderPurchase.getDateOrder().plusDays(7).isEqual(LocalDate.now());
+        }
+
+        return orderPurchase.getDateOrder().plusDays(90).isAfter(LocalDate.now()) ||
+                orderPurchase.getDateOrder().plusDays(90).isEqual(LocalDate.now());
     }
 
     private List<ItemBatch> updateItemBatchesQuantities(List<ItemBatch> itemBatches, List<ProductOrder> productOrders) {
