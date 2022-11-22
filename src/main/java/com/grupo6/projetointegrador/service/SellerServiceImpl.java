@@ -31,6 +31,9 @@ public class SellerServiceImpl implements SellerService {
     @Autowired
     private WarehouseRepo warehouseRepo;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     /**
      * This method returns a new Seller.
      * Or throws a {@link BusinessRuleException} if the zip code doesn't match the address given.
@@ -163,7 +166,7 @@ public class SellerServiceImpl implements SellerService {
      * @param address This is the seller's address.
      */
     private void checkZipCode(String zipCode, String address) {
-        ZipCodeDto zipCodeDtoDto = new RestTemplate()
+        ZipCodeDto zipCodeDtoDto = restTemplate
                 .getForEntity("https://viacep.com.br/ws/"+zipCode+"/json/", ZipCodeDto.class)
                 .getBody();
         if (zipCodeDtoDto.getErro() != null) {
@@ -204,14 +207,14 @@ public class SellerServiceImpl implements SellerService {
         if(createSellerDto.getZipCode() != null && createSellerDto.getAddress() != null) {
             checkZipCode(createSellerDto.getZipCode(), createSellerDto.getAddress());
         } else if (createSellerDto.getZipCode() != null) {
-            ZipCodeDto zipCodeDtoDto = new RestTemplate()
+            ZipCodeDto zipCodeDtoDto = restTemplate
                     .getForEntity("https://viacep.com.br/ws/"+createSellerDto.getZipCode()+"/json/", ZipCodeDto.class)
                     .getBody();
             if (!zipCodeDtoDto.getLogradouro().equals(seller.getAddress())) {
                 throw new BusinessRuleException("CEP não corresponde ao endereço passado.");
             }
         } else if (createSellerDto.getAddress() != null) {
-            ZipCodeDto zipCodeDtoDto = new RestTemplate()
+            ZipCodeDto zipCodeDtoDto = restTemplate
                     .getForEntity("https://viacep.com.br/ws/"+seller.getZipCode()+"/json/", ZipCodeDto.class)
                     .getBody();
             if (!zipCodeDtoDto.getLogradouro().equals(createSellerDto.getAddress())) {
