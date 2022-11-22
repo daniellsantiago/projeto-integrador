@@ -172,12 +172,25 @@ insert into `item_batch` (`id`, `due_date`, `manufacturing_date`, `manufacturing
 --
 insert into `order_purchase` (`id`, `date_order`, `status`, `buyer_id`) values(1, '2022-11-10', 0, 1);
 insert into `order_purchase` (`id`, `date_order`, `status`, `buyer_id`) values(2, '2022-11-10', 0, 2);
+insert into `order_purchase` (`id`, `date_order`, `status`, `buyer_id`) values(3, '2022-11-20', 1, 2);
+insert into `order_purchase` (`id`, `date_order`, `status`, `buyer_id`) values(4, '2022-11-08', 1, 1);
+insert into `order_purchase` (`id`, `date_order`, `status`, `buyer_id`) values(5, '2022-11-20', 2, 1);
 
 --
 -- Extraindo dados da tabela `product_order`
 --
 insert into `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) values(1, 1, 2, 1);
 insert into `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) values(2, 1, 1, 2);
+insert into `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) values(3, 1, 4, 3);
+insert into `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) values(4, 4, 2, 3);
+insert into `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) values(5, 6, 2, 3);
+insert into `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) values(6, 1, 2, 4);
+insert into `product_order` (`id`, `product_id`, `quantity`, `order_purchase_id`) values(7, 1, 2, 5);
+
+--
+-- Extraindo dados da tabela `order_purchase_refund`
+--
+insert into `order_purchase_refund` (`id`, `reason`, `refund_date`, `order_purchase_id`) values(1, 'DEFEITO', '2022-11-22', 5);
 
 SET FOREIGN_KEY_CHECKS=1;
 commit;
