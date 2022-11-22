@@ -1,12 +1,17 @@
 package com.grupo6.projetointegrador.service;
 
 import com.grupo6.projetointegrador.dto.CreateSellerDto;
+import com.grupo6.projetointegrador.dto.InactiveSellerBatchDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.factory.SellerFactory;
 import com.grupo6.projetointegrador.model.entity.Seller;
+import com.grupo6.projetointegrador.model.entity.Warehouse;
 import com.grupo6.projetointegrador.model.enumeration.Active;
+import com.grupo6.projetointegrador.model.enumeration.Category;
+import com.grupo6.projetointegrador.repository.ProductRepo;
 import com.grupo6.projetointegrador.repository.SellerRepo;
+import com.grupo6.projetointegrador.repository.WarehouseRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -27,6 +32,12 @@ public class SellerServiceImplTest {
 
     @Mock
     private SellerRepo sellerRepo;
+
+    @Mock
+    private WarehouseRepo warehouseRepo;
+
+    @Mock
+    private ProductRepo productRepo;
 
     @InjectMocks
     private SellerServiceImpl sellerService;
@@ -123,7 +134,7 @@ public class SellerServiceImplTest {
     }
 
     @Test
-    void findSeller_returnNotFoundException_whenSellerDoesntExists() {
+    void findSeller_returnNotFoundException_whenSellerDoesntExist() {
         // Given
 
         // When
@@ -356,6 +367,59 @@ public class SellerServiceImplTest {
                 .isInstanceOf(BusinessRuleException.class);
     }
 
+    @Test
+    void getInactiveSellerBatches_returnListOfInactiveSellerBatch_whenWarehouseExistsAndInactiveSellerInWarehouse() {
+        // Given
+        InactiveSellerBatchDto inactiveSellerBatchDto = genericInactiveSellerBatchDto();
+        List<InactiveSellerBatchDto> inactiveSellerBatches = new ArrayList<>();
+        inactiveSellerBatches.add(inactiveSellerBatchDto);
+
+        Warehouse warehouse = new Warehouse();
+
+        // When
+        Mockito.when(warehouseRepo.findById(warehouse.getId())).thenReturn(Optional.of(warehouse));
+        Mockito.when(productRepo.findBatchesInWarehouseFromInactiveSellers(warehouse.getId()))
+                .thenReturn(inactiveSellerBatches);
+        List<InactiveSellerBatchDto> result = sellerService.getInactiveSellerBatches(warehouse.getId());
+
+        // Then
+        assertThat(result).isNotEmpty();
+        assertThat(result.get(0)).isInstanceOf(InactiveSellerBatchDto.class);
+        assertThat(result.get(0).getSellerId()).isEqualTo(inactiveSellerBatchDto.getSellerId());
+        assertThat(result.get(0).getQuantity()).isEqualTo(inactiveSellerBatchDto.getQuantity());
+        assertThat(result.get(0).getProductId()).isEqualTo(inactiveSellerBatchDto.getProductId());
+        assertThat(result.get(0).getSectionId()).isEqualTo(inactiveSellerBatchDto.getSectionId());
+        assertThat(result.get(0).getCategory()).isEqualTo(inactiveSellerBatchDto.getCategory());
+        assertThat(result.get(0).getActive()).isEqualTo(inactiveSellerBatchDto.getActive());
+    }
+
+    @Test
+    void getInactiveSellerBatches_throwsNotFoundException_whenWarehouseDoesntExist() {
+        // Given
+
+        // When
+        Mockito.when(warehouseRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.empty());
+
+        // Then
+        assertThatThrownBy(() -> sellerService.getInactiveSellerBatches(ArgumentMatchers.anyLong()))
+                .isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    void getInactiveSellerBatches_throwsNotFoundException_whenNoInactiveSellerBatchesFound() {
+        // Given
+        Warehouse warehouse = new Warehouse();
+
+        // When
+        Mockito.when(warehouseRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(warehouse));
+        Mockito.when(productRepo.findBatchesInWarehouseFromInactiveSellers(ArgumentMatchers.anyLong()))
+                .thenReturn(new ArrayList<>());
+
+        // Then
+        assertThatThrownBy(() -> sellerService.getInactiveSellerBatches(ArgumentMatchers.anyLong()))
+                .isInstanceOf(NotFoundException.class);
+    }
+
     private CreateSellerDto setupCreateSellerDto() {
         return new CreateSellerDto(
                 "Fulano",
@@ -365,5 +429,27 @@ public class SellerServiceImplTest {
                 123,
                 "26379030"
         );
+    }
+
+    private InactiveSellerBatchDto genericInactiveSellerBatchDto() {
+        return new InactiveSellerBatchDto() {
+            @Override
+            public Long getSellerId() { return 1L; }
+
+            @Override
+            public Active getActive() { return Active.INATIVO; }
+
+            @Override
+            public Long getProductId() { return 1L; }
+
+            @Override
+            public Integer getQuantity() { return 5; }
+
+            @Override
+            public Long getSectionId() { return 1L; }
+
+            @Override
+            public Category getCategory() { return Category.FRESCO; }
+        };
     }
 }
