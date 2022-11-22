@@ -2,7 +2,6 @@ package com.grupo6.projetointegrador.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo6.projetointegrador.dto.ProductLocationDto;
-import com.grupo6.projetointegrador.dto.ProductWarehousesDto;
 import com.grupo6.projetointegrador.factory.InboundOrderFactory;
 import com.grupo6.projetointegrador.factory.WarehouseFactory;
 import com.grupo6.projetointegrador.model.entity.*;
@@ -273,7 +272,8 @@ public class ProductControllerIT {
                         LocalDate.of(2022, 12, 14),
                         BigDecimal.valueOf(100),
                             inboundOrder,
-                        product.getCategory()
+                        product.getCategory(),
+                            null
                     ),
                     new ItemBatch(
                             2L,
@@ -285,7 +285,8 @@ public class ProductControllerIT {
                             LocalDate.of(2021, 12, 14),
                             BigDecimal.valueOf(1000),
                             inboundOrder,
-                            product.getCategory()
+                            product.getCategory(),
+                            null
                     )
                 )
         );
