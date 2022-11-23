@@ -1,0 +1,77 @@
+{
+	"info": {
+		"_postman_id": "981657c6-80e1-4193-9d01-821576b51ba7",
+		"name": "projeto-integrador-us06",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "US06 - Heatmap de todos os setores com produtos em estoque no armazém",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/heatmap/sections-used/warehouse/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"heatmap",
+						"sections-used",
+						"warehouse",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US06 - Heatmap de todos os setores registrado no armazém",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/heatmap/sections/warehouse/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"heatmap",
+						"sections",
+						"warehouse",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US06 - Heatmap de um setor especifico",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/heatmap/section/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"heatmap",
+						"section",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

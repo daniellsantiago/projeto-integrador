@@ -86,31 +86,32 @@ insert into `warehouse` (`id`, `warehouse_operator_id`) values(10, 1);
 -- Extraindo dados da tabela `product`
 --
 
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(1, '1.75', 'CONGELADO', 1);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(2, '2.30', 'REFRIGERADO', 1);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(3, '3.90', 'REFRIGERADO', 1);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(4, '4.10', 'FRESCO', 2);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(5, '5.50', 'REFRIGERADO', 2);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(6, '6.10', 'CONGELADO', 3);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(7, '7.99', 'FRESCO', 3);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(8, '8.45', 'FRESCO', 1);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(9, '9.12', 'CONGELADO', 1);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(10, '10.20', 'REFRIGERADO', 3);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(11, '11.25', 'FRESCO', 4);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(12, '12.44', 'REFRIGERADO', 5);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(13, '13.00', 'CONGELADO', 4);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(14, '14.20', 'FRESCO', 5);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(15, '15.60', 'REFRIGERADO', 6);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(16, '6.23', 'FRESCO', 6);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(17, '7.10', 'REFRIGERADO', 6);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(18, '8.25', 'CONGELADO', 8);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(19, '9.20', 'FRESCO', 8);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(20, '2.00', 'CONGELADO', 9);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(21, '2.10', 'FRESCO', 9);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(22, '7.20', 'CONGELADO', 2);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(23, '3.30', 'FRESCO', 10);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(24, '4.00', 'CONGELADO', 10);
-insert into `product` (`id`, `price`, `category`, `seller_id`) values(25, '14.20', 'FRESCO', 10);
+
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(1, '1.75', 'CONGELADO', 1, 1, 1.5, 1);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(2, '2.30', 'REFRIGERADO', 1, 1.5, 0.5, 2);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(3, '3.90', 'REFRIGERADO', 1, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(4, '4.10', 'FRESCO', 2, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(5, '5.50', 'REFRIGERADO', 2, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(6, '6.10', 'CONGELADO', 3, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(7, '7.99', 'FRESCO', 3, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(8, '8.45', 'FRESCO', 1, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(9, '9.12', 'CONGELADO', 1, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(10, '10.20', 'REFRIGERADO', 3, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(11, '11.25', 'FRESCO', 4, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(12, '12.44', 'REFRIGERADO', 5, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(13, '13.00', 'CONGELADO', 4, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(14, '14.20', 'FRESCO', 5, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(15, '15.60', 'REFRIGERADO', 6, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(16, '6.23', 'FRESCO', 6, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(17, '7.10', 'REFRIGERADO', 6, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(18, '8.25', 'CONGELADO', 8, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(19, '9.20', 'FRESCO', 8, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(20, '2.00', 'CONGELADO', 9, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(21, '2.10', 'FRESCO', 9, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(22, '7.20', 'CONGELADO', 2, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(23, '3.30', 'FRESCO', 10, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(24, '4.00', 'CONGELADO', 10, 0, 0, 0);
+insert into `product` (`id`, `price`, `category`, `seller_id`, `ite_height`, `ite_length`, `ite_width`) values(25, '14.20', 'FRESCO', 10, 0, 0, 0);
 
 --
 -- Extraindo dados da tabela `section`

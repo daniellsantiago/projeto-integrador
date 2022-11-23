@@ -1,10 +1,15 @@
 package com.grupo6.projetointegrador.service;
 
-import com.grupo6.projetointegrador.dto.*;
+import com.grupo6.projetointegrador.dto.CreateInboundOrderDto;
+import com.grupo6.projetointegrador.dto.CreateItemBatchDto;
+import com.grupo6.projetointegrador.dto.ItemBatchDto;
+import com.grupo6.projetointegrador.dto.UpdateItemBatchDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
 import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +19,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class InboundOrderServiceImpl implements InboundOrderService {
+
+    // US06 Update
+    private static final Logger LOGGER = LoggerFactory.getLogger(InboundOrderServiceImpl.class);
 
     private final InboundOrderRepo inboundOrderRepo;
     private final WarehouseRepo warehouseRepo;
@@ -173,18 +181,37 @@ public class InboundOrderServiceImpl implements InboundOrderService {
     ) {
         Long volumeToBeStored = itemBatchDtos.stream().map(CreateItemBatchDto::getVolume)
                 .reduce(0L, Long::sum);
-
         verifyWarehouseMatchWithOperator(warehouse, warehouseOperator);
         verifyWarehouseMatchSection(section, warehouse);
         verifyIfProductsCategoryDifferFromSection(products, section);
+
+        // US06 Update
+        analyzeAvailabilityInSection(section.getId(), volumeToBeStored);
+
         verifyIfSectionCanStoreItems(section, volumeToBeStored);
     }
 
     /**
+     * US06 Update<p>
+     * If the volume of the inbound order is greater than the available volume in the section, then log an error message.
+     *
+     * @param id               the id of the section
+     * @param volumeToBeStored the volume of the inbound order
+     */
+    private void analyzeAvailabilityInSection(Long id, Long volumeToBeStored) {
+        Double volumeUsed = warehouseRepo.analyzeVolumeUsedInSection(id);
+        if (volumeUsed >= (double) volumeToBeStored) {
+            LOGGER.info("INFO: Volume do Inbound Order: {}  maior que area disponivel no setor: {}!",
+                    volumeToBeStored, volumeUsed);
+        }
+    }
+
+    /**
      * Validates if the InboundOrder ItemBatches can be updated.
+     *
      * @param itemBatchDtos List of InboundOrder items to be updated.
-     * @param inboundOrder InboundOrder to be updated.
-     * @param products Products to be updated.
+     * @param inboundOrder  InboundOrder to be updated.
+     * @param products      Products to be updated.
      */
     private void validateInboundOrderUpdate(
             List<UpdateItemBatchDto> itemBatchDtos,
@@ -200,7 +227,8 @@ public class InboundOrderServiceImpl implements InboundOrderService {
 
     /**
      * Verify if the section has enough volume to store the items.
-     * @param section The id of the section.
+     *
+     * @param section          The id of the section.
      * @param volumeToBeStored The quantity of volume to be used.
      * @throws BusinessRuleException if volume is not valid.
      */

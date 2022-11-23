@@ -3,8 +3,9 @@ package com.grupo6.projetointegrador.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.*;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -27,4 +28,12 @@ public class Product {
     @ManyToOne
     @JsonBackReference
     private Seller seller;
+
+    // US06 Update
+    private BigDecimal iteHeight;
+    private BigDecimal iteLength;
+    private BigDecimal iteWidth;
+
+    public Product(long l, BigDecimal valueOf, Category fresco, Seller seller) {
+    }
 }
