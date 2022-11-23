@@ -20,11 +20,6 @@ public class OutboundOrderServiceImpl implements OutboundOrderService {
 
     public OutboundOrderServiceImpl(
             OutboundOrderRepo outboundOrderRepo,
-            WarehouseRepo warehouseRepo,
-            WarehouseOperatorRepo warehouseOperatorRepo,
-            ProductRepo productRepo,
-            SectionRepo sectionRepo,
-            InboundOrderRepo inboundOrderRepo,
             ItemBatchRepo itemBatchRepo
     ) {
         this.outboundOrderRepo = outboundOrderRepo;

@@ -13,9 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOutboundOrderDto {
-    @NotNull
-    private Long inboundOrderId;
-
     @NotEmpty
     private List<Long> itemBatchIds;
 }

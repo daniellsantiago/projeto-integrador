@@ -1,9 +1,6 @@
 package com.grupo6.projetointegrador.factory;
 
-import com.grupo6.projetointegrador.model.entity.InboundOrder;
-import com.grupo6.projetointegrador.model.entity.ItemBatch;
-import com.grupo6.projetointegrador.model.entity.Product;
-import com.grupo6.projetointegrador.model.entity.Seller;
+import com.grupo6.projetointegrador.model.entity.*;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 
 import java.math.BigDecimal;

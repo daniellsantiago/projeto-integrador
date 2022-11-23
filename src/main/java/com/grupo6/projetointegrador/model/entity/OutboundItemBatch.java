@@ -45,7 +45,7 @@ public class OutboundItemBatch {
   private Category category;
 
   public OutboundItemBatch(Long id, Product product, int productQuantity, LocalDate manufacturingDate,
-                           LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, Category category) {
+                           LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, Category category, OutboundOrder outboundOrder, InboundOrder inboundOrder) {
     this.id = id;
     this.product = product;
     this.productQuantity = productQuantity;
