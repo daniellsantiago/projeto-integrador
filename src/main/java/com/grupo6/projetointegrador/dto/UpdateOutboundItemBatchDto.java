@@ -39,19 +39,4 @@ public class UpdateOutboundItemBatchDto {
     @NotNull
     @Positive
     private BigDecimal price;
-
-    public OutboundItemBatch toOutboundItemBatch(OutboundOrder outboundOrder, Product product) {
-        return new OutboundItemBatch(
-                outItemBatchId,
-                product,
-                productQuantity,
-                manufacturingDate,
-                manufacturingTime,
-                volume,
-                dueDate,
-                price,
-                outboundOrder,
-                product.getCategory()
-        );
-    }
 }

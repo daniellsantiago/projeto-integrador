@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -14,15 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateOutboundOrderDto {
     @NotNull
-    private Long warehouseOperatorId;
-
-    @NotNull
-    private Long warehouseId;
-
-    @NotNull
-    private Long sectionId;
+    private Long inboundOrderId;
 
     @NotEmpty
-    @Valid
-    private List<CreateOutboundItemBatchDto> outboundItemBatches;
+    private List<Long> itemBatchIds;
 }

@@ -6,7 +6,9 @@ import com.grupo6.projetointegrador.dto.*;
 import java.util.List;
 
 public interface OutboundOrderService {
-    List<OutboundItemBatchDto> createOutboundOrder(CreateOutboundOrderDto createInboundOrderDto);
+    OutboundOrderDto createOutboundOrder(CreateOutboundOrderDto createOutboundOrderDto);
 
-    List<OutboundItemBatchDto> updateOutboundItemBatch(Long outboundOrderId, List<UpdateOutboundItemBatchDto> updateItemBatchDtos);
+//    OutboundOrderDto updateOutboundItemBatch(Long outboundOrderId, List<UpdateOutboundItemBatchDto> updateOutboundItemBatchDtos);
+
+    List<OutboundOrderDto> getAll();
 }

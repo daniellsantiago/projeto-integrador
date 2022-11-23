@@ -1,5 +1,6 @@
 package com.grupo6.projetointegrador.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.grupo6.projetointegrador.model.enumeration.Category;
 import lombok.*;
 
@@ -15,7 +16,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class OutboundItemBatch {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @OneToOne
@@ -34,12 +34,19 @@ public class OutboundItemBatch {
   private BigDecimal price;
 
   @ManyToOne
+  @JsonIgnore
   private OutboundOrder outboundOrder;
+
+  @ManyToOne
+  @JsonIgnore
+  private InboundOrder inboundOrder;
 
   @Enumerated(EnumType.STRING)
   private Category category;
 
-  public OutboundItemBatch(Product product, int productQuantity, LocalDate manufacturingDate, LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, OutboundOrder outboundOrder, Category category) {
+  public OutboundItemBatch(Long id, Product product, int productQuantity, LocalDate manufacturingDate,
+                           LocalDateTime manufacturingTime, Long volume, LocalDate dueDate, BigDecimal price, Category category) {
+    this.id = id;
     this.product = product;
     this.productQuantity = productQuantity;
     this.manufacturingDate = manufacturingDate;
@@ -47,7 +54,20 @@ public class OutboundItemBatch {
     this.volume = volume;
     this.dueDate = dueDate;
     this.price = price;
-    this.outboundOrder = outboundOrder;
     this.category = category;
+  }
+
+  public OutboundItemBatch(ItemBatch itemBatch, InboundOrder inboundOrder, OutboundOrder outboundOrder) {
+    this.id = itemBatch.getId();
+    this.product = itemBatch.getProduct();
+    this.productQuantity = itemBatch.getProductQuantity();
+    this.manufacturingDate = itemBatch.getManufacturingDate();
+    this.manufacturingTime = itemBatch.getManufacturingTime();
+    this.volume = itemBatch.getVolume();
+    this.dueDate = itemBatch.getDueDate();
+    this.price = itemBatch.getPrice();
+    this.inboundOrder = inboundOrder;
+    this.outboundOrder = outboundOrder;
+    this.category = itemBatch.getCategory();
   }
 }
