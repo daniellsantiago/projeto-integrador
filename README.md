@@ -35,5 +35,5 @@ Os relatórios podem ser consultados por armazém, resumido por setores ou uma b
 
 **Documentação**
 
-- [User Story e utilização.](./doc/requisito-06/US06 heatmap-warehouse-.pdf)
+- [User Story e utilização.](./doc/requisito-06/US06-heatmap-warehouse-.pdf)
 - [Coleção da API no Postman.](./doc/requisito-06/projeto-integrador-us06.postman_collection.json)
