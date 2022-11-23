@@ -280,7 +280,7 @@ public class ProductControllerIT {
                         LocalDate.now(),
                         LocalDateTime.now(),
                         300L,
-                        LocalDate.of(2022, 12, 14),
+                        LocalDate.now().plusDays(50),
                         BigDecimal.valueOf(100),
                             inboundOrder,
                         product.getCategory()
@@ -292,7 +292,7 @@ public class ProductControllerIT {
                             LocalDate.now(),
                             LocalDateTime.now(),
                             200L,
-                            LocalDate.of(2021, 12, 14),
+                            LocalDate.now().plusDays(40),
                             BigDecimal.valueOf(1000),
                             inboundOrder,
                             product.getCategory()

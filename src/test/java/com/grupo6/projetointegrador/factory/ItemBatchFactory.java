@@ -19,7 +19,7 @@ public class ItemBatchFactory {
         itemBatch.setId(1L);
         itemBatch.setProduct(genericProduct());
         itemBatch.setPrice(BigDecimal.valueOf(50));
-        itemBatch.setDueDate(LocalDate.of(2022, 11, 20));
+        itemBatch.setDueDate(LocalDate.now().plusDays(30));
         itemBatch.setVolume(10L);
         itemBatch.setProductQuantity(10);
         itemBatch.setManufacturingDate(LocalDate.of(2022, 10, 20));
