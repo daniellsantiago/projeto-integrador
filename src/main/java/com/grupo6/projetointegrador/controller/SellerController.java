@@ -2,6 +2,7 @@ package com.grupo6.projetointegrador.controller;
 
 import com.grupo6.projetointegrador.dto.CreateSellerDto;
 import com.grupo6.projetointegrador.dto.InactiveSellerBatchDto;
+import com.grupo6.projetointegrador.dto.UpdateSellerDto;
 import com.grupo6.projetointegrador.model.entity.Seller;
 import com.grupo6.projetointegrador.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class SellerController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Seller> updateSeller(@PathVariable Long id,
-                                               @RequestBody @Valid CreateSellerDto createSellerDto) {
-        return new ResponseEntity<>(sellerService.updateSeller(id, createSellerDto), HttpStatus.OK);
+                                               @RequestBody @Valid UpdateSellerDto updateSellerDto) {
+        return new ResponseEntity<>(sellerService.updateSeller(id, updateSellerDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

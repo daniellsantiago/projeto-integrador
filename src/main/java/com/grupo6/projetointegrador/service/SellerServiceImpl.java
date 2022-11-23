@@ -2,6 +2,7 @@ package com.grupo6.projetointegrador.service;
 
 import com.grupo6.projetointegrador.dto.CreateSellerDto;
 import com.grupo6.projetointegrador.dto.InactiveSellerBatchDto;
+import com.grupo6.projetointegrador.dto.UpdateSellerDto;
 import com.grupo6.projetointegrador.dto.ZipCodeDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
@@ -82,38 +83,38 @@ public class SellerServiceImpl implements SellerService {
      * Or throws a {@link BusinessRuleException} if the seller is inactive.
      *
      * @param id This is the id of the seller set to be updated.
-     * @param createSellerDto This is the entry object of seller information,
+     * @param updateSellerDto This is the entry object of seller information,
      *                        it may contain first name, last name, email, address, house number and zip code.
      * @return A Seller object containing the updated information.
      */
     @Override
     @Transactional
-    public Seller updateSeller(Long id, CreateSellerDto createSellerDto) {
+    public Seller updateSeller(Long id, UpdateSellerDto updateSellerDto) {
         Seller seller = sellerRepo.findById(id).orElseThrow(() -> new NotFoundException("Vendedor não encontrado."));
         if (seller.getActive().equals(Active.INATIVO)) {
             throw new BusinessRuleException("Usuário inativo.");
         }
 
-        updateCheckZipAndAddress(createSellerDto, seller);
-        if (createSellerDto.getEmail() != null) {
-            checkEmail(createSellerDto.getEmail(), seller.getId());
-            seller.setEmail(createSellerDto.getEmail());
+        updateCheckZipAndAddress(updateSellerDto, seller);
+        if (updateSellerDto.getEmail() != null) {
+            checkEmail(updateSellerDto.getEmail(), seller.getId());
+            seller.setEmail(updateSellerDto.getEmail());
         }
 
-        if (createSellerDto.getAddress() != null) {
-            seller.setAddress(createSellerDto.getAddress());
+        if (updateSellerDto.getAddress() != null) {
+            seller.setAddress(updateSellerDto.getAddress());
         }
-        if (createSellerDto.getZipCode() != null) {
-            seller.setZipCode(createSellerDto.getZipCode());
+        if (updateSellerDto.getZipCode() != null) {
+            seller.setZipCode(updateSellerDto.getZipCode());
         }
-        if (createSellerDto.getHouseNumber() != null) {
-            seller.setHouseNumber(createSellerDto.getHouseNumber());
+        if (updateSellerDto.getHouseNumber() != null) {
+            seller.setHouseNumber(updateSellerDto.getHouseNumber());
         }
-        if (createSellerDto.getFirstName() != null) {
-            seller.setFirstName(createSellerDto.getFirstName());
+        if (updateSellerDto.getFirstName() != null) {
+            seller.setFirstName(updateSellerDto.getFirstName());
         }
-        if (createSellerDto.getLastName() != null) {
-            seller.setLastName(createSellerDto.getLastName());
+        if (updateSellerDto.getLastName() != null) {
+            seller.setLastName(updateSellerDto.getLastName());
         }
 
         return sellerRepo.save(seller);
@@ -199,25 +200,25 @@ public class SellerServiceImpl implements SellerService {
      * * Or throws a {@link BusinessRuleException} if the zip code or address provided doesn't match each other
      *                                             or the information from the database.
      *
-     * @param createSellerDto This is the entry object of seller information,
+     * @param updateSellerDto This is the entry object of seller information,
      *                        containing first name, last name, email, address, house number and zip code.
      * @param seller Seller object containing all the seller's information.
      */
-    private void updateCheckZipAndAddress(CreateSellerDto createSellerDto, Seller seller) {
-        if(createSellerDto.getZipCode() != null && createSellerDto.getAddress() != null) {
-            checkZipCode(createSellerDto.getZipCode(), createSellerDto.getAddress());
-        } else if (createSellerDto.getZipCode() != null) {
+    private void updateCheckZipAndAddress(UpdateSellerDto updateSellerDto, Seller seller) {
+        if(updateSellerDto.getZipCode() != null && updateSellerDto.getAddress() != null) {
+            checkZipCode(updateSellerDto.getZipCode(), updateSellerDto.getAddress());
+        } else if (updateSellerDto.getZipCode() != null) {
             ZipCodeDto zipCodeDtoDto = restTemplate
-                    .getForEntity("https://viacep.com.br/ws/"+createSellerDto.getZipCode()+"/json/", ZipCodeDto.class)
+                    .getForEntity("https://viacep.com.br/ws/"+updateSellerDto.getZipCode()+"/json/", ZipCodeDto.class)
                     .getBody();
             if (!zipCodeDtoDto.getLogradouro().equals(seller.getAddress())) {
                 throw new BusinessRuleException("CEP não corresponde ao endereço passado.");
             }
-        } else if (createSellerDto.getAddress() != null) {
+        } else if (updateSellerDto.getAddress() != null) {
             ZipCodeDto zipCodeDtoDto = restTemplate
                     .getForEntity("https://viacep.com.br/ws/"+seller.getZipCode()+"/json/", ZipCodeDto.class)
                     .getBody();
-            if (!zipCodeDtoDto.getLogradouro().equals(createSellerDto.getAddress())) {
+            if (!zipCodeDtoDto.getLogradouro().equals(updateSellerDto.getAddress())) {
                 throw new BusinessRuleException("CEP não corresponde ao endereço passado.");
             }
         }

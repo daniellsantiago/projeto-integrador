@@ -2,6 +2,7 @@ package com.grupo6.projetointegrador.service;
 
 import com.grupo6.projetointegrador.dto.CreateSellerDto;
 import com.grupo6.projetointegrador.dto.InactiveSellerBatchDto;
+import com.grupo6.projetointegrador.dto.UpdateSellerDto;
 import com.grupo6.projetointegrador.dto.ZipCodeDto;
 import com.grupo6.projetointegrador.exception.BusinessRuleException;
 import com.grupo6.projetointegrador.exception.NotFoundException;
@@ -59,7 +60,7 @@ public class SellerServiceImplTest {
 
         // When
         Seller newSeller = SellerFactory.build(createSellerDto);
-        ZipCodeDto zipCodeDto = ZipCodeDtoFactory.build(createSellerDto);
+        ZipCodeDto zipCodeDto = ZipCodeDtoFactory.build(createSellerDto, null);
         Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
                 .thenReturn(new ResponseEntity<>(zipCodeDto, HttpStatus.OK));
         Mockito.when(sellerRepo.findAll()).thenReturn(new ArrayList<>());
@@ -149,7 +150,7 @@ public class SellerServiceImplTest {
         sellers.add(SellerFactory.build(setupCreateSellerDto()));
 
         // When
-        ZipCodeDto zipCodeDto = ZipCodeDtoFactory.build(createSellerDto);
+        ZipCodeDto zipCodeDto = ZipCodeDtoFactory.build(createSellerDto, null);
         Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
                 .thenReturn(new ResponseEntity<>(zipCodeDto, HttpStatus.OK));
         Mockito.when(sellerRepo.findAll()).thenReturn(sellers);
@@ -188,7 +189,7 @@ public class SellerServiceImplTest {
     void updateSeller_returnSeller_whenAllDataValid() {
         // Given
         CreateSellerDto createSellerDto = setupCreateSellerDto();
-        CreateSellerDto updateSellerDto = new CreateSellerDto(
+        UpdateSellerDto updateSellerDto = new UpdateSellerDto(
                 "Ciclano",
                 "Teste",
                 "ciclano.dtal@teste.com",
@@ -211,7 +212,7 @@ public class SellerServiceImplTest {
                 seller.getProducts()
         );
         Mockito.when(sellerRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(seller));
-        ZipCodeDto zipCodeDto = ZipCodeDtoFactory.build(updateSellerDto);
+        ZipCodeDto zipCodeDto = ZipCodeDtoFactory.build(null, updateSellerDto);
         Mockito.when(restTemplate.getForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
                 .thenReturn(new ResponseEntity<>(zipCodeDto, HttpStatus.OK));
         Mockito.when(sellerRepo.findAll()).thenReturn(new ArrayList<>());
@@ -239,7 +240,7 @@ public class SellerServiceImplTest {
         Mockito.when(sellerRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(seller));
 
         // Then
-        assertThatThrownBy(() -> sellerService.updateSeller(seller.getId(), setupCreateSellerDto()))
+        assertThatThrownBy(() -> sellerService.updateSeller(seller.getId(), new UpdateSellerDto()))
                 .isInstanceOf(BusinessRuleException.class);
     }
 
@@ -251,7 +252,7 @@ public class SellerServiceImplTest {
         Mockito.when(sellerRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.empty());
 
         // Then
-        assertThatThrownBy(() -> sellerService.updateSeller(1L, setupCreateSellerDto()))
+        assertThatThrownBy(() -> sellerService.updateSeller(1L, new UpdateSellerDto()))
                 .isInstanceOf(NotFoundException.class);
     }
 
@@ -259,7 +260,7 @@ public class SellerServiceImplTest {
     void updateSeller_returnBusinessRuleException_whenSellerZipCodeAddressDoesntMatch() {
         // Given
         CreateSellerDto createSellerDto = setupCreateSellerDto();
-        CreateSellerDto updateSellerDto = new CreateSellerDto(
+        UpdateSellerDto updateSellerDto = new UpdateSellerDto(
                 null,
                 null,
                 null,
@@ -291,7 +292,7 @@ public class SellerServiceImplTest {
     void updateSeller_returnBusinessRuleException_whenSellerZipCodeDoesntMatchDBAddress() {
         // Given
         CreateSellerDto createSellerDto = setupCreateSellerDto();
-        CreateSellerDto updateSellerDto = new CreateSellerDto(
+        UpdateSellerDto updateSellerDto = new UpdateSellerDto(
                 null,
                 null,
                 null,
@@ -323,7 +324,7 @@ public class SellerServiceImplTest {
     void updateSeller_returnBusinessRuleException_whenSellerAddressDoesntMatchDBZipCode() {
         // Given
         CreateSellerDto createSellerDto = setupCreateSellerDto();
-        CreateSellerDto updateSellerDto = new CreateSellerDto(
+        UpdateSellerDto updateSellerDto = new UpdateSellerDto(
                 null,
                 null,
                 null,
@@ -355,7 +356,7 @@ public class SellerServiceImplTest {
     void updateSeller_returnBusinessRuleException_whenSellerEmailAlreadyExists() {
         // Given
         CreateSellerDto createSellerDto = setupCreateSellerDto();
-        CreateSellerDto updateSellerDto = new CreateSellerDto(
+        UpdateSellerDto updateSellerDto = new UpdateSellerDto(
                 null,
                 null,
                 "teste@teste.com",
