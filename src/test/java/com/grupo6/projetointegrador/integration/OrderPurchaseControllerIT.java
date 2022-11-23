@@ -195,7 +195,7 @@ public class OrderPurchaseControllerIT {
                 LocalDate.now(),
                 LocalDateTime.now(),
                 20L,
-                LocalDate.of(2022, 12, 14),
+                LocalDate.now().plusDays(50),
                 BigDecimal.valueOf(100),
                 null,
                 product.getCategory()
